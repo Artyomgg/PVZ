@@ -1,69 +1,100 @@
-const dragon = document.querySelector('.Dragon') // используем lowercase
 const now = document.querySelector('.now')
 const clicksscore = document.querySelector('.clicks-score')
 const clicksscore2 = document.querySelector('.clicks-score2')
+const future = document.querySelector('.future')
+const modal = document.querySelector('.modal')
 
 const dragonSrc = {
-	one: 'assets/img/Dragons/маленький-красный.png',
-	two: 'assets/img/Dragons/средний-красный.png',
-	three: 'assets/img/Dragons/красно-белый.png',
-	four: 'assets/img/Dragons/синий-маленький.png',
-	five: 'assets/img/Dragons/фиолетово-синий.png',
-	six: 'assets/img/Dragons/синий-большой.png',
+	one: '../assets/img/Dragons/маленький-красный.png',
+	two: '../assets/img/Dragons/средний-красный.png',
+	three: '../assets/img/Dragons/красно-белый.png',
+	four: '../assets/img/Dragons/синий-маленький.png',
+	five: '../assets/img/Dragons/фиолетово-синий.png',
+	six: '../assets/img/Dragons/синий-большой.png',
 }
 
 //кликов для повышения
-const puproses = {
+const purposes = {
 	one: 50,
 	two: 150,
 	three: 350,
 	four: 700,
-	five: 1000
+	five: 1001,
 }
 
 let clickHandler
+const key = 'clicks'
 
 function setupDragon() {
-	let purpose = puproses.one
-	const key = 'clicks'
+	let nextPurpose = purposes.one // Сначала цель - 50 кликов
 	let clicks = parseInt(localStorage.getItem(key)) || 0
 	clicksscore.innerText = clicks
+
+	// Устанавливаем начальное изображение дракона
+	updateDragonImage(clicks)
+	updateNextPurpose(clicks) // Обновляем цель при инициализации
+
 	clickHandler = function () {
 		clicks++
 
-		// Измененный порядок условий (от большего к меньшему)
-		let newSrc = dragonSrc.one
-		if (clicks >= 1000) {
-			newSrc = dragonSrc.six
-		} else if (clicks >= 700) {
-			newSrc = dragonSrc.five
-			purpose = puproses.five
-		} else if (clicks >= 350) {
-			newSrc = dragonSrc.four
-			purpose = puproses.four
-		} else if (clicks >= 150) {
-			newSrc = dragonSrc.three
-			purpose = puproses.three
-		} else if (clicks >= 50) {
-			newSrc = dragonSrc.two
-			purpose = puproses.two
-		} else if (clicks < 50) {
-			newSrc = dragonSrc.one
-			purpose = puproses.one
-		}
-
-		clicksscore2.innerText = puproses - clicks
-		const img = new Image()
-		img.src = newSrc
+		updateDragonImage(clicks)
+		updateNextPurpose(clicks) // Обновляем цель после каждого клика
 
 		localStorage.setItem(key, clicks.toString())
-		console.log('Текущее количество кликов:', clicks)
 		clicksscore.innerText = clicks
-		clicksscore2.innerText = purpose - clicks
 	}
 
 	now.addEventListener('click', clickHandler)
 }
 
-// Запускаем сразу (убрал setTimeout из последней строки)
+function updateNextPurpose(clicks) {
+	// Определяем следующий порог
+	if (clicks < purposes.one) {
+		clicksscore2.innerText = purposes.one - clicks
+	} else if (clicks < purposes.two) {
+		clicksscore2.innerText = purposes.two - clicks
+		future.src = dragonSrc.three
+	} else if (clicks < purposes.three) {
+		clicksscore2.innerText = purposes.three - clicks
+		future.src = dragonSrc.four
+	} else if (clicks < purposes.four) {
+		clicksscore2.innerText = purposes.four - clicks
+		future.src = dragonSrc.five
+	} else if (clicks < purposes.five) {
+		clicksscore2.innerText = purposes.five - clicks
+		future.src = dragonSrc.six
+	} else {
+		// Если достигнут максимальный уровень
+		clicksscore2.innerText = 'Макс. уровень!'
+		modal.style.display = 'flex'
+	}
+}
+
+// ... остальной код без изменений ...
+
+now.addEventListener('click', clickHandler)
+
+function updateDragonImage(clicks) {
+	if (clicks >= purposes.five) {
+		now.src = dragonSrc.six
+	} else if (clicks >= purposes.four) {
+		now.src = dragonSrc.five
+	} else if (clicks >= purposes.three) {
+		now.src = dragonSrc.four
+	} else if (clicks >= purposes.two) {
+		now.src = dragonSrc.three
+	} else if (clicks >= purposes.one) {
+		now.src = dragonSrc.two
+	} else {
+		now.src = dragonSrc.one
+	}
+}
+
+function onloadScore(){
+	localStorage.removeItem(key)
+	window.location.href = ''
+}
+
+// Запускаем сразу
 setupDragon()
+
