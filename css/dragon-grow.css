@@ -274,3 +274,27 @@ body {
 	flex-direction: column;
 	justify-content: space-between;
 }
+
+.back{
+	padding: 0.8rem 1.3rem;
+	background: dodgerblue;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 0.4rem;
+	position: absolute;
+	top: 0;
+	left: 0;
+	font-family: 'Roboto';
+	color: black;
+	transition: 0.5s;
+}
+
+.back:hover{
+	background: rgb(122, 189, 255);
+	color: #e8f802;
+}
+
+a{
+	text-decoration: none;
+}
