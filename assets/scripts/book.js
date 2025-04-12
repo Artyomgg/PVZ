@@ -5,7 +5,7 @@ const bookContent = [
 		title: 'Книга',
 		subtitle:
 			'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Architecto aspernatur molestias, maiores, ipsam corporis cumque laudantium ut assumenda blanditiis ipsa accusantium temporibus aliquam quod, necessitatibus sit voluptates reiciendis atque incidunt?',
-		img: '/assets/img/Dragons/красно-белый.png',
+		img: '../assets/img/Dragons/красно-белый.png',
 	},
 	{
 		type: 'page',
