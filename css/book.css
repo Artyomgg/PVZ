@@ -1,0 +1,242 @@
+:root {
+	--bg-color: #f8f9fa;
+	--text-color: #212529;
+	--primary-color: #4a6fa5;
+	--secondary-color: #6c757d;
+	--page-color: #ffffff;
+	--shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] {
+	--bg-color: #1a1a1a;
+	--text-color: #f8f9fa;
+	--primary-color: #6c8fc7;
+	--secondary-color: #adb5bd;
+	--page-color: #2d2d2d;
+	--shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	transition: background-color 0.3s, color 0.3s;
+}
+
+body {
+	font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+	background-color: var(--bg-color);
+	color: var(--text-color);
+	line-height: 1.6;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+.app-container {
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 2rem;
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+.book-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 2rem;
+}
+
+.book-header h1 {
+	font-size: 2rem;
+	font-weight: 600;
+	color: var(--primary-color);
+}
+
+.theme-switcher button {
+	background: none;
+	border: none;
+	color: var(--text-color);
+	font-size: 1.5rem;
+	cursor: pointer;
+	padding: 0.5rem;
+	border-radius: 50%;
+}
+
+.theme-switcher button:hover {
+	background-color: var(--secondary-color);
+	opacity: 0.8;
+}
+
+.book-main {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 2rem;
+}
+
+.flip-book {
+	width: 90%;
+	max-width: 900px;
+	height: 70vh;
+	min-height: 500px;
+	box-shadow: 0 10px 30px var(--shadow-color);
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+.flip-book img{
+	width: 300px;
+}
+
+.book-controls {
+	display: flex;
+	align-items: center;
+	gap: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+.control-btn {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	border: none;
+	background-color: var(--primary-color);
+	color: white;
+	font-size: 1.2rem;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: transform 0.2s, opacity 0.2s;
+}
+
+.control-btn:hover {
+	transform: scale(1.05);
+}
+
+.control-btn:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+	transform: none;
+}
+
+.page-indicator {
+	font-size: 1.2rem;
+	color: var(--secondary-color);
+	min-width: 80px;
+	text-align: center;
+}
+
+.book-footer {
+	margin-top: 2rem;
+	text-align: center;
+	color: var(--secondary-color);
+	font-size: 0.9rem;
+	padding: 1rem 0;
+}
+
+/* Стили страниц книги */
+.page {
+	background-color: var(--page-color);
+	color: var(--text-color);
+	padding: 3rem;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+}
+
+.page-cover {
+	background: linear-gradient(135deg, var(--primary-color) 0%, #3a5683 100%);
+	color: white;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
+.page-content {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+
+.page-title {
+	font-size: 2rem;
+	margin-bottom: 1.5rem;
+	color: var(--primary-color);
+	position: relative;
+	padding-bottom: 0.5rem;
+}
+
+.page-title::after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 60px;
+	height: 3px;
+	background-color: var(--primary-color);
+}
+
+.page-text {
+	margin-bottom: 1.5rem;
+	font-size: 1.1rem;
+}
+
+.page-image {
+	max-width: 100%;
+	height: auto;
+	margin: 1rem 0;
+	border-radius: 4px;
+	align-self: center;
+}
+
+.page-number {
+	position: absolute;
+	bottom: 1rem;
+	right: 1rem;
+	font-size: 0.9rem;
+	color: var(--secondary-color);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+	.app-container {
+		padding: 1rem;
+	}
+
+	.book-header h1 {
+		font-size: 1.5rem;
+	}
+
+	.flip-book {
+		height: 60vh;
+		min-height: 400px;
+	}
+
+	.page {
+		padding: 1.5rem;
+	}
+
+	.page-title {
+		font-size: 1.5rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.flip-book {
+		height: 50vh;
+	}
+
+	.control-btn {
+		width: 40px;
+		height: 40px;
+		font-size: 1rem;
+	}
+}
