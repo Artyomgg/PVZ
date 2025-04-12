@@ -6,10 +6,15 @@ const modal = document.querySelector('.modal')
 
 const dragonSrc = {
 	one: '../assets/img/Dragons/маленький-красный.png',
+	nextTwo: '../assets/img/Dragons/средний-красныйЧБ.png',
 	two: '../assets/img/Dragons/средний-красный.png',
+	nextThree: '../assets/img/Dragons/красно-белыйЧБ.png',
 	three: '../assets/img/Dragons/красно-белый.png',
+	nextFour: '../assets/img/Dragons/синий-маленькийЧБ.png',
 	four: '../assets/img/Dragons/синий-маленький.png',
+	nextFive: '../assets/img/Dragons/фиолетово-синийЧБ.png',
 	five: '../assets/img/Dragons/фиолетово-синий.png',
+	nextSix: '../assets/img/Dragons/синий-большойЧБ.png',
 	six: '../assets/img/Dragons/синий-большой.png',
 }
 
@@ -53,16 +58,16 @@ function updateNextPurpose(clicks) {
 		clicksscore2.innerText = purposes.one - clicks
 	} else if (clicks < purposes.two) {
 		clicksscore2.innerText = purposes.two - clicks
-		future.src = dragonSrc.three
+		future.src = dragonSrc.nextThree
 	} else if (clicks < purposes.three) {
 		clicksscore2.innerText = purposes.three - clicks
-		future.src = dragonSrc.four
+		future.src = dragonSrc.nextFour
 	} else if (clicks < purposes.four) {
 		clicksscore2.innerText = purposes.four - clicks
-		future.src = dragonSrc.five
+		future.src = dragonSrc.nextFive
 	} else if (clicks < purposes.five) {
 		clicksscore2.innerText = purposes.five - clicks
-		future.src = dragonSrc.six
+		future.src = dragonSrc.nextSix
 	} else {
 		// Если достигнут максимальный уровень
 		clicksscore2.innerText = 'Макс. уровень!'
