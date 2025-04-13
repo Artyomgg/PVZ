@@ -79,6 +79,7 @@ body {
   background: linear-gradient(to right, #0e0928b8, #0d273c, #0e0928b8);
   box-shadow: 0 -5px 10px #0e0b2f, inset 0 0 20px rgba(0, 0, 0, 0.463);
   color: white;
+  text-shadow: 0 -1px 1px rgb(9, 0, 141);
   font-size: 24px;
   transition: 0.5s;
 }
@@ -97,6 +98,7 @@ body {
   background: linear-gradient(to right, #0e0928b8, #0d273c, #0e0928b8);
   box-shadow: 0 -5px 10px #0e0b2f, inset 0 0 20px rgba(0, 0, 0, 0.463);
   color: white;
+  text-shadow: 0 -1px 1px rgb(9, 0, 141);
   font-size: 24px;
   transform: scale(1.05);
 }
@@ -276,7 +278,8 @@ body {
 .back {
   padding: 0.8rem 1.3rem;
   background: linear-gradient(to right, #932222, #ffc107, #932222);
-  box-shadow: 0 -5px 10px #932222, inset 0 0 20px rgba(0, 0, 0, 0.463);
+  box-shadow: 0 -5px 10px #4f1212, inset 0 0 20px rgba(0, 0, 0, 0.463);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;

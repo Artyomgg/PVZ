@@ -3,7 +3,7 @@
   --text-color: #3a2c1a;
   --primary-color: #8b4513; /* Коричневый для заголовков */
   --secondary-color: #6c757d;
-  --page-color: #fff8ee; /* Цвет страниц книги */
+  --page-color: #fcf1e2; /* Цвет страниц книги */
   --shadow-color: rgba(0, 0, 0, 0.2);
 }
 
@@ -25,6 +25,33 @@ body {
   background-size: cover;
   background-attachment: fixed;
 }
+
+.back {
+  padding: 0.8rem 1.3rem;
+  background: linear-gradient(to right, #8b4513, #9c5420, #8b4513);
+  box-shadow: 0 5px 10px #42230d, inset 0 0 20px rgba(0, 0, 0, 0.463);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+  position: absolute;
+  top: 1%;
+  left: 1%;
+  font-family: "Roboto";
+  color: #fcf1e2;
+  border-radius: 50%;
+  transition: 0.5s;
+}
+
+.back:hover {
+  color: black;
+  transform: scale(1.05);
+}
+
+a {
+  text-decoration: none;
+}
+
 
 .app-container {
   max-width: 1400px;
