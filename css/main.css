@@ -111,3 +111,32 @@ h1 {
 }
 
 
+.preloader{
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 1;
+	z-index: 10000000;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: black;
+	animation:hide 1s both 1s;
+}
+
+@keyframes hide{
+	100%{
+		display: none;
+	}
+}
+
+.preloader video{
+	width: 100%;
+	height: 100%;
+	background: no-repeat;
+	padding: 0;
+	margin: 0;
+	background-size:100% 100%;
+}
