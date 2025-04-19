@@ -162,7 +162,7 @@ body {
 
 .score-container {
 	position: absolute;
-	bottom: 10px;
+	top: 10px;
 	left: 10px;
 	display: flex;
 	gap: 20px;
@@ -174,7 +174,7 @@ body {
 
 .dragon-menu {
 	position: absolute;
-	bottom: 50px;
+	bottom: 10px;
 	left: 10px;
 	display: flex;
 	flex-direction: column;
