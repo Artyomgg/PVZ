@@ -8,7 +8,7 @@ let level = 1;
 const islands = {
   1: "../assets/img/Islands/island1.png",
   2: "../assets/img/Islands/island2.png",
-  3: "../assets/img/Islands/island3.png", //потом вставить спрайты след. уровней
+  3: "../assets/img/Islands/island3.png",
   4: "../assets/img/Islands/island1.png",
   5: "../assets/img/Islands/island1.png",
 };
@@ -32,6 +32,16 @@ function setupIsland() {
     if (level > 1) {
       level--;
       updateLevel();
+    }
+  });
+
+  levelSprite.addEventListener("click", () => {
+    if (level === 1) {
+      window.location.href = "../pages/levels/1.html";
+    } else if (level === 2) {
+    } else if (level === 3) {
+    } else if (level === 4) {
+    } else if (level === 5) {
     }
   });
 }
