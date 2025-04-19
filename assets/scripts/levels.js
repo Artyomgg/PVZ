@@ -5,7 +5,7 @@ const grid = document.getElementById('grid')
 const sunCountDisplay = document.getElementById('sunCount')
 const scoreCountDisplay = document.getElementById('scoreCount')
 
-// Dragon types configuration
+// типы драконов
 const dragonTypes = {
 	fire: {
 		cost: 50,
@@ -27,21 +27,6 @@ const dragonTypes = {
 	},
 }
 
-// Zombie types configuration
-const zombieTypes = {
-	normal: {
-		health: 3,
-		speed: 20,
-		points: 100,
-	},
-	armored: {
-		health: 5,
-		speed: 25,
-		points: 200,
-	},
-}
-
-// Create grid
 for (let i = 0; i < 40; i++) {
 	const cell = document.createElement('div')
 	cell.className = 'cell'
@@ -49,13 +34,12 @@ for (let i = 0; i < 40; i++) {
 	grid.appendChild(cell)
 }
 
-// Setup dragon selection menu
 document.querySelectorAll('.dragon-option').forEach(option => {
 	option.addEventListener('click', () => {
 		selectedDragonType = option.dataset.type
 		document
 			.querySelectorAll('.dragon-option')
-			.forEach(opt => (opt.style.border = '2px solid #ffd700'))
+			.forEach(opt => (opt.style.border = '2px solid #00903a'))
 		option.style.border = '2px solid #ff4757'
 	})
 })
@@ -72,24 +56,23 @@ function placeDragon(cell) {
 		dragon.className = `dragon ${selectedDragonType}`
 		cell.appendChild(dragon)
 
-		// Start shooting
+		// начало стрельбы дракона
 		setInterval(() => shoot(dragon, dragonConfig), dragonConfig.shootInterval)
 	}
 }
 
 function shoot(dragon, config) {
-	// Add shooting animation to dragon
+	// добавляем анимацию стрельбы драконов
 	dragon.classList.add('shooting')
 	setTimeout(() => dragon.classList.remove('shooting'), 300)
 
 	const projectile = document.createElement('div')
 	projectile.className = `projectile ${config.projectileClass}`
 
-	// Get dragon's position
+	// позиции драконов
 	const dragonRect = dragon.getBoundingClientRect()
 	const gridRect = grid.getBoundingClientRect()
 
-	// Position projectile at dragon's position
 	projectile.style.left = `${dragonRect.left - gridRect.left}px`
 	projectile.style.top = `${
 		dragonRect.top - gridRect.top + dragon.offsetHeight / 2
@@ -97,7 +80,6 @@ function shoot(dragon, config) {
 
 	grid.appendChild(projectile)
 
-	// Create trail effect for projectiles
 	let trailInterval
 	if (config.projectileClass === 'fireball') {
 		trailInterval = createFireballTrail(projectile, gridRect)
@@ -105,7 +87,6 @@ function shoot(dragon, config) {
 		trailInterval = createIceballTrail(projectile, gridRect)
 	}
 
-	// Animate projectile
 	const animation = projectile.animate(
 		[
 			{ left: `${dragonRect.left - gridRect.left}px` },
@@ -147,92 +128,21 @@ function createIceballTrail(projectile, gridRect) {
 	}, 50)
 }
 
-function spawnZombie() {
-	const zombie = document.createElement('div')
-	const isArmored = Math.random() > 0.7
-	const zombieConfig = isArmored ? zombieTypes.armored : zombieTypes.normal
-
-	zombie.className = `zombie ${isArmored ? 'armored' : ''}`
-	zombie.style.setProperty('--move-duration', `${zombieConfig.speed}s`)
-
-	const row = Math.floor(Math.random() * 5)
-	zombie.style.top = `${row * 20}%`
-	zombie.dataset.health = zombieConfig.health
-	zombie.dataset.points = zombieConfig.points
-
-	grid.appendChild(zombie)
-
-	zombie.addEventListener('animationend', () => {
-		alert(`Game Over! Final Score: ${score}`)
-		location.reload()
-	})
-
-	// Check for collision with projectiles
-	const checkCollision = setInterval(() => {
-		if (!zombie.isConnected) {
-			clearInterval(checkCollision)
-			return
-		}
-
-		const projectiles = document.querySelectorAll('.projectile')
-		const zombieRect = zombie.getBoundingClientRect()
-
-		projectiles.forEach(projectile => {
-			if (!projectile.isConnected) return
-
-			const projectileRect = projectile.getBoundingClientRect()
-
-			if (
-				projectileRect.right > zombieRect.left &&
-				projectileRect.left < zombieRect.right &&
-				projectileRect.bottom > zombieRect.top &&
-				projectileRect.top < zombieRect.bottom
-			) {
-				// Create hit effect
-				const hitEffect = document.createElement('div')
-				hitEffect.className = 'hit-effect'
-				hitEffect.style.left = `${zombieRect.left}px`
-				hitEffect.style.top = `${zombieRect.top}px`
-				document.body.appendChild(hitEffect)
-				setTimeout(() => hitEffect.remove(), 500)
-
-				// Handle damage
-				const damage = Object.values(dragonTypes).find(d =>
-					projectile.classList.contains(d.projectileClass)
-				).damage
-
-				zombie.dataset.health -= damage
-				projectile.remove()
-
-				if (zombie.dataset.health <= 0) {
-					score += parseInt(zombie.dataset.points)
-					scoreCountDisplay.textContent = score
-					zombie.remove()
-					clearInterval(checkCollision)
-				}
-			}
-		})
-	}, 100)
-}
-
 function collectSun(sun) {
 	sun.classList.add('collected')
 
-	// Calculate position of sun counter
 	const counter = document.getElementById('sunCount')
 	const counterRect = counter.getBoundingClientRect()
 	const sunRect = sun.getBoundingClientRect()
 
-	// Animate sun to counter position
 	sun.style.position = 'fixed'
 	sun.style.left = `${sunRect.left}px`
 	sun.style.top = `${sunRect.top}px`
 
-	// Add sun value and update display
 	sunCount += 50
 	sunCountDisplay.textContent = sunCount
 
-	// Remove sun after animation
+	// удаляем солнце после анимации
 	setTimeout(() => sun.remove(), 500)
 }
 
@@ -242,14 +152,14 @@ function spawnSun() {
 	sun.style.left = `${Math.random() * 90}%`
 	grid.appendChild(sun)
 
-	// Make sun interactive
+	// делаем солнца кликабельными
 	sun.addEventListener('click', () => {
 		if (!sun.classList.contains('collected')) {
 			collectSun(sun)
 		}
 	})
 
-	// Remove sun if not collected
+	// удаляем солнце если игрок по нему не кликнул
 	sun.addEventListener('animationend', () => {
 		if (!sun.classList.contains('collected')) {
 			sun.remove()
@@ -257,17 +167,7 @@ function spawnSun() {
 	})
 }
 
-// Difficulty progression
-let zombieInterval = 7000
 let sunInterval = 5000
 
-function increaseDifficulty() {
-	zombieInterval - 500
-	clearInterval(zombieSpawnInterval)
-	zombieSpawnInterval = setInterval(spawnZombie, zombieInterval)
-}
-
-// Game loops
-let zombieSpawnInterval = setInterval(spawnZombie, zombieInterval)
 setInterval(spawnSun, sunInterval)
 setInterval(increaseDifficulty, 30000)
