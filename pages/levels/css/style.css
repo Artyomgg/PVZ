@@ -66,13 +66,22 @@ body {
 }
 
 .dragon.fire::before {
-	content: '🐉';
+	content: url('/assets/img/Dragons/красно-белый.png');
+	scale: 12%;
+	left: -835%;
+	top: -835%;	
 }
 .dragon.ice::before {
-	content: '🐲';
+	content: url('/assets/img/Dragons/синий-большой.png');
+	scale: 12%;
+	left: -750%;
+	top: -660%;
 }
 .dragon.poison::before {
-	content: '🦕';
+	content: url('/assets/img/Dragons/фиолетово-синий.png');
+	scale: 12%;
+	left: -600%;
+	top: -570%;
 }
 
 .dragon.shooting {
