@@ -20,7 +20,7 @@ body {
 	background-size: 100% 100%;
 	background-position: center;
 	display: flex;
-	justify-content: center;
+	justify-content: center;	
 	align-items: center;
 }
 
@@ -109,3 +109,14 @@ h1 {
 	color: aliceblue;
 	cursor: pointer;
 }
+
+#gif {
+	position: absolute;
+	width: 25%;
+	left: 87%;
+	height: auto;
+	opacity: 0;
+	transition: opacity 0.3s;
+	pointer-events: none;
+  }
+  
