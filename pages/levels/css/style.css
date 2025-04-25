@@ -16,8 +16,8 @@ body {
 }
 
 .game-container {
-  width: 1280px;
-  height: 800px;
+  width: 160vh;
+  height: 98vh;
   background: linear-gradient(#2d362f, #63726b);
   position: relative;
   overflow: hidden;
