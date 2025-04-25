@@ -20,7 +20,7 @@ for (let i = 0; i < liItems.length; i++) {
     const liCenterY = liRect.top + liRect.height / 2 - containerRect.top
     gif.style.opacity = "1"
     gif.style.top = `${liCenterY - gif.offsetHeight / 2}px`
-    gif.style.left = `73%`
+    gif.style.left = `74%`
     triangle;
   });
 
@@ -35,6 +35,6 @@ for (let i = 0; i < liItems.length; i++) {
 
   liItems[i].addEventListener("mouseleave", function () {
     gif.style.opacity = "0"
-    gif.style.left = `73%`
+    gif.style.left = `74%`
   });
 }
