@@ -83,7 +83,7 @@ body {
 
 .back {
   padding: 0.8rem 1.3rem;
-  background: linear-gradient(to right, #572293, #d207ff, #572293);
+  background: linear-gradient(to right, #572293, #8307ff, #572293);
   box-shadow: 0 3px 10px #572293, inset 0 0 20px rgba(0, 0, 0, 0.463);
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
   display: flex;
