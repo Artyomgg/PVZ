@@ -55,7 +55,7 @@ document.querySelectorAll('.dragon-option').forEach(option => {
 		selectedDragonType = option.dataset.type
 		document
 			.querySelectorAll('.dragon-option')
-			.forEach(opt => (opt.style.border = '2px solid #ffd700'))
+			.forEach(opt => (opt.style.border = '2px solid #00903a'))
 		option.style.border = '2px solid #ff4757'
 	})
 })
