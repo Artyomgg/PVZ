@@ -14,8 +14,16 @@ const islands = {
 };
 
 function updateLevel() {
-  levelText.innerText = `Уровень ${level}`;
-  levelSprite.src = islands[level];
+  levelSprite.classList.add("fade");
+  levelText.classList.add("fade");
+
+  setTimeout(() => {
+    levelText.innerText = `Уровень ${level}`;
+    levelSprite.src = islands[level];
+
+    levelSprite.classList.remove("fade");
+    levelText.classList.remove("fade");
+  }, 300);
 }
 
 function setupIsland() {
@@ -37,11 +45,15 @@ function setupIsland() {
 
   levelSprite.addEventListener("click", () => {
     if (level === 1) {
-      window.location.href = "../pages/levels/1.html";
+      window.location.href = "../pages/levels/1 level.html";
     } else if (level === 2) {
+      window.location.href = "../pages/levels/2 level.html";
     } else if (level === 3) {
+      window.location.href = "../pages/levels/3 level.html";
     } else if (level === 4) {
+      window.location.href = "../pages/levels/4 level.html";
     } else if (level === 5) {
+      window.location.href = "../pages/levels/5 level.html";
     }
   });
 }

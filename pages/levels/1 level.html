@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dragons vs Zombies</title>
+    <link rel="stylesheet" href="./css/1 level.css" />
+  </head>
+  <body>
+    <!-- Кнопка назад -->
+    <a href="../levels.html">
+      <div class="back">
+        <i class="bx bx-arrow-back"></i>
+        Назад
+      </div>
+    </a>
+    <!-- Dragon Menu outside game-container -->
+    <div class="dragon-menu">
+      <div class="dragon-option" data-type="fire" data-cost="50">
+        Fire Dragon (50 ☀️)
+      </div>
+      <div class="dragon-option" data-type="ice" data-cost="75">
+        Ice Dragon (75 ☀️)
+      </div>
+      <div class="dragon-option" data-type="poison" data-cost="100">
+        Poison Dragon (100 ☀️)
+      </div>
+    </div>
+    <div class="game-container">
+      <div class="score-container">
+        <div class="score">Sun: <span id="sunCount">100</span></div>
+        <div class="score">Score: <span id="scoreCount">0</span></div>
+      </div>
+      <div class="grid" id="grid"></div>
+    </div>
+    <script type="module" src="/assets/scripts/1 level.js"></script>
+  </body>
+</html>
