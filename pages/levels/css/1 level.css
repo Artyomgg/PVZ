@@ -136,6 +136,9 @@ body {
 	animation: rotateProjectile 0.5s linear infinite;
 }
 
+.lightningball {
+}
+
 .trail {
 	position: absolute;
 	opacity: 0.3;
@@ -450,4 +453,316 @@ a {
 		transform: translate(-50%, -50%) scale(2);
 		opacity: 0;
 	}
+}
+
+/* Add these styles to your existing CSS */
+
+/* Lightning Dragon */
+.dragon.lightning::before {
+	content: url('/assets/img/Dragons/маленький-красный.png');
+	scale: 11.5%;
+	left: -480%;
+	top: -500%;
+	position: absolute;
+	transform: translate(-50%, -50%); /* Центрируем изображение */
+}
+
+/* Lightning Projectile */
+.lightningball {
+	background: #f1c40f;
+	box-shadow: 0 0 15px #f1c40f, 0 0 30px #fff;
+	position: relative;
+	overflow: hidden;
+}
+
+.lightningball::before {
+	content: '';
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(
+		45deg,
+		transparent 0%,
+		#fff 20%,
+		transparent 40%,
+		#fff 60%,
+		transparent 80%,
+		#fff 100%
+	);
+	animation: lightningFlash 0.2s linear infinite;
+}
+
+.lightningball::after {
+	content: '';
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: radial-gradient(circle, #f1c40f 0%, #e67e22 100%);
+	border-radius: 50%;
+	animation: pulseLightning 0.5s infinite alternate;
+}
+
+/* Lightning Trail */
+.lightning-trail {
+	position: absolute;
+	width: 10px;
+	height: 40px;
+	background: linear-gradient(to bottom, #f1c40f, #e67e22);
+	transform: rotate(45deg);
+	opacity: 0.7;
+	animation: fadeTrail 0.3s forwards;
+}
+
+/* Lightning Hit Effect */
+.lightning-hit {
+	position: absolute;
+	width: 80px;
+	height: 80px;
+	background: radial-gradient(circle, #f1c40f, #e67e22, transparent 70%);
+	border-radius: 50%;
+	animation: lightningExplode 0.5s forwards;
+}
+
+/* Keyframes for Lightning */
+@keyframes lightningFlash {
+	0% {
+		transform: translateX(-100%);
+	}
+	100% {
+		transform: translateX(100%);
+	}
+}
+
+@keyframes pulseLightning {
+	0% {
+		transform: scale(1);
+		opacity: 1;
+	}
+	100% {
+		transform: scale(1.2);
+		opacity: 0.8;
+	}
+}
+
+@keyframes fadeTrail {
+	0% {
+		opacity: 0.7;
+		transform: scale(1) rotate(45deg);
+	}
+	100% {
+		opacity: 0;
+		transform: scale(0.5) rotate(45deg);
+	}
+}
+
+@keyframes lightningExplode {
+	0% {
+		transform: scale(0.5);
+		opacity: 1;
+	}
+	70% {
+		transform: scale(1.2);
+		opacity: 0.8;
+	}
+	100% {
+		transform: scale(1.5);
+		opacity: 0;
+	}
+}
+
+/* Additional effect for chain lightning */
+.chain-lightning {
+	position: absolute;
+	width: 5px;
+	height: 100px;
+	background: linear-gradient(to bottom, #f1c40f, transparent);
+	transform-origin: bottom center;
+	animation: chainLightning 0.3s forwards;
+}
+
+@keyframes chainLightning {
+	0% {
+		transform: scaleY(0);
+		opacity: 1;
+	}
+	100% {
+		transform: scaleY(1);
+		opacity: 0;
+	}
+}
+
+.lightning-effect {
+	position: absolute;
+	pointer-events: none;
+	z-index: 5;
+}
+
+@keyframes lightningStrike {
+	0% {
+		opacity: 0;
+		transform: scale(0.5);
+	}
+	50% {
+		opacity: 1;
+		transform: scale(1.2);
+	}
+	100% {
+		opacity: 0;
+		transform: scale(1);
+	}
+}
+
+.lightning-bolt {
+	position: absolute;
+	height: 3px;
+	background: linear-gradient(
+		90deg,
+		rgba(255, 255, 255, 0.8) 0%,
+		rgba(241, 196, 15, 1) 20%,
+		rgba(255, 255, 255, 0.8) 40%,
+		rgba(241, 196, 15, 1) 60%,
+		rgba(255, 255, 255, 0.8) 80%,
+		rgba(241, 196, 15, 1) 100%
+	);
+	box-shadow: 0 0 10px #f1c40f;
+	z-index: 10;
+	pointer-events: none;
+	animation: lightningFlash 0.1s linear infinite;
+}
+
+.lightning-effect {
+	position: absolute;
+	background: radial-gradient(
+		circle,
+		rgba(241, 196, 15, 0.3) 0%,
+		rgba(230, 126, 34, 0.1) 70%,
+		transparent 100%
+	);
+	box-shadow: 0 0 30px #f1c40f inset;
+	z-index: 5;
+	pointer-events: none;
+	animation: lightningPulse 0.3s ease-out;
+}
+
+@keyframes lightningFlash {
+	0% {
+		opacity: 0.5;
+	}
+	50% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0.5;
+	}
+}
+
+@keyframes lightningPulse {
+	0% {
+		transform: scale(0.8);
+		opacity: 0;
+	}
+	50% {
+		transform: scale(1.1);
+		opacity: 1;
+	}
+	100% {
+		transform: scale(1);
+		opacity: 0;
+	}
+}
+
+/* Эффект попадания молнии */
+.lightning-hit-effect {
+	position: absolute;
+	background: radial-gradient(
+		circle,
+		rgba(255, 255, 255, 0.8) 0%,
+		rgba(241, 196, 15, 0.6) 30%,
+		rgba(230, 126, 34, 0.3) 60%,
+		transparent 80%
+	);
+	border-radius: 50%;
+	pointer-events: none;
+	z-index: 15;
+	animation: lightningHit 0.3s forwards;
+}
+
+@keyframes lightningHit {
+	0% {
+		transform: scale(0.5);
+		opacity: 1;
+	}
+	100% {
+		transform: scale(1.5);
+		opacity: 0;
+	}
+}
+
+/* Анимация дрожания зомби при попадании */
+@keyframes zombieShock {
+	0% {
+		transform: translateX(0);
+	}
+	25% {
+		transform: translateX(-5px);
+	}
+	50% {
+		transform: translateX(5px);
+	}
+	75% {
+		transform: translateX(-5px);
+	}
+	100% {
+		transform: translateX(0);
+	}
+}
+
+.modal{
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	z-index: 1000000;
+	background: rgba(0, 0, 0, 0.473);
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	gap: 3.5rem;
+	display: none;
+}
+
+.modal h1{
+	font-size: 2.5rem;
+	color: white;
+}
+
+.modal button{
+	width: 30%;
+	padding: 1rem;
+	border: 3px solid green;
+	font-size: 90%;
+	font-weight: 700;
+	border-radius: 20px;
+	outline: none;
+	background: dodgerblue;
+	transition: 0.2s all;
+	cursor: pointer;
+}
+
+.modal button:hover{
+	transform: scale(1.01);
+	background: darkblue;
+	color: #e67e22;
+	border-color: goldenrod;
+}
+
+.block-with-two-buttons{
+	width: 50%;
+	display: flex;
+	gap: 2rem;
+	padding: 0.8rem;
+	justify-content: space-around;
+}
+
+.visible{
+	display: flex;
 }
