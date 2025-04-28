@@ -53,6 +53,12 @@ const zombieTypes = {
 		health: 13,
 		speed: 25,
 		points: 150,
+		spawnChance: 0.35,
+	},
+	hz: {
+		health: 15,
+		speed: 20,
+		points: 150,
 		spawnChance: 0.4,
 	},
 }
