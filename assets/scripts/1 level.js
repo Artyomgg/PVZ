@@ -45,9 +45,9 @@ const dragonTypes = {
 const zombieTypes = {
 	normal: {
 		health: 4,
-		speed: 20,
+		speed: 25,
 		points: 100,
-		spawnChance: 0.6,
+		spawnChance: 1,
 	},
 	// armored: {
 	// 	health: 6,
@@ -355,7 +355,7 @@ function spawnSun() {
 }
 
 // Увеличение сложности
-let zombieInterval = 7000
+let zombieInterval = 4000
 let sunInterval = 5000
 
 function increaseDifficulty() {
