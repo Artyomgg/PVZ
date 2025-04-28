@@ -367,11 +367,11 @@ a {
 }
 
 .zombie {
-	background-image: url('/assets/img/ZOMBIE/chel.gif');
+	background-image: url('/assets/img/KNIGHTS/chel.gif');
 }
 
 .zombie.armored {
-	background-image: url('/assets/img/ZOMBIE/chel2.gif');
+	background-image: url('/assets/img/KNIGHTS/chel2.gif');
 }
 
 .zombie.hit {
