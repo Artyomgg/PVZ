@@ -1,4 +1,4 @@
-import {} from './'
+// import {IntoLocalStorage} from './intoLocalStorage'
 
 let sunCount = 100
 let score = 0
@@ -81,7 +81,7 @@ function updateDragonMenu() {
 		option.addEventListener('click', () => {
 			selectedDragonType = type
 			document.querySelectorAll('.dragon-option').forEach(opt => {
-				opt.style.border = '2px solid #00903a'
+				opt.style.border = '2px solid #006c43'
 			})
 			option.style.border = '2px solid #ff4757'
 		})
