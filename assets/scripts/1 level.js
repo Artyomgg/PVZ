@@ -1,3 +1,5 @@
+import {} from './'
+
 let sunCount = 100
 let score = 0
 let selectedDragonType = null
