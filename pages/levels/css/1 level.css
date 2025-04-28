@@ -19,7 +19,7 @@ body {
 .game-container {
 	width: 146vh;
 	height: 83vh;
-	background: linear-gradient(#314635, #319649);
+	background: linear-gradient(#314635, #708f78);
 	position: relative;
 	overflow: hidden;
 	border: 4px solid #006c43;
