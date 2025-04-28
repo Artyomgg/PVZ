@@ -13,11 +13,12 @@ body {
 	align-items: center;
 	min-height: 100vh;
 	font-family: 'Arial', sans-serif;
+	gap: 20px;
 }
 
 .game-container {
-	width: 160vh;
-	height: 98vh;
+	width: 146vh;
+	height: 83vh;
 	background: linear-gradient(#2d362f, #63726b);
 	position: relative;
 	overflow: hidden;
@@ -188,10 +189,9 @@ body {
 
 .dragon-menu {
 	position: fixed;
-	top: 60px;
-	left: 10px;
+	top: 10px;
+	left: calc(10% + 10px);
 	display: flex;
-	flex-direction: column;
 	gap: 10px;
 	z-index: 101;
 	background: rgba(0, 0, 0, 0.5);
@@ -765,4 +765,13 @@ a {
 
 .visible{
 	display: flex;
+}
+
+
+.win{
+	background: rgb(6, 107, 6, 0.747);
+}
+
+.lose{
+	background: rgba(149, 31, 31, 0.747);
 }

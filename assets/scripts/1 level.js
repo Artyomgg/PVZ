@@ -27,18 +27,18 @@ const dragonTypes = {
 		shootInterval: 2000,
 		projectileClass: 'iceball',
 	},
-	poison: {
-		cost: 100,
-		damage: 3,
-		shootInterval: 2500,
-		projectileClass: 'poisonball',
-	},
-	lightning: {
-		cost: 125,
-		damage: 5,
-		shootInterval: 1700,
-		projectileClass: 'lightningball',
-	},
+	// poison: {
+	// 	cost: 100,
+	// 	damage: 3,
+	// 	shootInterval: 2500,
+	// 	projectileClass: 'poisonball',
+	// },
+	// lightning: {
+	// 	cost: 125,
+	// 	damage: 5,
+	// 	shootInterval: 1700,
+	// 	projectileClass: 'lightningball',
+	// },
 }
 
 // 2. МАССИВ ЗОМБИ
