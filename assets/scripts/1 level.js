@@ -49,24 +49,12 @@ const zombieTypes = {
 		points: 100,
 		spawnChance: 0.6,
 	},
-	armored: {
-		health: 6,
-		speed: 20,
-		points: 150,
-		spawnChance: 0.25,
-	},
-	dancer: {
-		health: 5,
-		speed: 30,
-		points: 200,
-		spawnChance: 0.15,
-	},
-	giant: {
-		health: 10,
-		speed: 15,
-		points: 300,
-		spawnChance: 0.05,
-	},
+	// armored: {
+	// 	health: 6,
+	// 	speed: 20,
+	// 	points: 150,
+	// 	spawnChance: 0.25,
+	// },
 }
 
 // Создаем сетку
