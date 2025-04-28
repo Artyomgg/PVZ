@@ -44,16 +44,16 @@ const dragonTypes = {
 // 2. МАССИВ ЗОМБИ
 const zombieTypes = {
 	normal: {
-		health: 4,
-		speed: 20,
+		health: 5,
+		speed: 17,
 		points: 100,
-		spawnChance: 0.6,
+		spawnChance: 0.8,
 	},
 	armored: {
-		health: 6,
-		speed: 20,
+		health: 10,
+		speed: 25,
 		points: 150,
-		spawnChance: 0.25,
+		spawnChance: 0.20,
 	},
 }
 
@@ -304,7 +304,7 @@ function spawnZombie() {
 					scoreCountDisplay.textContent = score
 					zombie.remove()
 					clearInterval(checkCollision)
-					if (score >= 1500) {
+					if (score >= 2500) {
 						clearInterval(zombieSpawnInterval)
 						modalWin.classList.add('visible')
 					}
@@ -355,7 +355,7 @@ function spawnSun() {
 }
 
 // Увеличение сложности
-let zombieInterval = 7000
+let zombieInterval = 4000
 let sunInterval = 5000
 
 function increaseDifficulty() {
@@ -480,7 +480,7 @@ function applyDamage(zombie, damage) {
 		scoreCountDisplay.textContent = score
 		zombie.remove()
 
-		if (score >= 1500) {
+		if (score >= 2500) {
 			clearInterval(zombieSpawnInterval)
 			modalWin.classList.add('visible')
 		}
