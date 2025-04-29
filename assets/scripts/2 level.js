@@ -1,3 +1,5 @@
+import { IntoLocalStorage } from './intoLocalStorage.js'
+
 let sunCount = 100
 let score = 0
 let selectedDragonType = null
@@ -307,6 +309,7 @@ function spawnZombie() {
 					if (score >= 2500) {
 						clearInterval(zombieSpawnInterval)
 						modalWin.classList.add('visible')
+						IntoLocalStorage(2)
 					}
 				} else {
 					zombie.classList.add('damaged')

@@ -1,105 +1,126 @@
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 
 html,
 body {
-  height: 100%;
-  font-family: "Caveat", cursive;
-  font-optical-sizing: auto;
-  font-style: normal;
+	height: 100%;
+	font-family: 'Caveat', cursive;
+	font-optical-sizing: auto;
+	font-style: normal;
 }
 
 body {
-  background: url("../assets/img/background2.png") no-repeat;
-  background-size: 100% 100%;
-  background-position: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+	background: url('../assets/img/background2.png') no-repeat;
+	background-size: 100% 100%;
+	background-position: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
 }
 
 .levels-list {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2rem;
 }
 
 /* Стрелочки */
 .levels-list2 {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  gap: 2rem;
-  padding: 5%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	gap: 2rem;
+	padding: 5%;
 }
 
 .level-arrows {
-  width: 14%;
-  height: auto;
-  object-fit: contain;
-  transition: transform 0.5s;
+	width: 14%;
+	height: auto;
+	object-fit: contain;
+	transition: transform 0.5s;
 }
 
 .level-arrows:hover {
-  transform: scale(1.1);
+	transform: scale(1.1);
 }
 
 .level-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  transition: transform 0.4s;
-  cursor: pointer;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.5rem;
+	transition: transform 0.4s;
+	cursor: pointer;
 }
 
 .level-sprite {
-  width: 65%;
-  height: auto;
-  object-fit: contain;
-  transition: opacity 0.3s ease-in-out;
+	width: 65%;
+	height: auto;
+	object-fit: contain;
+	transition: opacity 0.3s ease-in-out;
 }
 
 .level-label {
-  font-size: 1.5rem;
-  color: #fff;
-  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  transition: opacity 0.3s ease-in-out;
+	font-size: 1.5rem;
+	color: #fff;
+	text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+	transition: opacity 0.3s ease-in-out;
 }
 
 .fade {
-  opacity: 0;
+	opacity: 0;
 }
 
 .level-item:hover {
-  transform: scale(1.1);
+	transform: scale(1.1);
 }
 
 .back {
-  padding: 0.8rem 1.3rem;
-  background: linear-gradient(to right, #572293, #8307ff, #572293);
-  box-shadow: 0 3px 10px #572293, inset 0 0 20px rgba(0, 0, 0, 0.463);
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  top: 1%;
-  left: 1%;
-  font-family: "Roboto", sans-serif;
-  color: black;
-  border-radius: 50%;
-  transition: 0.5s;
-  text-decoration: none;
+	padding: 0.8rem 1.3rem;
+	background: linear-gradient(to right, #572293, #8307ff, #572293);
+	box-shadow: 0 3px 10px #572293, inset 0 0 20px rgba(0, 0, 0, 0.463);
+	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	top: 1%;
+	left: 1%;
+	font-family: 'Roboto', sans-serif;
+	color: black;
+	border-radius: 50%;
+	transition: 0.5s;
+	text-decoration: none;
 }
 
 .back:hover {
-  color: #ffffff;
-  transform: scale(1.05);
+	color: #ffffff;
+	transform: scale(1.05);
+}
+
+.level-item {
+	position: relative;
+	/* остальные стили остаются */
+}
+
+.level-lock {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.level-lock img {
+	width: 100%;
 }

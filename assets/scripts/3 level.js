@@ -1,3 +1,5 @@
+import { IntoLocalStorage } from './intoLocalStorage.js'
+
 let sunCount = 100
 let score = 0
 let selectedDragonType = null
@@ -45,7 +47,7 @@ const dragonTypes = {
 const zombieTypes = {
 	normal: {
 		health: 5,
-		speed: 17,
+		speed: 20,
 		points: 100,
 		spawnChance: 0.6,
 	},
@@ -56,9 +58,9 @@ const zombieTypes = {
 		spawnChance: 0.35,
 	},
 	hz: {
-		health: 15,
-		speed: 20,
-		points: 150,
+		health: 10,
+		speed: 22,
+		points: 175,
 		spawnChance: 0.4,
 	},
 }
@@ -313,6 +315,7 @@ function spawnZombie() {
 					if (score >= 2500) {
 						clearInterval(zombieSpawnInterval)
 						modalWin.classList.add('visible')
+						IntoLocalStorage(3)
 					}
 				} else {
 					zombie.classList.add('damaged')

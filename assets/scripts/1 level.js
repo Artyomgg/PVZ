@@ -1,4 +1,4 @@
-// import {IntoLocalStorage} from './intoLocalStorage'
+import {IntoLocalStorage} from './intoLocalStorage.js'
 
 let sunCount = 100
 let score = 0
@@ -309,6 +309,7 @@ function spawnZombie() {
 					if (score >= 1500) {
 						clearInterval(zombieSpawnInterval)
 						modalWin.classList.add('visible')
+						IntoLocalStorage(1)
 					}
 				} else {
 					zombie.classList.add('damaged')
