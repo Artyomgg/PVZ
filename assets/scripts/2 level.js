@@ -74,7 +74,7 @@ function updateDragonMenu() {
 		const option = document.createElement('div')
 		option.className = 'dragon-option'
 		option.dataset.type = type
-		option.textContent = `${type} (${dragonTypes[type].cost} ☀️)`
+		option.textContent = `${type} (${dragonTypes[type].cost} 🔥)`
 
 		option.addEventListener('click', () => {
 			selectedDragonType = type
