@@ -32,7 +32,7 @@ body {
   background: url("/assets/img/blockstory.png") no-repeat;
   background-size: 100% 100%;
   background-position: center;
-  padding: 130px;
+  padding: 10%;
   border-radius: 10px;
   max-width: 600px;
   width: 90%;
