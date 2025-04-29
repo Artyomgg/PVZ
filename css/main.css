@@ -119,3 +119,24 @@ h1 {
   transition: opacity 0.3s ease, top 0.3s ease, left 0.3s ease;
   pointer-events: none;
 }
+
+.back {
+  padding: 0.8rem 1.3rem;
+  background: linear-gradient(to right, #8b4513, #9c5420, #8b4513);
+  box-shadow: 0 5px 10px #42230d, inset 0 0 20px rgba(0, 0, 0, 0.463);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+  position: absolute;
+  top: 1%;
+  left: 1%;
+  font-family: "Roboto";
+  color: #fcf1e2;
+  border-radius: 50%;
+  transition: 0.5s;
+}
+
+.back:hover {
+  color: #932222;
+}
