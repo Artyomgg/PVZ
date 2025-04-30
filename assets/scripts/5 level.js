@@ -17,25 +17,25 @@ if (!modalLose || !modalWin) {
 const dragonTypes = {
 	fire: {
 		cost: 50,
-		damage: 1,
+		damage: 10,
 		shootInterval: 1500,
 		projectileClass: 'fireball',
 	},
 	ice: {
 		cost: 75,
-		damage: 2,
+		damage: 15,
 		shootInterval: 2000,
 		projectileClass: 'iceball',
 	},
 	poison: {
 		cost: 100,
-		damage: 3,
+		damage: 10,
 		shootInterval: 2500,
 		projectileClass: 'poisonball',
 	},
 	lightning: {
 		cost: 150,
-		damage: 5,
+		damage: 20,
 		shootInterval: 2000,
 		projectileClass: 'lightningball',
 	},
@@ -45,7 +45,7 @@ const dragonTypes = {
 const zombieTypes = {
 	golden: {
 		health: 28,
-		speed: 11,
+		speed: 19,
 		points: 100,
 		spawnChance: 1
 	}
