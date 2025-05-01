@@ -5,7 +5,7 @@ const soundToggleButton = menuButtons[1];
 
 const sound = new Audio("assets/img/Pyrokinesis_minus.mp3");
 
-sound.volume = 0.1;
+sound.volume = 0.04;
 sound.loop = true;
 sound.currentTime = 0;
 

@@ -41,7 +41,7 @@ for (let i = 0; i < liItems.length; i++) {
 
 const sound = new Audio("assets/img/Pyrokinesis_minus.mp3");
 const soundToggleButton = document.querySelector(".soundon");
-sound.volume = 0.1;
+sound.volume = 0.035;
 sound.loop = true;
 sound.currentTime = 0;
 
@@ -49,9 +49,11 @@ let isPlaying = false;
 
 soundToggleButton.addEventListener("click", () => {
   if (isPlaying) {
+    soundToggleButton.src = ('/assets/img/323420356034211_4.png')
     sound.pause();
   } else {
     sound.play();
+    soundToggleButton.src = ('/assets/img/323420356034211.png')
   }
   isPlaying = !isPlaying;
 });
