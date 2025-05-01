@@ -251,6 +251,10 @@ a {
 	text-decoration: none;
 }
 
+button{
+	font-family: 'Tiny5';
+}
+
 @keyframes moveLeft {
 	from {
 		right: -40px;

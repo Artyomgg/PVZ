@@ -247,6 +247,10 @@ body {
 	color: #000000;
 }
 
+button{
+	font-family: 'Tiny5';
+}
+
 a {
 	text-decoration: none;
 }
