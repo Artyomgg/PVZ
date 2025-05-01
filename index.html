@@ -9,8 +9,17 @@
   <body>
     <h1 class="game-title">Драконы против человечества</h1>
     <button class="menu-button">Начать игру</button>
-    <button class="menu-button">Настройки</button>
-    <button class="menu-button">Авторы</button>
+    <div class="sound-controls">
+      <button class="menu-button sound-toggle">Вкл/Выкл звук</button>
+      <input
+        type="range"
+        class="volume-slider"
+        min="0"
+        max="1"
+        step="0.1"
+        value="0.1"
+      />
+    </div>
     <script src="assets/scripts/menu.js"></script>
   </body>
 </html>
