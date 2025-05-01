@@ -8,9 +8,8 @@ const sunCountDisplay = document.getElementById('sunCount')
 const scoreCountDisplay = document.getElementById('scoreCount')
 let modalLose = document.querySelector('.modal.lose')
 let modalWin = document.querySelector('.modal.win')
-let isGameOver = false // Переменная для отслеживания состояния игры
+let isGameOver = false
 
-// Проверяем, что элементы найдены
 if (!modalLose || !modalWin) {
 	console.error('Modal elements not found!')
 }
@@ -19,25 +18,27 @@ if (!modalLose || !modalWin) {
 const dragonTypes = {
 	fire: {
 		cost: 50,
-		damage: 1,
+		damage: 4,
 		shootInterval: 1500,
 		projectileClass: 'fireball',
+		sunSpawnInterval: 5000, // Интервал спавна солнца (5 секунд)
+		sunSpawnChance: 0.5, // Шанс спавна солнца (50%)
 	},
 	ice: {
 		cost: 75,
-		damage: 2,
+		damage: 7,
 		shootInterval: 2000,
 		projectileClass: 'iceball',
 	},
 	poison: {
 		cost: 100,
-		damage: 3,
+		damage: 10,
 		shootInterval: 2500,
 		projectileClass: 'poisonball',
 	},
 	lightning: {
 		cost: 150,
-		damage: 5,
+		damage: 16,
 		shootInterval: 2000,
 		projectileClass: 'lightningball',
 	},
@@ -49,19 +50,19 @@ const zombieTypes = {
 		health: 5,
 		speed: 20,
 		points: 100,
-		spawnChance: 0.6,
+		spawnChance: 0.5,
 	},
 	armored: {
 		health: 13,
 		speed: 25,
 		points: 150,
-		spawnChance: 0.35,
+		spawnChance: 0.25,
 	},
 	hz: {
 		health: 10,
 		speed: 22,
 		points: 175,
-		spawnChance: 0.4,
+		spawnChance: 0.25,
 	},
 }
 
@@ -100,19 +101,28 @@ function updateDragonMenu() {
 updateDragonMenu()
 
 function GameOver() {
-	isGameOver = true // Устанавливаем состояние игры в "окончен"
+	isGameOver = true
 	modalLose.classList.add('visible')
-	stopAllIntervals() // Останавливаем все запущенные интервалы
+
+	// Останавливаем все интервалы драконов
+	document.querySelectorAll('.dragon').forEach(dragon => {
+		clearInterval(dragon.dataset.shootIntervalId)
+		if (dragon.dataset.sunIntervalId) {
+			clearInterval(dragon.dataset.sunIntervalId)
+		}
+	})
+
+	stopAllIntervals()
 }
 
 function stopAllIntervals() {
-	clearInterval(zombieSpawnInterval) // Остановить спавн зомби
-	clearInterval(sunSpawnInterval) // Остановить спавн солнца
-	clearInterval(difficultyInterval) // Остановить изменение сложности
+	clearInterval(zombieSpawnInterval)
+	clearInterval(sunSpawnInterval)
+	clearInterval(difficultyInterval)
 }
 
 function placeDragon(cell) {
-	if (!selectedDragonType || isGameOver) return // Прекращаем, если игра окончена
+	if (!selectedDragonType || isGameOver) return
 
 	const dragonConfig = dragonTypes[selectedDragonType]
 	if (sunCount >= dragonConfig.cost && !cell.hasChildNodes()) {
@@ -123,16 +133,74 @@ function placeDragon(cell) {
 		dragon.className = `dragon ${selectedDragonType}`
 		cell.appendChild(dragon)
 
-		const intervalId = setInterval(
+		// Интервал для стрельбы
+		const shootIntervalId = setInterval(
 			() => shoot(dragon, dragonConfig),
 			dragonConfig.shootInterval
 		)
-		dragon.dataset.intervalId = intervalId
+		dragon.dataset.shootIntervalId = shootIntervalId
+
+		// Для fire дракона - интервал спавна солнца
+		if (selectedDragonType === 'fire') {
+			const sunIntervalId = setInterval(
+				() => spawnSunNearDragon(dragon, cell),
+				dragonConfig.sunSpawnInterval
+			)
+			dragon.dataset.sunIntervalId = sunIntervalId
+		}
 	}
 }
 
+// Функция спавна солнца рядом с драконом
+function spawnSunNearDragon(dragon, cell) {
+	if (isGameOver || Math.random() > dragonTypes.fire.sunSpawnChance) return
+
+	const sun = document.createElement('div')
+	sun.className = 'sun'
+
+	// Позиционируем солнце рядом с драконом
+	const cellRect = cell.getBoundingClientRect()
+	const gridRect = grid.getBoundingClientRect()
+
+	sun.style.left = `${
+		cellRect.left - gridRect.left + (Math.random() * 60 - 30)
+	}px`
+	sun.style.top = `${cellRect.top - gridRect.top + (Math.random() * 60 - 30)}px`
+
+	grid.appendChild(sun)
+
+	sun.addEventListener('click', () => {
+		if (!sun.classList.contains('collected')) {
+			collectSun(sun)
+		}
+	})
+
+	// Автоматическое исчезновение через 10 секунд, если не собрано
+	setTimeout(() => {
+		if (sun.isConnected && !sun.classList.contains('collected')) {
+			sun.remove()
+		}
+	}, 10000)
+}
+
+function collectSun(sun) {
+	sun.classList.add('collected')
+	const counter = document.getElementById('sunCount')
+	const counterRect = counter.getBoundingClientRect()
+	const sunRect = sun.getBoundingClientRect()
+
+	sun.style.position = 'fixed'
+	sun.style.left = `${sunRect.left}px`
+	sun.style.top = `${sunRect.top}px`
+
+	sunCount += 50
+	sunCountDisplay.textContent = sunCount
+
+	setTimeout(() => sun.remove(), 500)
+}
+
 function shoot(dragon, config) {
-	if (isGameOver) return // Прекращаем, если игра окончена
+	if (isGameOver) return
 	dragon.classList.add('shooting')
 	setTimeout(() => dragon.classList.remove('shooting'), 300)
 
@@ -200,28 +268,8 @@ function createIceballTrail(projectile) {
 	}, 50)
 }
 
-function createLightningTrail(projectile) {
-	return setInterval(() => {
-		const trail = document.createElement('div')
-		trail.className = 'lightning-trail'
-		trail.style.left = projectile.style.left
-		trail.style.top = projectile.style.top
-		grid.appendChild(trail)
-		setTimeout(() => trail.remove(), 300)
-
-		if (Math.random() > 0.7) {
-			const bolt = document.createElement('div')
-			bolt.className = 'chain-lightning'
-			bolt.style.left = projectile.style.left
-			bolt.style.top = projectile.style.top
-			grid.appendChild(bolt)
-			setTimeout(() => bolt.remove(), 300)
-		}
-	}, 50)
-}
-
 function spawnZombie() {
-	if (isGameOver) return // Если игра окончена, ничего не делаем
+	if (isGameOver) return
 
 	let random = Math.random()
 	let cumulativeChance = 0
@@ -250,7 +298,7 @@ function spawnZombie() {
 	grid.appendChild(zombie)
 
 	const checkGameOver = () => {
-		if (isGameOver) return // Если игра окончена, ничего не делаем
+		if (isGameOver) return
 		const cells = document.querySelectorAll(`.cell:nth-child(${row * 8 + 1})`)
 		if (cells.length === 0) return
 
@@ -312,7 +360,7 @@ function spawnZombie() {
 					scoreCountDisplay.textContent = score
 					zombie.remove()
 					clearInterval(checkCollision)
-					if (score >= 2500) {
+					if (score >= 3500) {
 						clearInterval(zombieSpawnInterval)
 						modalWin.classList.add('visible')
 						IntoLocalStorage(3)
@@ -326,24 +374,8 @@ function spawnZombie() {
 	}, 100)
 }
 
-function collectSun(sun) {
-	sun.classList.add('collected')
-	const counter = document.getElementById('sunCount')
-	const counterRect = counter.getBoundingClientRect()
-	const sunRect = sun.getBoundingClientRect()
-
-	sun.style.position = 'fixed'
-	sun.style.left = `${sunRect.left}px`
-	sun.style.top = `${sunRect.top}px`
-
-	sunCount += 50
-	sunCountDisplay.textContent = sunCount
-
-	setTimeout(() => sun.remove(), 500)
-}
-
 function spawnSun() {
-	if (isGameOver) return // Если игра окончена, ничего не делаем
+	if (isGameOver) return
 
 	const sun = document.createElement('div')
 	sun.className = 'sun'
@@ -374,7 +406,7 @@ function increaseDifficulty() {
 }
 
 function lightningAttack(dragon, config) {
-	if (isGameOver) return // Если игра окончена, ничего не делаем
+	if (isGameOver) return
 
 	const dragonRect = dragon.getBoundingClientRect()
 	const gridRect = grid.getBoundingClientRect()

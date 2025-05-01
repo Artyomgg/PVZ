@@ -172,7 +172,8 @@ body {
 }
 
 .sun::before {
-	content: '☀️';
+	content: '🔥';
+	transform: scale(2);
 }
 
 .score-container {
