@@ -206,10 +206,32 @@ function createLightningTrail(projectile) {
 	}, 50)
 }
 
-function spawnBoss() {
-	const bossknight = document.createElement('div')
+function spawnBossWithoutAttack(name, health) {
+    const boss = {
+        name: name,
+        health: health,
+        isAlive: true,
+        image: '/assets/img/KNIGHTS/boss.gif'
+    };
+    return boss;
+}
 
+function displayBossImage(imageUrl) {
+    const bossknight = document.createElement('img')
+    bossknight.src = imageUrl
+    bossknight.style.position = 'fixed'
+    bossknight.style.top = '50%'
+    bossknight.style.left = '73%'
+	bossknight.style.width = '20%'
+    bossknight.style.transform = 'translate(-50%, -50%)'
+    bossknight.style.zIndex = '1000'
+    document.body.appendChild(bossknight)
+}
 
+const boss = spawnBossWithoutAttack()
+
+window.onload = function() {
+    displayBossImage(boss.image)
 }
 
 function spawnZombie() {
