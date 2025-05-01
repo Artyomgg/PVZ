@@ -141,3 +141,14 @@ h1 {
 .back:hover {
   color: #ffffff;
 }
+
+.soundon {
+  width: 50px;
+  height: 50px;
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+.soundon:hover {
+  transform: scale(1.2);
+}
