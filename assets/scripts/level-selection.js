@@ -20,7 +20,7 @@ const islands = {
 	1: '../assets/img/Islands/island1.png',
 	2: '../assets/img/Islands/island2.png',
 	3: '../assets/img/Islands/island3.png',
-	4: '../assets/img/Islands/island1.png',
+	4: '../assets/img/Islands/island4.png',
 	5: '../assets/img/Islands/island1.png',
 }
 
