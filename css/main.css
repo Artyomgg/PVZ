@@ -128,7 +128,7 @@ h1 {
 #gif {
   position: absolute;
   width: 23%;
-  left: 75%;
+  left: 76%;
   height: auto;
   opacity: 0;
   transition: opacity 0.3s ease, top 0.3s ease, left 0.3s ease;
