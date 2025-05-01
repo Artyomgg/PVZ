@@ -154,6 +154,7 @@ h1 {
 
 .back:hover {
   color: #ffffff;
+  transition: scale(1.05);
 }
 
 .soundon {

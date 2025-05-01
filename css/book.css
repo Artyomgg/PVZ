@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
 :root {
   --bg-color: #f5e6d0; /* Пергаментный цвет фона */
   --text-color: #3a2c1a;
@@ -14,7 +16,7 @@
 }
 
 body {
-  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-family: "Great Vibes", system-ui, -apple-system, sans-serif;
   background-color: var(--bg-color);
   color: var(--text-color);
   line-height: 1.6;
@@ -37,7 +39,7 @@ body {
   position: absolute;
   top: 1%;
   left: 1%;
-  font-family: "Roboto";
+  font-family: "Tiny5";
   color: #fcf1e2;
   border-radius: 50%;
   transition: 0.5s;
