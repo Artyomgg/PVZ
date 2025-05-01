@@ -165,7 +165,7 @@ body {
 }
 
 .sun:hover {
-	transform: scale(1.2);
+	transform: scale(1.1);
 	filter: brightness(1.2);
 }
 
@@ -175,7 +175,7 @@ body {
 
 .sun::before {
 	content: '🔥';
-	transform: scale(2);
+	transform: scale(1.5);
 }
 
 .score-container {

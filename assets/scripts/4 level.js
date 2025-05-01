@@ -22,7 +22,7 @@ const dragonTypes = {
 		shootInterval: 1500,
 		projectileClass: 'fireball',
 		sunSpawnInterval: 5000, // Интервал спавна солнца (5 секунд)
-		sunSpawnChance: 0.5, // Шанс спавна солнца (50%)
+		sunSpawnChance: 0.1, // Шанс спавна солнца (10%)
 	},
 	ice: {
 		cost: 75,
@@ -163,7 +163,7 @@ function spawnSunNearDragon(dragon, cell) {
 	const gridRect = grid.getBoundingClientRect()
 
 	sun.style.left = `${
-		cellRect.left - gridRect.left + (Math.random() * 60 - 30)
+		cellRect.left - gridRect.left + (Math.random() * 150 - 30)
 	}px`
 	sun.style.top = `${cellRect.top - gridRect.top + (Math.random() * 60 - 30)}px`
 
@@ -379,7 +379,7 @@ function spawnSun() {
 
 	const sun = document.createElement('div')
 	sun.className = 'sun'
-	sun.style.left = `${Math.random() * 90}%`
+	sun.style.left = `${Math.random() * 150}%`
 	grid.appendChild(sun)
 
 	sun.addEventListener('click', () => {
@@ -397,7 +397,7 @@ function spawnSun() {
 
 // Увеличение сложности
 let zombieInterval = 4000
-let sunInterval = 5000
+let sunInterval = 8000
 
 function increaseDifficulty() {
 	zombieInterval = Math.max(2000, zombieInterval - 500)

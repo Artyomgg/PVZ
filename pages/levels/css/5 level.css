@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Tiny5&display=swap');
+
 * {
 	margin: 0;
 	padding: 0;
@@ -12,7 +14,7 @@ body {
 	justify-content: center;
 	align-items: center;
 	min-height: 100vh;
-	font-family: 'Arial', sans-serif;
+	font-family: 'Tiny5', sans-serif;
 	gap: 20px;
 }
 
@@ -163,7 +165,7 @@ body {
 }
 
 .sun:hover {
-	transform: scale(1.2);
+	transform: scale(1.1);
 	filter: brightness(1.2);
 }
 
@@ -173,7 +175,7 @@ body {
 
 .sun::before {
 	content: '🔥';
-	transform: scale(2);
+	transform: scale(1.5);
 }
 
 .score-container {
@@ -236,7 +238,6 @@ body {
 	position: absolute;
 	top: 0.5%;
 	left: 0.5%;
-	font-family: 'Roboto';
 	color: black;
 	transition: 0.5s;
 	border-radius: 50%;

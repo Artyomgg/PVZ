@@ -206,7 +206,8 @@ function createLightningTrail(projectile) {
 	}, 50)
 }
 
-function spawnBossWithoutAttack(name, health) {
+//босс
+function spawnBoss(name, health) {
     const boss = {
         name: name,
         health: health,
@@ -228,7 +229,7 @@ function displayBossImage(imageUrl) {
     document.body.appendChild(bossknight)
 }
 
-const boss = spawnBossWithoutAttack()
+const boss = spawnBoss()
 
 window.onload = function() {
     displayBossImage(boss.image)
@@ -360,7 +361,7 @@ function spawnSun() {
 
 	const sun = document.createElement('div')
 	sun.className = 'sun'
-	sun.style.left = `${Math.random() * 90}%`
+	sun.style.left = `${Math.random() * 150}%`
 	grid.appendChild(sun)
 
 	sun.addEventListener('click', () => {
@@ -378,7 +379,7 @@ function spawnSun() {
 
 // Увеличение сложности
 let zombieInterval = 4000
-let sunInterval = 5000
+let sunInterval = 8000
 
 function increaseDifficulty() {
 	zombieInterval = Math.max(2000, zombieInterval - 500)

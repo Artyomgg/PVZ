@@ -22,7 +22,7 @@ const dragonTypes = {
 		shootInterval: 1500,
 		projectileClass: 'fireball',
 		sunSpawnInterval: 5000, // Интервал спавна солнца (5 секунд)
-		sunSpawnChance: 0.5, // Шанс спавна солнца (50%)
+		sunSpawnChance: 0.2, // Шанс спавна солнца (20%)
 	},
 	ice: {
 		cost: 75,
@@ -151,7 +151,7 @@ function spawnSunNearDragon(dragon, cell) {
 	const gridRect = grid.getBoundingClientRect()
 
 	sun.style.left = `${
-		cellRect.left - gridRect.left + (Math.random() * 60 - 30)
+		cellRect.left - gridRect.left + (Math.random() * 150 - 30)
 	}px`
 	sun.style.top = `${cellRect.top - gridRect.top + (Math.random() * 60 - 30)}px`
 
