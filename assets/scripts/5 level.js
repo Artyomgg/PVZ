@@ -44,8 +44,8 @@ const dragonTypes = {
 		damage: 5,
 		flashDuration: 1000,
 		flashCount: 3,
-		explosionRadius: 3
-		}
+		explosionRadius: 3,
+	},
 }
 
 // 2. МАССИВ ЗОМБИ
@@ -54,8 +54,8 @@ const zombieTypes = {
 		health: 28,
 		speed: 19,
 		points: 100,
-		spawnChance: 1
-	}
+		spawnChance: 1,
+	},
 }
 
 // Создаем сетку
@@ -105,7 +105,7 @@ function stopAllIntervals() {
 }
 
 function placeDragon(cell) {
-	if (!selectedDragonType || isGameOver) return // Прекращаем, если игра окончена
+	if (!selectedDragonType || isGameOver) return
 
 	const dragonConfig = dragonTypes[selectedDragonType]
 	if (sunCount >= dragonConfig.cost && !cell.hasChildNodes()) {
@@ -116,106 +116,103 @@ function placeDragon(cell) {
 		dragon.className = `dragon ${selectedDragonType}`
 		cell.appendChild(dragon)
 
-		// Интервал для стрельбы
 		if (selectedDragonType === 'blast') {
-		startBlastDragon(dragon, dragonConfig, cell)
+			startBlastDragon(dragon, dragonConfig, cell)
 		} else {
-		const shootIntervalId = setInterval(
-			() => shoot(dragon, dragonConfig),
-			  dragonConfig.shootInterval
+			const shootIntervalId = setInterval(
+				() => shoot(dragon, dragonConfig),
+				dragonConfig.shootInterval
 			)
-		dragon.dataset.shootIntervalId = shootIntervalId
-	  
-		dragon.dataset.intervalId = intervalId
+			dragon.dataset.shootIntervalId = shootIntervalId
+		}
 	}
 }
 
 function startBlastDragon(dragon, config, cell) {
 	let flashCount = 0
-  
+
 	const flashInterval = setInterval(() => {
-	if (isGameOver = !dragon.isConnected) {
-	  clearInterval(flashInterval)
-	  return
-	}
-  
-	dragon.classList.toggle('flashing')
-	flashCount++
-  
-	if (flashCount >= config.flashCount * 2) {
-	  clearInterval(flashInterval)
-	  triggerExplosion(dragon, config, cell)
-	}
+		if ((isGameOver = !dragon.isConnected)) {
+			clearInterval(flashInterval)
+			return
+		}
+
+		dragon.classList.toggle('flashing')
+		flashCount++
+
+		if (flashCount >= config.flashCount * 2) {
+			clearInterval(flashInterval)
+			triggerExplosion(dragon, config, cell)
+		}
 	}, config.flashDuration / 2)
 	dragon.dataset.flashIntervalId = flashInterval
-  }
-  
-  function triggerExplosion(dragon, config, cell) {
+}
+
+function triggerExplosion(dragon, config, cell) {
 	if (isGameOver || !dragon.isConnected) return
-  
+
 	const explosion = document.createElement('div')
 	explosion.className = 'blast-explosion'
 	const cellRect = cell.getBoundingClientRect()
 	const gridRect = grid.getBoundingClientRect()
 	explosion.style.left = `${
-	cellRect.left - gridRect.left + cellRect.width / 2 - 180
+		cellRect.left - gridRect.left + cellRect.width / 2 - 180
 	}px`
 	explosion.style.top = `${
-	cellRect.top - gridRect.top + cellRect.height / 2 - 180
+		cellRect.top - gridRect.top + cellRect.height / 2 - 180
 	}px`
 	grid.appendChild(explosion)
 	setTimeout(() => explosion.remove(), 500)
-  
+
 	const cellIndex = Array.from(grid.children).indexOf(cell)
 	const row = Math.floor(cellIndex / 8)
 	const col = cellIndex % 8
 	const radius = config.explosionRadius
-  
+
 	const zombies = document.querySelectorAll('.zombie')
 	zombies.forEach(zombie => {
-	const zombieRow = parseInt(zombie.dataset.row)
-	const zombieRect = zombie.getBoundingClientRect()
-	const cellCenterX = cellRect.left + cellRect.width / 2
-	const cellCenterY = cellRect.top + cellRect.height / 2
-	const zombieCenterX = zombieRect.left + zombieRect.width / 2
-	const zombieCenterY = zombieRect.top + zombieRect.height / 2
-  
-	const rowDiff = Math.abs(zombieRow - row)
-	const colDiff =
-	  Math.abs(zombieCenterX - cellCenterX) / cellRect.width +
-	  Math.abs(zombieCenterY - cellCenterY) / cellRect.height
-  
-	if (rowDiff <= radius && colDiff <= radius) {
-	  let currentHealth = parseInt(zombie.dataset.health)
-	  currentHealth -= config.damage
-	  zombie.dataset.health = currentHealth.toString()
-  
-	  const hitEffect = document.createElement('div')
-	  hitEffect.className = 'hit-effect'
-	  hitEffect.style.left = `${zombieRect.left - gridRect.left}px`;
-	  hitEffect.style.top = `${zombieRect.top - gridRect.top}px`;
-	  grid.appendChild(hitEffect)
-	  setTimeout(() => hitEffect.remove(), 500)
-  
-	  if (currentHealth <= 0) {
-	  score += parseInt(zombie.dataset.points)
-	  scoreCountDisplay.textContent = score
-	  zombie.remove()
-	  if (score >= 1500) {
-		clearInterval(zombieSpawnInterval)
-		modalWin.classList.add('visible')
-		IntoLocalStorage(1)
-	  }
-	  } else {
-	  zombie.classList.add('damaged')
-	  setTimeout(() => zombie.classList.remove('damaged'), 200)
-	  }
-	}
-	})
-  
-	dragon.remove()
-  }
+		const zombieRow = parseInt(zombie.dataset.row)
+		const zombieRect = zombie.getBoundingClientRect()
+		const cellCenterX = cellRect.left + cellRect.width / 2
+		const cellCenterY = cellRect.top + cellRect.height / 2
+		const zombieCenterX = zombieRect.left + zombieRect.width / 2
+		const zombieCenterY = zombieRect.top + zombieRect.height / 2
 
+		const rowDiff = Math.abs(zombieRow - row)
+		const colDiff =
+			Math.abs(zombieCenterX - cellCenterX) / cellRect.width +
+			Math.abs(zombieCenterY - cellCenterY) / cellRect.height
+
+		if (rowDiff <= radius && colDiff <= radius) {
+			let currentHealth = parseInt(zombie.dataset.health)
+			currentHealth -= config.damage
+			zombie.dataset.health = currentHealth.toString()
+
+			const hitEffect = document.createElement('div')
+			hitEffect.className = 'hit-effect'
+			hitEffect.style.left = `${zombieRect.left - gridRect.left}px`
+			hitEffect.style.top = `${zombieRect.top - gridRect.top}px`
+			grid.appendChild(hitEffect)
+			setTimeout(() => hitEffect.remove(), 500)
+
+			if (currentHealth <= 0) {
+				score += parseInt(zombie.dataset.points)
+				scoreCountDisplay.textContent = score
+				zombie.remove()
+				if (score >= 1500) {
+					clearInterval(zombieSpawnInterval)
+					modalWin.classList.add('visible')
+					IntoLocalStorage(1)
+				}
+			} else {
+				zombie.classList.add('damaged')
+				setTimeout(() => zombie.classList.remove('damaged'), 200)
+			}
+		}
+	})
+
+	dragon.remove()
+}
 
 function shoot(dragon, config) {
 	if (isGameOver) return // Прекращаем, если игра окончена
@@ -308,31 +305,31 @@ function createLightningTrail(projectile) {
 
 //босс
 function spawnBoss(name, health) {
-    const boss = {
-        name: name,
-        health: health,
-        isAlive: true,
-        image: '/assets/img/KNIGHTS/boss.gif'
-    };
-    return boss;
+	const boss = {
+		name: name,
+		health: health,
+		isAlive: true,
+		image: '/assets/img/KNIGHTS/boss.gif',
+	}
+	return boss
 }
 
 function displayBossImage(imageUrl) {
-    const bossknight = document.createElement('img')
-    bossknight.src = imageUrl
-    bossknight.style.position = 'fixed'
-    bossknight.style.top = '50%'
-    bossknight.style.left = '73%'
+	const bossknight = document.createElement('img')
+	bossknight.src = imageUrl
+	bossknight.style.position = 'fixed'
+	bossknight.style.top = '50%'
+	bossknight.style.left = '73%'
 	bossknight.style.width = '20%'
-    bossknight.style.transform = 'translate(-50%, -50%)'
-    bossknight.style.zIndex = '1000'
-    document.body.appendChild(bossknight)
+	bossknight.style.transform = 'translate(-50%, -50%)'
+	bossknight.style.zIndex = '1000'
+	document.body.appendChild(bossknight)
 }
 
 const boss = spawnBoss()
 
-window.onload = function() {
-    displayBossImage(boss.image)
+window.onload = function () {
+	displayBossImage(boss.image)
 }
 
 function spawnZombie() {
@@ -617,4 +614,3 @@ function applyDamage(zombie, damage) {
 let zombieSpawnInterval = setInterval(spawnZombie, zombieInterval)
 let sunSpawnInterval = setInterval(spawnSun, sunInterval)
 let difficultyInterval = setInterval(increaseDifficulty, 30000)
-}

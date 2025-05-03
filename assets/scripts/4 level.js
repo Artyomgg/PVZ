@@ -133,32 +133,32 @@ function placeDragon(cell) {
 
 	const dragonConfig = dragonTypes[selectedDragonType]
 	if (sunCount >= dragonConfig.cost && !cell.hasChildNodes()) {
-		sunCount -= dragonConfig.cost
-		sunCountDisplay.textContent = sunCount
+			sunCount -= dragonConfig.cost
+			sunCountDisplay.textContent = sunCount
 
-		const dragon = document.createElement('div')
-		dragon.className = `dragon ${selectedDragonType}`
-		cell.appendChild(dragon)
+			const dragon = document.createElement('div')
+			dragon.className = `dragon ${selectedDragonType}`
+			cell.appendChild(dragon)
 
-		// Интервал для стрельбы
-		if (selectedDragonType === 'blast') {
-			startBlastDragon(dragon, dragonConfig, cell)
+			// Интервал для стрельбы
+			if (selectedDragonType === 'blast') {
+					startBlastDragon(dragon, dragonConfig, cell)
 			} else {
-			const shootIntervalId = setInterval(
-			  () => shoot(dragon, dragonConfig),
-			  dragonConfig.shootInterval
-			)
-			dragon.dataset.shootIntervalId = shootIntervalId
-	  
+					const shootIntervalId = setInterval(
+							() => shoot(dragon, dragonConfig),
+							dragonConfig.shootInterval
+					)
+					dragon.dataset.shootIntervalId = shootIntervalId
 
-		// Для fire дракона - интервал спавна солнца
-		if (selectedDragonType === 'fire') {
-			const sunIntervalId = setInterval(
-				() => spawnSunNearDragon(dragon, cell),
-				dragonConfig.sunSpawnInterval
-			)
-			dragon.dataset.sunIntervalId = sunIntervalId
-		}
+					// Для fire дракона - интервал спавна солнца
+					if (selectedDragonType === 'fire') {
+							const sunIntervalId = setInterval(
+									() => spawnSunNearDragon(dragon, cell),
+									dragonConfig.sunSpawnInterval
+							)
+							dragon.dataset.sunIntervalId = sunIntervalId
+					}
+			}
 	}
 }
 
@@ -628,4 +628,4 @@ function applyDamage(zombie, damage) {
 let zombieSpawnInterval = setInterval(spawnZombie, zombieInterval)
 let sunSpawnInterval = setInterval(spawnSun, sunInterval)
 let difficultyInterval = setInterval(increaseDifficulty, 30000)
-}
+

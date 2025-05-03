@@ -89,38 +89,40 @@ body {
 	top: -570%;
 }
 
-
 .dragon.blast {
 	content: url('/assets/img/Dragons/средний-красный.png');
 	scale: 1.8;
-  }
-  
-  .dragon.blast.flashing {
+}
+
+.dragon.blast.flashing {
 	filter: brightness(1.5) drop-shadow(0 0 10px #ff0000);
-  }
-  
-  .blast-explosion {
+}
+
+.blast-explosion {
 	position: absolute;
 	width: 360px;
 	height: 360px;
-	background: radial-gradient(circle, rgba(255, 255, 0, 0.8) 0%, transparent 70%);
+	background: radial-gradient(
+		circle,
+		rgba(255, 255, 0, 0.8) 0%,
+		transparent 70%
+	);
 	border-radius: 50%;
 	pointer-events: none;
 	z-index: 10;
 	animation: blastExplosion 0.5s ease-out forwards;
-  }
-  
-  @keyframes blastExplosion {
+}
+
+@keyframes blastExplosion {
 	0% {
-	  transform: scale(0.5);
-	  opacity: 1;
+		transform: scale(0.5);
+		opacity: 1;
 	}
 	100% {
-	  transform: scale(1.5);
-	  opacity: 0;
+		transform: scale(1.5);
+		opacity: 0;
 	}
-  }
-
+}
 
 .dragon.shooting {
 	animation: dragonShoot 0.3s ease-in-out;
@@ -260,7 +262,7 @@ body {
 
 .back {
 	padding: 0.8rem 1.3rem;
-	background: linear-gradient(to right,  #7d1921, #ca313e, #7d1921);
+	background: linear-gradient(to right, #7d1921, #ca313e, #7d1921);
 	box-shadow: 0 2px 10px #710400, inset 0 0 20px rgba(0, 0, 0, 0.463);
 	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 	display: flex;
@@ -284,7 +286,7 @@ a {
 	text-decoration: none;
 }
 
-button{
+button {
 	font-family: 'Tiny5';
 }
 
@@ -297,12 +299,13 @@ button{
 	}
 }
 
-@keyframes moveBoss { /* потом тут будет норм анимация */
+@keyframes moveBoss {
+	/* потом тут будет норм анимация */
 	0% {
-		transform: translateX(0), translateY(0); 
+		transform: translateX(0), translateY(0);
 	}
 	10% {
-		transform: translateX(10%px),  translateY(20%)
+		transform: translateX(10%px), translateY(20%);
 	}
 	100% {
 		transform: translateX(0), translateY(0);
