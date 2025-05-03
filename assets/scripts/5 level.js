@@ -240,12 +240,12 @@ function moveBoss(bossElement, speed) {
             { left: '63%' , top: '20%' },
             { left: '45%', top: '30%' },
             { left: '45%', top: '30%' },
-            { left: '70%', top: '10%' },
-            { left: '70%', top: '10%' },
+            { left: '72%', top: '10%' },
+            { left: '72%', top: '10%' },
         ],
         {
             duration: speed * 1000,
-            easing: 'linear',
+            easing: 'ease',
             fill: 'forwards'
         }
     )
