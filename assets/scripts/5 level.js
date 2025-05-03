@@ -219,7 +219,7 @@ function spawnBoss() {
     const bossElement = document.createElement('div')
     bossElement.className = 'boss'
     bossElement.style.backgroundImage = `url(${boss.image})`
-    bossElement.style.top = '40%' 
+    bossElement.style.top = '30%' 
     bossElement.dataset.health = boss.health.toString()
     bossElement.dataset.points = boss.points.toString()
     grid.appendChild(bossElement)
@@ -229,11 +229,19 @@ function spawnBoss() {
 }
 
 function moveBoss(bossElement, speed) {
-    bossElement.style.left = '100%'
+    bossElement.style.left = '65%'
     const animation = bossElement.animate(
         [
-            { left: '100%' },
-            { left: '-100px' }
+            { left: '65%' , top: '20%' },
+            { left: '65%' , top: '20%' },
+            { left: '20%', top: '0%' },
+            { left: '20%', top: '0%' },
+            { left: '65%' , top: '20%' },
+            { left: '65%' , top: '20%' },
+            { left: '45%', top: '30%' },
+            { left: '45%', top: '30%' },
+            { left: '70%', top: '10%' },
+            { left: '70%', top: '10%' },
         ],
         {
             duration: speed * 1000,
@@ -267,7 +275,7 @@ function spawnZombie() {
     if (isGameOver) return
 
    
-    if (score >= 1500 && !bossSpawned) {
+    if (score >= 0 && !bossSpawned) {
         bossSpawned = true
         spawnBoss()
     }

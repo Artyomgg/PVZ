@@ -332,12 +332,12 @@ button {
 
 .boss {
     position: absolute;
-    width: 25%; /* Two cells wide (2 * 12.5%) */
-    height: 300px; /* Adjusted to maintain proportions */
+    width: 40%; /* Two cells wide (2 * 12.5%) */
+    height: 50%; /* Adjusted to maintain proportions */
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    z-index: 10;
+    z-index: 100;
 }
 
 .damaged {
