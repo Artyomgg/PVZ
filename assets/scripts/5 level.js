@@ -232,12 +232,12 @@ function moveBoss(bossElement, speed) {
     bossElement.style.left = '65%'
     const animation = bossElement.animate(
         [
-            { left: '65%' , top: '20%' },
-            { left: '65%' , top: '20%' },
-            { left: '20%', top: '0%' },
-            { left: '20%', top: '0%' },
-            { left: '65%' , top: '20%' },
-            { left: '65%' , top: '20%' },
+            { left: '62%' , top: '20%' },
+            { left: '62%' , top: '20%' },
+            { left: '23%', top: '0%' },
+            { left: '23%', top: '0%' },
+            { left: '63%' , top: '20%' },
+            { left: '63%' , top: '20%' },
             { left: '45%', top: '30%' },
             { left: '45%', top: '30%' },
             { left: '70%', top: '10%' },
