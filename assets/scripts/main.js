@@ -5,6 +5,8 @@ function redirect(path) {
     window.location.href = `pages/${path}.html`;
   } else if (path == "dragon-grow") {
     window.location.href = `pages/${path}.html`;
+  } else if (path == "infinity") {
+    window.location.href = `pages/${path}.html`;
   }
 }
 
