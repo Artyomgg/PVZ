@@ -26,7 +26,7 @@ body {
 }
 
 .container {
-  background: rgba(79, 59, 51, 0.981);
+  background: rgb(79, 59, 51);
   border-radius: 16px;
   box-shadow: -5px -5px 0 rgb(53, 40, 33);
   border: 2px solid rgb(74, 59, 49);
@@ -36,6 +36,21 @@ body {
   justify-content: center;
   align-items: center;  
   flex-direction: row;
+}
+
+.gif-overlay {
+  position: fixed;
+  top: -10%;
+  left: 0;
+  width: 100%;
+  height: auto;
+  background: rgba(0, 0, 0, 0.8);
+  display: none;
+  z-index: 1000;
+}
+.gif-overlay img {
+  width: 100%;
+  height: auto;
 }
 
 .container2 {
