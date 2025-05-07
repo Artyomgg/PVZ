@@ -44,7 +44,7 @@ const dragonTypes = {
 	},
 	blast: {
 		cost: 100,
-		damage: 5,
+		damage: 100,
 		flashDuration: 1000,
 		flashCount: 3,
 		explosionRadius: 3

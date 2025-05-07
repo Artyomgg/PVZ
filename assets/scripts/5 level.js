@@ -20,6 +20,11 @@ const dragonTypes = {
 		damage: 10,
 		shootInterval: 1500,
 		projectileClass: 'fireball',
+		fireDrops: {
+			interval: 5000, // Каждые 5 секунд
+			amount: 3, // 3 огонька
+			value: 25, // Каждый дает 25 энергии
+		},
 	},
 	ice: {
 		cost: 75,
@@ -38,13 +43,6 @@ const dragonTypes = {
 		damage: 20,
 		shootInterval: 2000,
 		projectileClass: 'lightningball',
-	},
-	blast: {
-		cost: 100,
-		damage: 30,
-		flashDuration: 1000,
-		flashCount: 3,
-		explosionRadius: 3,
 	},
 }
 
@@ -107,10 +105,8 @@ function stopAllIntervals() {
 	document.querySelectorAll('.dragon').forEach(dragon => {
 		if (dragon.dataset.shootIntervalId)
 			clearInterval(dragon.dataset.shootIntervalId)
-		if (dragon.dataset.flashIntervalId)
-			clearInterval(dragon.dataset.flashIntervalId)
-		if (dragon.dataset.trailIntervalId)
-			clearInterval(dragon.dataset.trailIntervalId)
+		if (dragon.dataset.fireDropIntervalId)
+			clearInterval(dragon.dataset.fireDropIntervalId)
 	})
 }
 
@@ -126,223 +122,85 @@ function placeDragon(cell) {
 		dragon.className = `dragon ${selectedDragonType}`
 		cell.appendChild(dragon)
 
-		if (selectedDragonType === 'blast') {
-			startBlastDragon(dragon, dragonConfig, cell)
-		} else if (selectedDragonType === 'rolling') {
-			startRollingDragon(dragon, dragonConfig, cell)
-		} else {
-			const shootIntervalId = setInterval(
-				() => shoot(dragon, dragonConfig),
-				dragonConfig.shootInterval
+		// Основная атака дракона
+		const shootIntervalId = setInterval(
+			() => shoot(dragon, dragonConfig),
+			dragonConfig.shootInterval
+		)
+		dragon.dataset.shootIntervalId = shootIntervalId
+
+		// Для fire dragon - дополнительно огоньки
+		if (selectedDragonType === 'fire' && dragonConfig.fireDrops) {
+			const fireDropIntervalId = setInterval(
+				() => createFireDrops(dragon, dragonConfig),
+				dragonConfig.fireDrops.interval
 			)
-			dragon.dataset.shootIntervalId = shootIntervalId
+			dragon.dataset.fireDropIntervalId = fireDropIntervalId
 		}
 	}
 }
 
-// Функции для rolling дракона
-function startRollingDragon(dragon, config, cell) {
-	const cellIndex = Array.from(grid.children).indexOf(cell)
-	const row = Math.floor(cellIndex / 8)
-	const col = cellIndex % 8
-
-	dragon.classList.add('rolling-active')
-
-	// Создаем эффект катящегося шара
-	const ball = document.createElement('div')
-	ball.className = 'rolling-ball'
-	dragon.appendChild(ball)
-
-	// Запускаем движение
-	moveRollingDragon(dragon, config, cell, row, col)
-
-	// Запускаем создание следа
-	const trailInterval = setInterval(() => {
-		if (dragon.isConnected) {
-			createRollingTrail(dragon)
-		} else {
-			clearInterval(trailInterval)
-		}
-	}, config.trailInterval)
-
-	dragon.dataset.trailIntervalId = trailInterval
-}
-
-function moveRollingDragon(dragon, config, prevCell, row, col) {
-	if (isGameOver || !dragon.isConnected) return
-
-	const nextCol = col + 1
-	if (nextCol >= 8) {
-		// Достигли края - удаляем дракона
-		if (dragon.dataset.trailIntervalId) {
-			clearInterval(dragon.dataset.trailIntervalId)
-		}
-		dragon.remove()
-		return
-	}
-
-	const nextCellIndex = row * 8 + nextCol
-	const nextCell = grid.children[nextCellIndex]
-
-	if (!nextCell || nextCell.hasChildNodes()) {
-		// Нет следующей клетки или она занята - удаляем дракона
-		if (dragon.dataset.trailIntervalId) {
-			clearInterval(dragon.dataset.trailIntervalId)
-		}
-		dragon.remove()
-		return
-	}
-
-	// Проверяем столкновение с зомби
-	const zombies = document.querySelectorAll('.zombie')
-	let zombieInPath = null
-
-	zombies.forEach(zombie => {
-		const zombieRow = parseInt(zombie.dataset.row)
-		if (zombieRow === row) {
-			const zombieRect = zombie.getBoundingClientRect()
-			const nextCellRect = nextCell.getBoundingClientRect()
-
-			if (
-				Math.abs(zombieRect.left - nextCellRect.left) <
-				nextCellRect.width / 2
-			) {
-				zombieInPath = zombie
-			}
-		}
-	})
-
-	if (zombieInPath) {
-		applyDamage(zombieInPath, config.damage)
-
-		const explosion = document.createElement('div')
-		explosion.className = 'rolling-explosion'
-		const zombieRect = zombieInPath.getBoundingClientRect()
-		const gridRect = grid.getBoundingClientRect()
-		explosion.style.left = `${zombieRect.left - gridRect.left}px`
-		explosion.style.top = `${zombieRect.top - gridRect.top}px`
-		grid.appendChild(explosion)
-		setTimeout(() => explosion.remove(), 500)
-
-		if (dragon.dataset.trailIntervalId) {
-			clearInterval(dragon.dataset.trailIntervalId)
-		}
-		dragon.remove()
-		return
-	}
-
-	// Перемещаем дракона в следующую клетку
-	prevCell.removeChild(dragon)
-	nextCell.appendChild(dragon)
-
-	// Продолжаем движение
-	setTimeout(() => {
-		moveRollingDragon(dragon, config, nextCell, row, nextCol)
-	}, config.speed)
-}
-
-function createRollingTrail(dragon) {
+// Функция создания огоньков для fire dragon
+function createFireDrops(dragon, config) {
 	if (isGameOver || !dragon.isConnected) return
 
 	const dragonRect = dragon.getBoundingClientRect()
 	const gridRect = grid.getBoundingClientRect()
+	const dropsConfig = config.fireDrops
 
-	const trail = document.createElement('div')
-	trail.className = 'rolling-trail'
-	trail.style.left = `${
-		dragonRect.left - gridRect.left + dragonRect.width / 2 - 10
-	}px`
-	trail.style.top = `${
-		dragonRect.top - gridRect.top + dragonRect.height / 2 - 10
-	}px`
-	grid.appendChild(trail)
+	for (let i = 0; i < dropsConfig.amount; i++) {
+		setTimeout(() => {
+			const fireDrop = document.createElement('div')
+			fireDrop.className = 'fire-drop'
 
-	setTimeout(() => trail.remove(), 1000)
-}
+			// Позиция относительно дракона
+			const offsetX = (Math.random() - 0.5) * dragonRect.width
+			const offsetY = (Math.random() - 0.5) * dragonRect.height
 
-function startBlastDragon(dragon, config, cell) {
-	let flashCount = 0
+			fireDrop.style.left = `${
+				dragonRect.left - gridRect.left + dragonRect.width / 2 + offsetX
+			}px`
+			fireDrop.style.top = `${
+				dragonRect.top - gridRect.top + dragonRect.height / 2 + offsetY
+			}px`
 
-	const flashInterval = setInterval(() => {
-		if (isGameOver || !dragon.isConnected) {
-			clearInterval(flashInterval)
-			return
-		}
+			grid.appendChild(fireDrop)
 
-		dragon.classList.toggle('flashing')
-		flashCount++
-
-		if (flashCount >= config.flashCount * 2) {
-			clearInterval(flashInterval)
-			triggerExplosion(dragon, config, cell)
-		}
-	}, config.flashDuration / 2)
-	dragon.dataset.flashIntervalId = flashInterval
-}
-
-function triggerExplosion(dragon, config, cell) {
-	if (isGameOver || !dragon.isConnected) return
-
-	const explosion = document.createElement('div')
-	explosion.className = 'blast-explosion'
-	const cellRect = cell.getBoundingClientRect()
-	const gridRect = grid.getBoundingClientRect()
-	explosion.style.left = `${
-		cellRect.left - gridRect.left + cellRect.width / 2 - 180
-	}px`
-	explosion.style.top = `${
-		cellRect.top - gridRect.top + cellRect.height / 2 - 180
-	}px`
-	grid.appendChild(explosion)
-	setTimeout(() => explosion.remove(), 500)
-
-	const cellIndex = Array.from(grid.children).indexOf(cell)
-	const row = Math.floor(cellIndex / 8)
-	const col = cellIndex % 8
-	const radius = config.explosionRadius
-
-	const zombies = document.querySelectorAll('.zombie')
-	zombies.forEach(zombie => {
-		const zombieRow = parseInt(zombie.dataset.row)
-		const zombieRect = zombie.getBoundingClientRect()
-		const cellCenterX = cellRect.left + cellRect.width / 2
-		const cellCenterY = cellRect.top + cellRect.height / 2
-		const zombieCenterX = zombieRect.left + zombieRect.width / 2
-		const zombieCenterY = zombieRect.top + zombieRect.height / 2
-
-		const rowDiff = Math.abs(zombieRow - row)
-		const colDiff =
-			Math.abs(zombieCenterX - cellCenterX) / cellRect.width +
-			Math.abs(zombieCenterY - cellCenterY) / cellRect.height
-
-		if (rowDiff <= radius && colDiff <= radius) {
-			let currentHealth = parseInt(zombie.dataset.health)
-			currentHealth -= config.damage
-			zombie.dataset.health = currentHealth.toString()
-
-			const hitEffect = document.createElement('div')
-			hitEffect.className = 'hit-effect'
-			hitEffect.style.left = `${zombieRect.left - gridRect.left}px`
-			hitEffect.style.top = `${zombieRect.top - gridRect.top}px`
-			grid.appendChild(hitEffect)
-			setTimeout(() => hitEffect.remove(), 500)
-
-			if (currentHealth <= 0) {
-				score += parseInt(zombie.dataset.points)
-				scoreCountDisplay.textContent = score
-				zombie.remove()
-				if (score >= 1500) {
-					clearInterval(zombieSpawnInterval)
-					modalWin.classList.add('visible')
+			// Анимация падения
+			fireDrop.animate(
+				[{ top: fireDrop.style.top }, { top: `${gridRect.height}px` }],
+				{
+					duration: 3000,
+					easing: 'linear',
 				}
-			} else {
-				zombie.classList.add('damaged')
-				setTimeout(() => zombie.classList.remove('damaged'), 200)
-			}
-		}
-	})
+			)
 
-	dragon.remove()
+			// Обработка клика по огоньку
+			fireDrop.addEventListener('click', () => {
+				if (!fireDrop.classList.contains('collected')) {
+					fireDrop.classList.add('collected')
+					sunCount += dropsConfig.value
+					sunCountDisplay.textContent = sunCount
+
+					// Анимация сбора
+					fireDrop.animate(
+						[{ transform: 'scale(1)' }, { transform: 'scale(0)' }],
+						{
+							duration: 300,
+							easing: 'ease-out',
+						}
+					).onfinish = () => fireDrop.remove()
+				}
+			})
+
+			// Удаление если не собрали
+			setTimeout(() => {
+				if (fireDrop.isConnected && !fireDrop.classList.contains('collected')) {
+					fireDrop.remove()
+				}
+			}, 3000)
+		}, i * 300) // Небольшая задержка между огоньками
+	}
 }
 
 function shoot(dragon, config) {
@@ -616,16 +474,6 @@ function spawnSun() {
 	})
 }
 
-// Увеличение сложности
-let zombieInterval = 4000
-let sunInterval = 5000
-
-function increaseDifficulty() {
-	zombieInterval = Math.max(2000, zombieInterval - 500)
-	clearInterval(zombieSpawnInterval)
-	zombieSpawnInterval = setInterval(spawnZombie, zombieInterval)
-}
-
 function damageZombiesInArea(cell, width, height, damage) {
 	const zombies = document.querySelectorAll('.zombie')
 	const gridRect = grid.getBoundingClientRect()
@@ -693,6 +541,15 @@ function applyDamage(zombie, damage) {
 }
 
 // Game loops
+let zombieInterval = 4000
+let sunInterval = 5000
+
+function increaseDifficulty() {
+	zombieInterval = Math.max(2000, zombieInterval - 500)
+	clearInterval(zombieSpawnInterval)
+	zombieSpawnInterval = setInterval(spawnZombie, zombieInterval)
+}
+
 let zombieSpawnInterval = setInterval(spawnZombie, zombieInterval)
 let sunSpawnInterval = setInterval(spawnSun, sunInterval)
 let difficultyInterval = setInterval(increaseDifficulty, 30000)
