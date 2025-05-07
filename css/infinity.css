@@ -233,7 +233,7 @@ body {
 	gap: 10px;
 	z-index: 101;
 	background: rgba(147, 137, 255, 0.1);
-	padding: 10px;
+	padding: 10px 10px 0 10px;
 	border-radius: 5px;
 }
 

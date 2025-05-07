@@ -25,12 +25,12 @@ body {
 }
 
 .container {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(237, 182, 255, 0.2);
   border-radius: 16px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(251, 195, 254, 0.3);
   width: 45%;
   padding: 0 0 2rem 0;
   display: flex;
