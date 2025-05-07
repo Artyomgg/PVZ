@@ -28,13 +28,13 @@ body {
 .container {
   background: rgba(79, 59, 51, 0.981);
   border-radius: 16px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: -5px -5px 0 rgb(53, 40, 33);
   border: 2px solid rgb(74, 59, 49);
   width: 70%;
   height: 70%;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center;  
   flex-direction: row;
 }
 
@@ -48,12 +48,46 @@ body {
     flex-direction: row;
 }
 
+.c {
+  width: 33%;
+  height: 100%;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  flex-direction: column;
+}
+
+.shadow{
+  width: 45%;
+  height: 35%;
+  margin-top: -5%;
+  background: rgba(59, 45, 37, 0.582);
+}
+
+.shadow2{
+  width: 65%;
+  height: 55%;
+  margin-top: -70%;
+  background: rgba(59, 45, 37, 0.729);
+}
+
+.shadow3{
+  width: 45%;
+  height: 45%;
+  margin-top: -19%;
+  background: rgba(59, 45, 37, 0.582);
+}
+
 .four-stars {
     height: 40%;
+    z-index: 10;
+    margin:-10%;
 }
 
 .five-stars {
     height: 100%;
+    z-index: 10;
 }
 
 .container3 {
@@ -67,6 +101,18 @@ body {
     gap: 2rem;
   }
 
+.container4 {
+    color: rgb(33, 25, 21);
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    font-size: 20px;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    flex-direction: column;
+}
+
 .buttons{
     border: 2px solid #5c0a46;
     border-radius: 35px;
@@ -75,7 +121,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    color:#000000;
+    color:#2e0724;
     background: #75125b;
     transition: 0.5s;
 }
@@ -104,8 +150,8 @@ body {
   position: absolute;
   top: 1%;
   left: 1%;
-  color: #000000;
-  text-shadow: 0.5px 1px 0 #280a5c;
+  color: #2e0724;
+  text-shadow: 0.5px 1px 0 #3f0a5c;
   border-radius: 50%;
   transition: 0.5s;
 }
