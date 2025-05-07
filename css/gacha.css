@@ -62,7 +62,7 @@ body {
   width: 45%;
   height: 35%;
   margin-top: -5%;
-  background: rgba(59, 45, 37, 0.582);
+  background: rgba(59, 45, 37, 0.729);
 }
 
 .shadow2{
@@ -76,7 +76,7 @@ body {
   width: 45%;
   height: 45%;
   margin-top: -19%;
-  background: rgba(59, 45, 37, 0.582);
+  background: rgba(59, 45, 37, 0.729);
 }
 
 .four-stars {
@@ -91,32 +91,53 @@ body {
 }
 
 .container3 {
-    width: 60%;
-    height: 14%;
-    padding: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-direction: row;
-    gap: 2rem;
-  }
+  padding: 1%;
+  color: rgb(161, 142, 128);
+  font-size: 20px;
+  text-shadow: 2px 2px 0 rgb(51, 46, 44);
+  width: 57%;
+  height: 1%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+}
 
 .container4 {
     color: rgb(33, 25, 21);
     width: 100%;
     height: 100%;
     padding: 10px;
-    font-size: 20px;
+    font-size: 23px;
     display: flex;
     align-items: end;
     justify-content: center;
     flex-direction: column;
 }
 
+.container5 {
+  width: 60%;
+  height: 12%;
+  padding: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.but{
+  width: 25%;
+  height: 100%;
+}
+
+a {
+  text-decoration: none;
+}
+
 .buttons{
     border: 2px solid #5c0a46;
     border-radius: 35px;
-    width: 25%;
+    width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
@@ -129,7 +150,7 @@ body {
 .buttons:hover{
     border: 2px solid rgba(99, 37, 120, 0.997);
     border-radius: 30px;
-    width: 25%;
+    width: 100%;
     height: 100%;
     display: flex;  
     align-items: center;
@@ -142,7 +163,7 @@ body {
 .back {
   padding: 0.8rem 1.3rem;
   background: linear-gradient(to right, #5c0a46, #75125b, #5c0a46);
-  box-shadow: 0 5px 10px #330d42, inset 0 0 20px rgba(0, 0, 0, 0.463);
+  box-shadow: 0 5px 10px #420d36, inset 0 0 20px rgba(0, 0, 0, 0.463);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -158,6 +179,7 @@ body {
 
 .back:hover {
   background: linear-gradient(to right, rgba(99, 37, 120, 0.997), rgba(186, 78, 222, 0.997), rgba(99, 37, 120, 0.997));
+  box-shadow: 0 5px 10px #330d42, inset 0 0 20px rgba(0, 0, 0, 0.463);
   color: #ffffff;
   transition: scale(1.05);
 }

@@ -1,0 +1,99 @@
+/* fonts */
+@import url('https://fonts.googleapis.com/css2?family=Tiny5&display=swap');
+
+* {
+  margin: 0;
+  padding: 0%;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: "Tiny5";
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+body {
+  background: url("../assets/img/backgrounddop2.png") no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.container {
+  background: rgb(79, 59, 51);
+  border-radius: 16px;
+  box-shadow: -5px -5px 0 rgb(53, 40, 33);
+  border: 2px solid rgb(74, 59, 49);
+  width: 70%;
+  height: 90%;
+  display: flex;
+  justify-content: start;
+  align-items: center;  
+  flex-direction: column;
+}
+
+.container2 {
+    color: rgb(33, 25, 21);
+    width: 100%;
+    padding: 15px;
+    font-size: 20px;
+    display: flex;
+    align-items: start;
+    justify-content: end;
+    flex-direction: row;
+}
+
+.c {
+    color: rgb(33, 25, 21);
+    width: 60%;
+    height: 22%;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.c2 {
+    color: rgb(33, 25, 21);
+    width: 60%;
+    height: 22%;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.egg {
+    width: auto;
+    height: 90%;
+}
+
+.back {
+    padding: 0.8rem 1.3rem;
+    background: linear-gradient(to right, #5c0a46, #75125b, #5c0a46);
+    box-shadow: 0 5px 10px #420d36, inset 0 0 20px rgba(0, 0, 0, 0.463);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4rem;
+    position: absolute;
+    top: 1%;
+    left: 1%;
+    color: #2e0724;
+    text-shadow: 0.5px 1px 0 #3f0a5c;
+    border-radius: 50%;
+    transition: 0.5s;
+  }
+  
+  .back:hover {
+    background: linear-gradient(to right, rgba(99, 37, 120, 0.997), rgba(186, 78, 222, 0.997), rgba(99, 37, 120, 0.997));
+    box-shadow: 0 5px 10px #330d42, inset 0 0 20px rgba(0, 0, 0, 0.463);
+    color: #ffffff;
+    transition: scale(1.05);
+  }
