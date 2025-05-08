@@ -174,9 +174,6 @@ body {
 	animation: rotateProjectile 0.5s linear infinite;
 }
 
-.lightningball {
-}
-
 .trail {
 	position: absolute;
 	opacity: 0.3;
@@ -910,7 +907,7 @@ button {
 	transform: scale(2.7);
 }
 
-.fire-drop::before{
+.fire-drop::before {
 	content: '🔥';
 }
 

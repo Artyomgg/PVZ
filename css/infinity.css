@@ -407,7 +407,6 @@ button {
 	z-index: 10;
 }
 
-
 .zombie {
 	background-image: url('/assets/img/KNIGHTS/chel.gif');
 }
@@ -889,4 +888,34 @@ button {
 		transform: scale(2);
 		opacity: 0;
 	}
+}
+
+.fire-drop {
+	position: absolute;
+	cursor: pointer;
+	z-index: 10;
+	animation: flicker 0.5s infinite alternate;
+	transform: scale(2.7);
+}
+
+.fire-drop::before {
+	content: '🔥';
+}
+
+@keyframes flicker {
+	0% {
+		opacity: 0.7;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+.fireball.trail {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	background-color: #ff6600;
+	border-radius: 50%;
+	opacity: 0.7;
 }

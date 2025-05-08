@@ -20,6 +20,12 @@ const dragonTypes = {
 		damage: 10,
 		shootInterval: 1500,
 		projectileClass: 'fireball',
+		fireDrops: {
+			// Добавляем параметры для солнышек
+			interval: 9000,
+			amount: 1,
+			value: 25,
+		},
 	},
 	ice: {
 		cost: 75,
@@ -50,7 +56,7 @@ const dragonTypes = {
 
 // 2. МАССИВ ЗОМБИ
 const zombieTypes = {
-    normal: {
+	normal: {
 		health: 5,
 		speed: 20,
 		points: 100,
@@ -132,6 +138,8 @@ function stopAllIntervals() {
 	})
 }
 
+// Остальной код остается без изменений до функции placeDragon
+
 function placeDragon(cell) {
 	if (!selectedDragonType || isGameOver) return
 
@@ -154,7 +162,79 @@ function placeDragon(cell) {
 				dragonConfig.shootInterval
 			)
 			dragon.dataset.shootIntervalId = shootIntervalId
+
+			// Добавляем генерацию солнышек для fire дракона
+			if (selectedDragonType === 'fire' && dragonConfig.fireDrops) {
+				const fireDropIntervalId = setInterval(
+					() => createFireDrops(dragon, dragonConfig),
+					dragonConfig.fireDrops.interval
+				)
+				dragon.dataset.fireDropIntervalId = fireDropIntervalId
+			}
 		}
+	}
+}
+
+// Функция создания солнышек для fire дракона
+function createFireDrops(dragon, config) {
+	if (isGameOver || !dragon.isConnected) return
+
+	const dragonRect = dragon.getBoundingClientRect()
+	const gridRect = grid.getBoundingClientRect()
+	const dropsConfig = config.fireDrops
+
+	for (let i = 0; i < dropsConfig.amount; i++) {
+		setTimeout(() => {
+			const fireDrop = document.createElement('div')
+			fireDrop.className = 'fire-drop'
+
+			// Позиция относительно дракона
+			const offsetX = (Math.random() - 0.5) * dragonRect.width * 2
+			const offsetY = (Math.random() - 0.5) * dragonRect.height * 2
+
+			fireDrop.style.left = `${
+				dragonRect.left - gridRect.left + dragonRect.width / 2 + offsetX
+			}px`
+			fireDrop.style.top = `${
+				dragonRect.top - gridRect.top + dragonRect.height / 2 + offsetY
+			}px`
+
+			grid.appendChild(fireDrop)
+
+			// Анимация падения
+			fireDrop.animate(
+				[{ top: fireDrop.style.top }, { top: `${gridRect.height}px` }],
+				{
+					duration: 10000,
+					easing: 'linear',
+				}
+			)
+
+			// Обработка клика по солнышку
+			fireDrop.addEventListener('click', () => {
+				if (!fireDrop.classList.contains('collected')) {
+					fireDrop.classList.add('collected')
+					sunCount += dropsConfig.value
+					sunCountDisplay.textContent = sunCount
+
+					// Анимация сбора
+					fireDrop.animate(
+						[{ transform: 'scale(1)' }, { transform: 'scale(0)' }],
+						{
+							duration: 100,
+							easing: 'ease-out',
+						}
+					).onfinish = () => fireDrop.remove()
+				}
+			})
+
+			// Удаление если не собрали
+			setTimeout(() => {
+				if (fireDrop.isConnected && !fireDrop.classList.contains('collected')) {
+					fireDrop.remove()
+				}
+			}, 5000)
+		}, i * 300) // Небольшая задержка между солнышками
 	}
 }
 
