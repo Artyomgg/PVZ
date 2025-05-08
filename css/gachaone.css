@@ -63,6 +63,7 @@ body {
 .egg {
     width: auto;
     height: 90%;
+    transition: 0.5s;
 }
 
 .back {
