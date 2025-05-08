@@ -61,7 +61,7 @@ if (!modalLose || !modalWin) {
 const dragonTypes = {
 	fire: {
 		cost: 50,
-		damage: 10,
+		damage: 7,
 		shootInterval: 1500,
 		projectileClass: 'fireball',
 		fireDrops: {
@@ -72,13 +72,13 @@ const dragonTypes = {
 	},
 	ice: {
 		cost: 75,
-		damage: 15,
+		damage: 12,
 		shootInterval: 2000,
 		projectileClass: 'iceball',
 	},
 	poison: {
 		cost: 100,
-		damage: 10,
+		damage: 15,
 		shootInterval: 2500,
 		projectileClass: 'poisonball',
 	},
@@ -87,6 +87,13 @@ const dragonTypes = {
 		damage: 20,
 		shootInterval: 2000,
 		projectileClass: 'lightningball',
+	},
+	blast: {
+		cost: 100,
+		damage: 40, // Большой урон при взрыве
+		flashDuration: 1000, // Длительность мигания перед взрывом
+		flashCount: 3, // Количество миганий
+		explosionRadius: 3, // Радиус взрыва в клетках
 	},
 }
 
@@ -145,12 +152,13 @@ function stopAllIntervals() {
 	clearInterval(sunSpawnInterval)
 	clearInterval(difficultyInterval)
 
-	// Очищаем все интервалы драконов
 	document.querySelectorAll('.dragon').forEach(dragon => {
 		if (dragon.dataset.shootIntervalId)
 			clearInterval(dragon.dataset.shootIntervalId)
 		if (dragon.dataset.fireDropIntervalId)
 			clearInterval(dragon.dataset.fireDropIntervalId)
+		if (dragon.dataset.flashIntervalId)
+			clearInterval(dragon.dataset.flashIntervalId)
 	})
 }
 
@@ -166,22 +174,106 @@ function placeDragon(cell) {
 		dragon.className = `dragon ${selectedDragonType}`
 		cell.appendChild(dragon)
 
-		// Основная атака дракона
-		const shootIntervalId = setInterval(
-			() => shoot(dragon, dragonConfig),
-			dragonConfig.shootInterval
-		)
-		dragon.dataset.shootIntervalId = shootIntervalId
-
-		// Для fire dragon - дополнительно огоньки
-		if (selectedDragonType === 'fire' && dragonConfig.fireDrops) {
-			const fireDropIntervalId = setInterval(
-				() => createFireDrops(dragon, dragonConfig),
-				dragonConfig.fireDrops.interval
+		if (selectedDragonType === 'blast') {
+			startBlastDragon(dragon, dragonConfig, cell)
+		} else {
+			// Обычная логика для других драконов
+			const shootIntervalId = setInterval(
+				() => shoot(dragon, dragonConfig),
+				dragonConfig.shootInterval
 			)
-			dragon.dataset.fireDropIntervalId = fireDropIntervalId
+			dragon.dataset.shootIntervalId = shootIntervalId
+
+			if (selectedDragonType === 'fire' && dragonConfig.fireDrops) {
+				const fireDropIntervalId = setInterval(
+					() => createFireDrops(dragon, dragonConfig),
+					dragonConfig.fireDrops.interval
+				)
+				dragon.dataset.fireDropIntervalId = fireDropIntervalId
+			}
 		}
 	}
+}
+
+function startBlastDragon(dragon, config, cell) {
+	let flashCount = 0
+
+	const flashInterval = setInterval(() => {
+		if (isGameOver || !dragon.isConnected) {
+			clearInterval(flashInterval)
+			return
+		}
+
+		dragon.classList.toggle('flashing')
+		flashCount++
+
+		if (flashCount >= config.flashCount * 2) {
+			clearInterval(flashInterval)
+			triggerExplosion(dragon, config, cell)
+		}
+	}, config.flashDuration / 2)
+	dragon.dataset.flashIntervalId = flashInterval
+}
+
+function triggerExplosion(dragon, config, cell) {
+	if (isGameOver || !dragon.isConnected) return
+
+	const explosion = document.createElement('div')
+	explosion.className = 'blast-explosion'
+	const cellRect = cell.getBoundingClientRect()
+	const gridRect = grid.getBoundingClientRect()
+	explosion.style.left = `${
+		cellRect.left - gridRect.left + cellRect.width / 2 - 180
+	}px`
+	explosion.style.top = `${
+		cellRect.top - gridRect.top + cellRect.height / 2 - 180
+	}px`
+	grid.appendChild(explosion)
+	setTimeout(() => explosion.remove(), 500)
+
+	const cellIndex = Array.from(grid.children).indexOf(cell)
+	const row = Math.floor(cellIndex / 8)
+	const col = cellIndex % 8
+	const radius = config.explosionRadius
+
+	const zombies = document.querySelectorAll('.zombie')
+	zombies.forEach(zombie => {
+		const zombieRow = parseInt(zombie.dataset.row)
+		const zombieRect = zombie.getBoundingClientRect()
+		const cellCenterX = cellRect.left + cellRect.width / 2
+		const cellCenterY = cellRect.top + cellRect.height / 2
+		const zombieCenterX = zombieRect.left + zombieRect.width / 2
+		const zombieCenterY = zombieRect.top + zombieRect.height / 2
+
+		const rowDiff = Math.abs(zombieRow - row)
+		const colDiff =
+			Math.abs(zombieCenterX - cellCenterX) / cellRect.width +
+			Math.abs(zombieCenterY - cellCenterY) / cellRect.height
+
+		if (rowDiff <= radius && colDiff <= radius) {
+			let currentHealth = parseInt(zombie.dataset.health)
+			currentHealth -= config.damage
+			zombie.dataset.health = currentHealth.toString()
+
+			const hitEffect = document.createElement('div')
+			hitEffect.className = 'hit-effect'
+			hitEffect.style.left = `${zombieRect.left - gridRect.left}px`
+			hitEffect.style.top = `${zombieRect.top - gridRect.top}px`
+			grid.appendChild(hitEffect)
+			setTimeout(() => hitEffect.remove(), 500)
+
+			if (currentHealth <= 0) {
+				score += parseInt(zombie.dataset.points)
+				scoreCountDisplay.textContent = score
+				zombie.remove()
+			} else {
+				zombie.classList.add('damaged')
+				setTimeout(() => zombie.classList.remove('damaged'), 200)
+			}
+		}
+	})
+
+	dragon.remove()
 }
 
 // Функция создания огоньков для fire dragon (солнышек)
@@ -243,7 +335,7 @@ function createFireDrops(dragon, config) {
 					fireDrop.remove()
 				}
 			}, 3000)
-		}, i * 300) // Небольшая задержка между солнышками
+		}, i * 1000) // Небольшая задержка между солнышками
 	}
 }
 
