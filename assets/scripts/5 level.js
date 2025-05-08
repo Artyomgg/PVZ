@@ -21,9 +21,9 @@ const dragonTypes = {
 		shootInterval: 1500,
 		projectileClass: 'fireball',
 		fireDrops: {
-			interval: 5000, // Каждые 5 секунд
-			amount: 3, // 3 огонька
-			value: 25, // Каждый дает 25 энергии
+			interval: 9000, // Каждые 5 секунд
+			amount: 1,
+			value: 25, // Каждый дает 50 энергии
 		},
 	},
 	ice: {
@@ -140,7 +140,7 @@ function placeDragon(cell) {
 	}
 }
 
-// Функция создания огоньков для fire dragon
+// Функция создания огоньков для fire dragon (солнышек)
 function createFireDrops(dragon, config) {
 	if (isGameOver || !dragon.isConnected) return
 
@@ -154,8 +154,8 @@ function createFireDrops(dragon, config) {
 			fireDrop.className = 'fire-drop'
 
 			// Позиция относительно дракона
-			const offsetX = (Math.random() - 0.5) * dragonRect.width
-			const offsetY = (Math.random() - 0.5) * dragonRect.height
+			const offsetX = (Math.random() - 0.5) * dragonRect.width * 2
+			const offsetY = (Math.random() - 0.5) * dragonRect.height * 2
 
 			fireDrop.style.left = `${
 				dragonRect.left - gridRect.left + dragonRect.width / 2 + offsetX
@@ -170,12 +170,12 @@ function createFireDrops(dragon, config) {
 			fireDrop.animate(
 				[{ top: fireDrop.style.top }, { top: `${gridRect.height}px` }],
 				{
-					duration: 3000,
+					duration: 10000,
 					easing: 'linear',
 				}
 			)
 
-			// Обработка клика по огоньку
+			// Обработка клика по солнышку
 			fireDrop.addEventListener('click', () => {
 				if (!fireDrop.classList.contains('collected')) {
 					fireDrop.classList.add('collected')
@@ -186,7 +186,7 @@ function createFireDrops(dragon, config) {
 					fireDrop.animate(
 						[{ transform: 'scale(1)' }, { transform: 'scale(0)' }],
 						{
-							duration: 300,
+							duration: 100,
 							easing: 'ease-out',
 						}
 					).onfinish = () => fireDrop.remove()
@@ -199,7 +199,7 @@ function createFireDrops(dragon, config) {
 					fireDrop.remove()
 				}
 			}, 3000)
-		}, i * 300) // Небольшая задержка между огоньками
+		}, i * 300) // Небольшая задержка между солнышками
 	}
 }
 
@@ -424,10 +424,6 @@ function spawnZombie() {
 					scoreCountDisplay.textContent = score
 					zombie.remove()
 					clearInterval(checkCollision)
-					if (score >= 2500) {
-						clearInterval(zombieSpawnInterval)
-						modalWin.classList.add('visible')
-					}
 				} else {
 					zombie.classList.add('damaged')
 					setTimeout(() => zombie.classList.remove('damaged'), 200)
