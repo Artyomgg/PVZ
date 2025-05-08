@@ -152,6 +152,7 @@ a {
 .buttons{
     border: 2px solid #5c0a46;
     border-radius: 35px;
+    font-size: 20px;
     width: 100%;
     height: 100%;
     display: flex;
@@ -165,6 +166,7 @@ a {
 .buttons:hover{
     border: 2px solid rgba(99, 37, 120, 0.997);
     border-radius: 30px;
+    font-size: 20px;
     width: 100%;
     height: 100%;
     display: flex;  
