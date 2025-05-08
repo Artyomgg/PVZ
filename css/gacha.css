@@ -177,6 +177,19 @@ a {
     transform: scale(1.05);
 }
 
+.tablet {
+  background: rgb(79, 51, 67);
+  border-radius: 16px;
+  box-shadow: -5px -5px 0 rgb(53, 40, 33);
+  border: 2px solid rgb(74, 59, 49);
+  width: 60%;
+  height: 60%;
+  display: flex;
+  justify-content: center;
+  align-items: center;  
+  flex-direction: row;
+}
+
 .back {
   padding: 0.8rem 1.3rem;
   background: linear-gradient(to right, #5c0a46, #75125b, #5c0a46);
