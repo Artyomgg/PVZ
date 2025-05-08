@@ -225,7 +225,82 @@ function spawnBoss() {
     grid.appendChild(bossElement)
 
     moveBoss(bossElement, boss.speed)
+    
+    // Механика сжигания левого края в случайном ряду
+    const burnInterval = setInterval(() => {
+        if (!bossElement.isConnected || isGameOver) {
+            clearInterval(burnInterval)
+            return
+        }
+        bossBurnAttack(bossElement)
+    }, 15000) // Сжигание каждые 15 секунд
+
     return bossElement
+}
+
+function bossBurnAttack(bossElement) {
+    if (isGameOver) return
+
+    const bossRect = bossElement.getBoundingClientRect()
+    const gridRect = grid.getBoundingClientRect()
+    const cellWidth = gridRect.width / 8
+    const cellHeight = gridRect.height / 5
+
+    // Выбираем случайный ряд
+    const randomRow = Math.floor(Math.random() * 5)
+
+    const bossX = bossRect.left - gridRect.left + bossRect.width / 2
+    const bossY = bossRect.top - gridRect.top + bossRect.height / 2
+
+    // Атака на первые 4 клетки (столбцы 0-3) в случайном ряду
+    for (let col = 0; col < 4; col++) {
+        const targetCellIndex = randomRow * 8 + col
+        const targetCell = grid.children[targetCellIndex]
+
+        if (!targetCell) continue
+
+        const targetX = targetCell.offsetLeft + cellWidth / 2
+        const targetY = targetCell.offsetTop + cellHeight / 2
+
+        createBurnBolt(bossX, bossY, targetX, targetY)
+
+        const burnEffect = document.createElement('div')
+        burnEffect.className = 'burn-effect'
+        burnEffect.style.width = `${cellWidth}px`
+        burnEffect.style.height = `${cellHeight}px`
+        burnEffect.style.left = `${targetCell.offsetLeft}px`
+        burnEffect.style.top = `${targetCell.offsetTop}px`
+        grid.appendChild(burnEffect)
+
+        setTimeout(() => burnEffect.remove(), 500)
+
+        // Уничтожаем драконов в клетке
+        const dragon = targetCell.querySelector('.dragon')
+        if (dragon) {
+            clearInterval(dragon.dataset.intervalId)
+            dragon.remove()
+        }
+
+        // Наносим урон зомби в области
+        damageZombiesInArea(targetCell, cellWidth, cellHeight, 20) // Такой же урон, как у lightning
+    }
+}
+
+function createBurnBolt(x1, y1, x2, y2) {
+    const bolt = document.createElement('div')
+    bolt.className = 'burn-bolt'
+
+    const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2))
+    const angle = (Math.atan2(y2 - y1, x2 - x1) * 180) / Math.PI
+
+    bolt.style.width = `${length}px`
+    bolt.style.left = `${x1}px`
+    bolt.style.top = `${y1}px`
+    bolt.style.transformOrigin = '0 0'
+    bolt.style.transform = `rotate(${angle}deg)`
+
+    grid.appendChild(bolt)
+    setTimeout(() => bolt.remove(), 200)
 }
 
 function moveBoss(bossElement, speed) {
@@ -250,7 +325,6 @@ function moveBoss(bossElement, speed) {
         }
     )
 
-   
     const checkBossGameOver = setInterval(() => {
         if (isGameOver || !bossElement.isConnected) {
             clearInterval(checkBossGameOver)
@@ -274,7 +348,6 @@ function moveBoss(bossElement, speed) {
 function spawnZombie() {
     if (isGameOver) return
 
-   
     if (score >= 0 && !bossSpawned) {
         bossSpawned = true
         spawnBoss()
@@ -378,7 +451,6 @@ function spawnZombie() {
             }
         })
 
-       
         const boss = document.querySelector('.boss')
         if (boss && boss.isConnected) {
             const bossRect = boss.getBoundingClientRect()
@@ -469,9 +541,8 @@ function spawnSun() {
     })
 }
 
-
 let zombieInterval = 4000
-let sunInterval = 8000
+let sunInterval = 4000
 
 function increaseDifficulty() {
     zombieInterval = Math.max(2000, zombieInterval - 500)
@@ -508,7 +579,7 @@ function lightningAttack(dragon, config) {
 
         createLightningBolt(dragonX, dragonY, targetX, targetY)
 
-        const lightningEffect = editDocument.createElement('div')
+        const lightningEffect = document.createElement('div')
         lightningEffect.className = 'lightning-effect'
         lightningEffect.style.width = `${cellWidth}px`
         lightningEffect.style.height = `${cellHeight}px`
@@ -520,7 +591,6 @@ function lightningAttack(dragon, config) {
 
         damageZombiesInArea(targetCell, cellWidth, cellHeight, config.damage)
 
-        
         const boss = document.querySelector('.boss')
         if (boss && boss.isConnected) {
             const bossRect = boss.getBoundingClientRect()
@@ -619,7 +689,6 @@ function applyDamage(entity, damage) {
         setTimeout(() => entity.classList.remove('damaged'), 200)
     }
 }
-
 
 let zombieSpawnInterval = setInterval(spawnZombie, zombieInterval)
 let sunSpawnInterval = setInterval(spawnSun, sunInterval)
