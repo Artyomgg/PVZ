@@ -7,7 +7,7 @@ const scoreCountDisplay = document.getElementById('scoreCount')
 let modalLose = document.querySelector('.modal.lose')
 let modalWin = document.querySelector('.modal.win')
 let isGameOver = false
-let bossSpawned = false 
+let bossSpawned = false
 
 // Проверяем, что элементы найдены
 if (!modalLose || !modalWin) {
@@ -20,26 +20,26 @@ const dragonTypes = {
         cost: 50,
         damage: 10,
         shootInterval: 1500,
-        projectileClass: 'fireball',
+        projectileClass: 'fireball'
     },
     ice: {
         cost: 75,
         damage: 15,
         shootInterval: 2000,
-        projectileClass: 'iceball',
+        projectileClass: 'iceball'
     },
     poison: {
         cost: 100,
         damage: 10,
         shootInterval: 2500,
-        projectileClass: 'poisonball',
+        projectileClass: 'poisonball'
     },
     lightning: {
         cost: 150,
         damage: 20,
         shootInterval: 2000,
-        projectileClass: 'lightningball',
-    },
+        projectileClass: 'lightningball'
+    }
 }
 
 // 2. МАССИВ ЗОМБИ
@@ -149,11 +149,11 @@ function shoot(dragon, config) {
     const animation = projectile.animate(
         [
             { left: `${dragonRect.left - gridRect.left}px` },
-            { left: `${gridRect.width}px` },
+            { left: `${gridRect.width}px` }
         ],
         {
             duration: 2000,
-            easing: 'linear',
+            easing: 'linear'
         }
     )
 
@@ -209,8 +209,8 @@ function createLightningTrail(projectile) {
 function spawnBoss() {
     const boss = {
         name: 'Boss Knight',
-        health: 150,
-        speed: 30, 
+        health: 700,
+        speed: 30,
         points: 500,
         isAlive: true,
         image: '/assets/img/KNIGHTS/boss.gif'
@@ -219,13 +219,13 @@ function spawnBoss() {
     const bossElement = document.createElement('div')
     bossElement.className = 'boss'
     bossElement.style.backgroundImage = `url(${boss.image})`
-    bossElement.style.top = '30%' 
+    bossElement.style.top = '30%'
     bossElement.dataset.health = boss.health.toString()
     bossElement.dataset.points = boss.points.toString()
     grid.appendChild(bossElement)
 
     moveBoss(bossElement, boss.speed)
-    
+
     // Механика сжигания левого края в случайном ряду
     const burnInterval = setInterval(() => {
         if (!bossElement.isConnected || isGameOver) {
@@ -233,7 +233,7 @@ function spawnBoss() {
             return
         }
         bossBurnAttack(bossElement)
-    }, 15000) // Сжигание каждые 15 секунд
+    }, 10000)
 
     return bossElement
 }
@@ -282,7 +282,7 @@ function bossBurnAttack(bossElement) {
         }
 
         // Наносим урон зомби в области
-        damageZombiesInArea(targetCell, cellWidth, cellHeight, 20) // Такой же урон, как у lightning
+        damageZombiesInArea(targetCell, cellWidth, cellHeight, 20)
     }
 }
 
@@ -307,16 +307,16 @@ function moveBoss(bossElement, speed) {
     bossElement.style.left = '65%'
     const animation = bossElement.animate(
         [
-            { left: '62%' , top: '20%' },
-            { left: '62%' , top: '20%' },
+            { left: '62%', top: '20%' },
+            { left: '62%', top: '20%' },
             { left: '23%', top: '0%' },
             { left: '23%', top: '0%' },
-            { left: '63%' , top: '20%' },
-            { left: '63%' , top: '20%' },
+            { left: '63%', top: '20%' },
+            { left: '63%', top: '20%' },
             { left: '45%', top: '30%' },
             { left: '45%', top: '30%' },
             { left: '72%', top: '10%' },
-            { left: '72%', top: '10%' },
+            { left: '72%', top: '10%' }
         ],
         {
             duration: speed * 1000,
@@ -340,7 +340,7 @@ function moveBoss(bossElement, speed) {
 
     animation.onfinish = () => {
         if (bossElement.isConnected && !isGameOver) {
-            GameOver()
+            moveBoss(bossElement, speed)
         }
     }
 }
@@ -441,8 +441,10 @@ function spawnZombie() {
                     zombie.remove()
                     clearInterval(checkCollision)
                     if (score >= 2500) {
+                        isGameOver = true
                         clearInterval(zombieSpawnInterval)
                         modalWin.classList.add('visible')
+                        stopAllIntervals()
                     }
                 } else {
                     zombie.classList.add('damaged')
@@ -490,10 +492,9 @@ function spawnZombie() {
                         score += parseInt(boss.dataset.points)
                         scoreCountDisplay.textContent = score
                         boss.remove()
-                        if (score >= 2500) {
-                            clearInterval(zombieSpawnInterval)
-                            modalWin.classList.add('visible')
-                        }
+                        isGameOver = true
+                        modalWin.classList.add('visible')
+                        stopAllIntervals()
                     } else {
                         boss.classList.add('damaged')
                         setTimeout(() => boss.classList.remove('damaged'), 200)
@@ -542,7 +543,7 @@ function spawnSun() {
 }
 
 let zombieInterval = 4000
-let sunInterval = 4000
+let sunInterval = 2000
 
 function increaseDifficulty() {
     zombieInterval = Math.max(2000, zombieInterval - 500)
@@ -680,9 +681,18 @@ function applyDamage(entity, damage) {
         scoreCountDisplay.textContent = score
         entity.remove()
 
-        if (score >= 2500) {
+        // Если это босс, показываем победу
+        if (entity.classList.contains('boss')) {
+            isGameOver = true
+            modalWin.classList.add('visible')
+            stopAllIntervals()
+        }
+        // Проверяем условие победы по очкам
+        else if (score >= 2500) {
+            isGameOver = true
             clearInterval(zombieSpawnInterval)
             modalWin.classList.add('visible')
+            stopAllIntervals()
         }
     } else {
         entity.classList.add('damaged')
