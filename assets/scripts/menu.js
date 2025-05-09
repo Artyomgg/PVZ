@@ -1,4 +1,5 @@
 const menuButtons = document.querySelectorAll(".menu-button");
+localStorage.removeItem('money')
 localStorage.setItem('money', 160);
 
 const startButton = menuButtons[0];

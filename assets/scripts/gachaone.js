@@ -13,7 +13,7 @@ let clickone = egg.addEventListener('click', () => {
         egg.src = '/assets/img/Dragons/dragonskinone.png'
         egg.style.transform = 'scale(0.95)' 
         egg.addEventListener('click', () => {
-          let ans = confirm('добавить скин 1?')
+          let ans = confirm('добавить скин?')
           if(ans==true){
             localStorage.setItem('dragonSkin1', 'skinone') 
             egg.style.opacity = 0
@@ -23,7 +23,7 @@ let clickone = egg.addEventListener('click', () => {
         egg.src = '/assets/img/Dragons/dragonskintwo.png'
         egg.style.transform = 'scale(0.80)' 
         egg.addEventListener('click', () => {
-          let ans = confirm('добавить скин 2?')
+          let ans = confirm('добавить скин?')
           if(ans==true){
             localStorage.setItem('dragonSkin2', 'skintwo') 
             egg.style.opacity = 0
@@ -33,7 +33,7 @@ let clickone = egg.addEventListener('click', () => {
         egg.src = '/assets/img/Dragons/dragonskinthree.png'
         egg.style.transform = 'scale(0.80)' 
         egg.addEventListener('click', () => {
-          let ans = confirm('добавить скин 3?')
+          let ans = confirm('добавить скин?')
           if(ans==true){
             localStorage.setItem('dragonSkin3', 'skinthree') 
             egg.style.opacity = 0

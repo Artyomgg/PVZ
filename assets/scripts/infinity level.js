@@ -699,7 +699,7 @@ function spawnZombie() {
 
 				if (currentHealth <= 0) {
 					score += parseInt(zombie.dataset.points)
-					localStorage.setItem('money', +localStorage.getItem('money') + +(score/10))
+					localStorage.setItem('money', +localStorage.getItem('money') + score)
 					scoreCountDisplay.textContent = score
 					zombie.remove()
 					clearInterval(checkCollision)
