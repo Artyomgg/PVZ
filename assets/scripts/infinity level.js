@@ -699,13 +699,10 @@ function spawnZombie() {
 
 				if (currentHealth <= 0) {
 					score += parseInt(zombie.dataset.points)
+					localStorage.setItem('money', +localStorage.getItem('money') + +(score/10))
 					scoreCountDisplay.textContent = score
 					zombie.remove()
 					clearInterval(checkCollision)
-					if (score >= 2500) {
-						clearInterval(zombieSpawnInterval)
-						modalWin.classList.add('visible')
-					}
 				} else {
 					zombie.classList.add('damaged')
 					setTimeout(() => zombie.classList.remove('damaged'), 200)
@@ -817,11 +814,6 @@ function applyDamage(zombie, damage) {
 		score += parseInt(zombie.dataset.points)
 		scoreCountDisplay.textContent = score
 		zombie.remove()
-
-		if (score >= 3500) {
-			clearInterval(zombieSpawnInterval)
-			modalWin.classList.add('visible')
-		}
 	} else {
 		zombie.classList.add('damaged')
 		setTimeout(() => zombie.classList.remove('damaged'), 200)

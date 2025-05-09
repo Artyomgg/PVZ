@@ -1,6 +1,10 @@
 const egg = document.querySelector('.egg')
 const emeralds = document.querySelector('.emeralds')
 
+window.onload = function() {
+  emeralds.innerText = localStorage.getItem('money')
+}
+
 let clickone = egg.addEventListener('click', () => {
     const random = Math.random() * 100
     
@@ -12,6 +16,7 @@ let clickone = egg.addEventListener('click', () => {
           let ans = confirm('добавить скин 1?')
           if(ans==true){
             localStorage.setItem('dragonSkin1', 'skinone') 
+            egg.style.opacity = 0
           }
         })
     } else if (random < 11) {
@@ -21,6 +26,7 @@ let clickone = egg.addEventListener('click', () => {
           let ans = confirm('добавить скин 2?')
           if(ans==true){
             localStorage.setItem('dragonSkin2', 'skintwo') 
+            egg.style.opacity = 0
           }
         })
     } else if (random < 20) {
@@ -30,6 +36,7 @@ let clickone = egg.addEventListener('click', () => {
           let ans = confirm('добавить скин 3?')
           if(ans==true){
             localStorage.setItem('dragonSkin3', 'skinthree') 
+            egg.style.opacity = 0
           }
         })
     } else {

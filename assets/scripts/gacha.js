@@ -1,12 +1,13 @@
 const emeralds = document.querySelector('.emeralds')
-let money = 1600
+let money = 0
 const button1 = document.querySelector('.buttonone')
 const button10 = document.querySelector('.buttonten')
 const overlay = document.querySelector('.gif-overlay')
 
 
 window.onload = function() {
-  emeralds.innerText = money
+  money += +localStorage.getItem('money')
+  emeralds.innerText = money 
 }
 
 //проигрывание гифки
@@ -22,6 +23,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   if(money>=160){
     button1.addEventListener('click', (e) => {
+      money -= 160
+      localStorage.setItem('money', money)
+      emeralds.innerText = localStorage.getItem('money')
       e.preventDefault()
       showGif(button1.getAttribute('href'))
       button1.href="gachaone.html"
@@ -30,6 +34,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   if(money>=1600){
     button10.addEventListener('click', (e) => {
+      money -= 1600
+      localStorage.setItem('money', money)
+      emeralds.innerText = localStorage.getItem('money')
       e.preventDefault()
       showGif(button10.getAttribute('href'))
       button10.href="gachaten.html"
