@@ -1,0 +1,296 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
+:root {
+  --bg-color: #f5e6d0; /* Пергаментный цвет фона */
+  --text-color: #3a2c1a;
+  --primary-color: #8b4513; /* Коричневый для заголовков */
+  --secondary-color: #6c757d;
+  --page-color: #fcf1e2; /* Цвет страниц книги */
+  --shadow-color: rgba(0, 0, 0, 0.2);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Great Vibes", system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-image: url("../assets/img/field.png");
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.back {
+  padding: 0.8rem 1.3rem;
+  background: linear-gradient(to right, #8b4513, #9c5420, #8b4513);
+  box-shadow: 0 5px 10px #42230d, inset 0 0 20px rgba(0, 0, 0, 0.463);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+  position: absolute;
+  top: 1%;
+  left: 1%;
+  font-family: "Tiny5";
+  color: #fcf1e2;
+  border-radius: 50%;
+  transition: 0.5s;
+}
+
+.back:hover {
+  color: black;
+  transform: scale(1.05);
+}
+
+a {
+  text-decoration: none;
+}
+
+.app-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.book-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.book-header h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.book-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.flip-book {
+  width: 90%;
+  max-width: 900px;
+  height: 70vh;
+  min-height: 500px;
+  box-shadow: 0 10px 30px var(--shadow-color);
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: var(--page-color);
+}
+
+.book-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.control-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--primary-color);
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.control-btn:hover {
+  transform: scale(1.05);
+}
+
+.control-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.page-indicator {
+  font-size: 1.2rem;
+  color: var(--secondary-color);
+  min-width: 80px;
+  text-align: center;
+}
+
+/* Стили страниц книги */
+.page {
+  background-color: var(--page-color);
+  color: var(--text-color);
+  padding: 3rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.page-cover {
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.page-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--primary-color);
+  position: relative;
+  padding-bottom: 0.5rem;
+  text-align: center;
+}
+
+.page-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 3px;
+  background-color: var(--primary-color);
+}
+
+.page-subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  line-height: 1.8;
+  font-weight: 500;
+}
+
+.page-text {
+  margin-bottom: 1.5rem;
+  font-size: 1.4rem;
+}
+
+.enemy-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem 0;
+  height: 120px; /* Ограничиваем высоту контейнера */
+}
+
+.enemy-image {
+  max-width: 100px; /* Уменьшаем размер гифок */
+  max-height: 100px;
+  object-fit: contain;
+  /* Примечание: CSS не может остановить воспроизведение GIF. Для полной остановки замените GIF на статическое изображение (например, PNG первого кадра). */
+  /* Альтернатива: используйте JS для замены src на статическое изображение или примените фильтр для визуальной "заморозки". */
+}
+
+.page-image {
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+  border-radius: 4px;
+  align-self: center;
+}
+
+.page-number {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  font-size: 0.9rem;
+  color: var(--secondary-color);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .app-container {
+    padding: 1rem;
+  }
+
+  .book-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .flip-book {
+    height: 60vh;
+    min-height: 400px;
+  }
+
+  .page {
+    padding: 1.5rem;
+  }
+
+  .page-title {
+    font-size: 1.8rem;
+  }
+
+  .page-subtitle {
+    font-size: 1.2rem;
+  }
+
+  .enemy-image-container {
+    height: 100px;
+  }
+
+  .enemy-image {
+    max-width: 80px;
+    max-height: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .flip-book {
+    height: 50vh;
+  }
+
+  .control-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .page-subtitle {
+    font-size: 1rem;
+  }
+
+  .enemy-image-container {
+    height: 80px;
+  }
+
+  .enemy-image {
+    max-width: 60px;
+    max-height: 60px;
+  }
+}

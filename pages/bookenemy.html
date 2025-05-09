@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Книга</title>
+		<link rel="stylesheet" href="../css/main.css" />
+		<link rel="stylesheet" href="../css/bookenemy.css" />
+		<!-- Подключение иконок -->
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+		/>
+	</head>
+	<body>
+		<!-- Кнопка назад -->
+		<a href="../main.html">
+			<div class="back">
+				<i class="bx bx-arrow-back"></i>
+				Назад
+			</div>
+		</a>
+		<div class="app-container">
+			<header class="book-header"></header>
+
+			<main class="book-main">
+				<div id="book" class="flip-book">
+					<!-- Страницы будут добавлены через JavaScript -->
+				</div>
+
+				<div class="book-controls">
+					<button
+						id="prev-page"
+						class="control-btn"
+						aria-label="Предыдущая страница"
+					>
+						<i class="fas fa-chevron-left"></i>
+					</button>
+					<div class="page-indicator">
+						<span id="current-page">1</span> / <span id="total-pages">6</span>
+					</div>
+					<button
+						id="next-page"
+						class="control-btn"
+						aria-label="Следующая страница"
+					>
+						<i class="fas fa-chevron-right"></i>
+					</button>
+				</div>
+			</main>
+		</div>
+
+		<!-- Подключение библиотеки page-flip через CDN (актуальная версия 2025) -->
+		<script src="
+https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.min.js
+"></script>
+		<link
+			href="
+https://cdn.jsdelivr.net/npm/page-flip@2.0.7/src/Style/stPageFlip.min.css
+"
+			rel="stylesheet"
+		/>
+		<script src="../assets/scripts/bookenemy.js" type="module"></script>
+	</body>
+</html>
