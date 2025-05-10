@@ -8,7 +8,12 @@ const sunCountDisplay = document.getElementById('sunCount')
 const scoreCountDisplay = document.getElementById('scoreCount')
 let modalLose = document.querySelector('.modal.lose')
 let modalWin = document.querySelector('.modal.win')
+const SMOKE = document.querySelector('.smoke')
 let isGameOver = false
+
+const function
+
+setInterval(SmokeOpacity, 10000)
 
 window.addEventListener('load', () => {
 	const skin1 = localStorage.getItem('dragonSkin1')
@@ -63,8 +68,8 @@ const dragonTypes = {
 		damage: 4,
 		shootInterval: 1500,
 		projectileClass: 'fireball',
-		sunSpawnInterval: 5000, // Интервал спавна солнца (5 секунд)
-		sunSpawnChance: 0.1, // Шанс спавна солнца (10%)
+		sunSpawnInterval: 50000000000000000000000000000000000000000000000000000000000000000000000000000000, // Интервал спавна солнца (5 секунд)
+		sunSpawnChance: 0, // Шанс спавна солнца (10%)
 	},
 	ice: {
 		cost: 75,
@@ -669,3 +674,11 @@ function applyDamage(zombie, damage) {
 let zombieSpawnInterval = setInterval(spawnZombie, zombieInterval)
 let sunSpawnInterval = setInterval(spawnSun, sunInterval)
 let difficultyInterval = setInterval(increaseDifficulty, 30000)
+
+function SmokeOpacity() {
+	SMOKE.style.opacity = '0'
+	setTimeout(smokeOne, 2000)
+	function smokeOne() {
+		SMOKE.style.opacity = '1'
+	}
+}

@@ -92,33 +92,37 @@ body {
 .dragon.blast {
 	content: url('/assets/img/Dragons/красный-большой.png');
 	scale: 1.8;
-  }
-  
-  .dragon.blast.flashing {
+}
+
+.dragon.blast.flashing {
 	filter: brightness(1.5) drop-shadow(0 0 10px #ff0000);
-  }
-  
-  .blast-explosion {
+}
+
+.blast-explosion {
 	position: absolute;
 	width: 360px;
 	height: 360px;
-	background: radial-gradient(circle, rgba(255, 255, 0, 0.8) 0%, transparent 70%);
+	background: radial-gradient(
+		circle,
+		rgba(255, 255, 0, 0.8) 0%,
+		transparent 70%
+	);
 	border-radius: 50%;
 	pointer-events: none;
 	z-index: 10;
 	animation: blastExplosion 0.5s ease-out forwards;
-  }
-  
-  @keyframes blastExplosion {
+}
+
+@keyframes blastExplosion {
 	0% {
-	  transform: scale(0.5);
-	  opacity: 1;
+		transform: scale(0.5);
+		opacity: 1;
 	}
 	100% {
-	  transform: scale(1.5);
-	  opacity: 0;
+		transform: scale(1.5);
+		opacity: 0;
 	}
-  }
+}
 
 .dragon.shooting {
 	animation: dragonShoot 0.3s ease-in-out;
@@ -240,7 +244,7 @@ body {
 	border-radius: 5px;
 	color: #fff;
 	cursor: pointer;
-	transition: all 0.3s;	
+	transition: all 0.3s;
 	font-size: 16px;
 }
 
@@ -258,7 +262,7 @@ body {
 
 .back {
 	padding: 0.8rem 1.3rem;
-	background: linear-gradient(to right, #ffbd72, #ffc20c,  #ffbd72);
+	background: linear-gradient(to right, #ffbd72, #ffc20c, #ffbd72);
 	box-shadow: 0 2px 10px #a89200, inset 0 0 20px rgba(74, 58, 0, 0.541);
 	text-shadow: 1px 1px 2px rgb(0, 91, 209);
 	display: flex;
@@ -282,7 +286,7 @@ a {
 	text-decoration: none;
 }
 
-button{
+button {
 	font-family: 'Tiny5';
 }
 
@@ -758,7 +762,7 @@ button{
 	}
 }
 
-.modal{
+.modal {
 	width: 100%;
 	height: 100%;
 	position: fixed;
@@ -771,12 +775,12 @@ button{
 	display: none;
 }
 
-.modal h1{
+.modal h1 {
 	font-size: 2.5rem;
 	color: white;
 }
 
-.modal button{
+.modal button {
 	width: 30%;
 	padding: 1rem;
 	border: 3px solid green;
@@ -789,14 +793,14 @@ button{
 	cursor: pointer;
 }
 
-.modal button:hover{
+.modal button:hover {
 	transform: scale(1.01);
 	background: darkblue;
 	color: #e67e22;
 	border-color: goldenrod;
 }
 
-.block-with-two-buttons{
+.block-with-two-buttons {
 	width: 50%;
 	display: flex;
 	gap: 2rem;
@@ -804,15 +808,42 @@ button{
 	justify-content: space-around;
 }
 
-.visible{
+.visible {
 	display: flex;
 }
 
-
-.win{
+.win {
 	background: rgb(6, 107, 6, 0.747);
 }
 
-.lose{
+.lose {
 	background: rgba(149, 31, 31, 0.747);
+}
+
+.smoke {
+	width: 300px;
+	height: 1000px;
+	background: rgba(128, 128, 128, 0.99);
+	position: fixed;
+	z-index: 100;
+	top: 0;
+	right: 100%;
+	animation: moveToGrid 2s ease-in-out 1s both;
+}
+
+@keyframes moveToGrid {
+	0% {
+		right: 100%;
+		opacity: 0;
+	}
+	60% {
+		right: 160px;
+	}
+	75% {
+		opacity: 0.4;
+	}
+	100% {
+		opacity: 1;
+		right: 160px;
+	}
 }
