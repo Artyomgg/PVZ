@@ -443,8 +443,7 @@ function spawnZombie() {
                     if (score >= 2500) {
                         isGameOver = true
                         clearInterval(zombieSpawnInterval)
-                        modalWin.classList.add('visible')
-                        stopAllIntervals()
+                        startCutscene()
                     }
                 } else {
                     zombie.classList.add('damaged')
@@ -493,8 +492,7 @@ function spawnZombie() {
                         scoreCountDisplay.textContent = score
                         boss.remove()
                         isGameOver = true
-                        modalWin.classList.add('visible')
-                        stopAllIntervals()
+                        startCutscene()
                     } else {
                         boss.classList.add('damaged')
                         setTimeout(() => boss.classList.remove('damaged'), 200)
@@ -658,6 +656,39 @@ function damageZombiesInArea(cell, width, height, damage) {
     })
 }
 
+// Функция для запуска катсцены в стиле "Звездных войн"
+function startCutscene() {
+    stopAllIntervals()
+
+    // Создаем контейнер для катсцены
+    const cutscene = document.createElement('div')
+    cutscene.className = 'cutscene'
+    cutscene.id = 'cutscene'
+    document.body.appendChild(cutscene)
+
+    // Создаем контейнер для ползущего текста
+    const crawlContainer = document.createElement('div')
+    crawlContainer.className = 'crawl-container'
+    cutscene.appendChild(crawlContainer)
+
+    // Тут пока что хз
+    const crawl = document.createElement('div')
+    crawl.className = 'crawl'
+    crawl.innerHTML = `
+        <h1>Победа!</h1>
+        <p>Давным-давно, в далекой-далекой галактике...</p>
+        <p>Отважные драконы сражались против орд нежити. Их огненные и ледяные атаки уничтожили могущественного Рыцаря Босса, восстановив мир на пятом уровне.</p>
+        <p>Теперь герои готовятся к новым приключениям, чтобы защитить свои земли от будущих угроз...</p>
+    `
+    crawlContainer.appendChild(crawl)
+
+    // Скрываем катсцену и показываем модальное окно победы через 15 секунд
+    setTimeout(() => {
+        cutscene.remove()
+        modalWin.classList.add('visible')
+    }, 15000)
+}
+
 function applyDamage(entity, damage) {
     let currentHealth = parseInt(entity.dataset.health)
     currentHealth -= damage
@@ -681,18 +712,15 @@ function applyDamage(entity, damage) {
         scoreCountDisplay.textContent = score
         entity.remove()
 
-        // Если это босс, показываем победу
+        
         if (entity.classList.contains('boss')) {
             isGameOver = true
-            modalWin.classList.add('visible')
-            stopAllIntervals()
+            startCutscene()
         }
-        // Проверяем условие победы по очкам
+        
         else if (score >= 2500) {
             isGameOver = true
-            clearInterval(zombieSpawnInterval)
-            modalWin.classList.add('visible')
-            stopAllIntervals()
+            startCutscene()
         }
     } else {
         entity.classList.add('damaged')
