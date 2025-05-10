@@ -6,7 +6,7 @@ const overlay = document.querySelector('.gif-overlay')
 
 
 window.onload = function() {
-  money = +localStorage.getItem('money') + +localStorage.getItem('score')
+  money = +localStorage.getItem('money') + +localStorage.getItem('score')/10
   localStorage.setItem('money', money)
   emeralds.innerText = money
   localStorage.removeItem('score')
