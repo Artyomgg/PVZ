@@ -1,3 +1,4 @@
+import { IntoLocalStorage } from './intoLocalStorage.js'
 let sunCount = 100
 let score = 0
 let selectedDragonType = null

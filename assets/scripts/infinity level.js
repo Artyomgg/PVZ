@@ -9,21 +9,21 @@ let modalWin = document.querySelector('.modal.win')
 let isGameOver = false
 
 window.addEventListener('load', () => {
-    const skin1 = localStorage.getItem('dragonSkin1') 
-    const skin2 = localStorage.getItem('dragonSkin2') 
-    const skin3 = localStorage.getItem('dragonSkin3') 
-    
-    let styleText = ''
-    
-    if (skin1 === 'skinone') {
-        styleText += `
+	const skin1 = localStorage.getItem('dragonSkin1')
+	const skin2 = localStorage.getItem('dragonSkin2')
+	const skin3 = localStorage.getItem('dragonSkin3')
+
+	let styleText = ''
+
+	if (skin1 === 'skinone') {
+		styleText += `
             .dragon.fire::before {
                 content: url('/assets/img/Dragons/dragonskinone.png') !important;
             }
         `
-    }
-    if (skin2 === 'skintwo') {
-        styleText += `
+	}
+	if (skin2 === 'skintwo') {
+		styleText += `
             .dragon.poison::before {
                 content: url('/assets/img/Dragons/dragonskintwo.png') !important;
 				scale: 11.5%;
@@ -31,9 +31,9 @@ window.addEventListener('load', () => {
 				top: -570%;
             }
         `
-    }
+	}
 	if (skin3 === 'skinthree') {
-        styleText += `
+		styleText += `
             .dragon.ice::before {
                 content: url('/assets/img/Dragons/dragonskinthree.png') !important;
 				scale: 11.5%;
@@ -41,13 +41,13 @@ window.addEventListener('load', () => {
 				top: -660%;
             }
         `
-    }
+	}
 
-    if (styleText) {
-        const style = document.createElement('style')
-        style.textContent = styleText
-        document.head.appendChild(style)
-    }
+	if (styleText) {
+		const style = document.createElement('style')
+		style.textContent = styleText
+		document.head.appendChild(style)
+	}
 })
 
 // Проверяем, что элементы найдены
@@ -59,11 +59,10 @@ if (!modalLose || !modalWin) {
 const dragonTypes = {
 	fire: {
 		cost: 50,
-		damage: 10,
+		damage: 4,
 		shootInterval: 1500,
 		projectileClass: 'fireball',
 		fireDrops: {
-			// Добавляем параметры для солнышек
 			interval: 9000,
 			amount: 1,
 			value: 25,
@@ -161,6 +160,19 @@ updateDragonMenu()
 function GameOver() {
 	isGameOver = true
 	modalLose.classList.add('visible')
+
+	// Останавливаем все интервалы
+	document.querySelectorAll('.dragon').forEach(dragon => {
+		if (dragon.dataset.shootIntervalId)
+			clearInterval(dragon.dataset.shootIntervalId)
+		if (dragon.dataset.fireIntervalId)
+			clearInterval(dragon.dataset.fireIntervalId)
+		if (dragon.dataset.flashIntervalId)
+			clearInterval(dragon.dataset.flashIntervalId)
+		if (dragon.dataset.trailIntervalId)
+			clearInterval(dragon.dataset.trailIntervalId)
+	})
+
 	stopAllIntervals()
 }
 
@@ -194,26 +206,82 @@ function placeDragon(cell) {
 		dragon.className = `dragon ${selectedDragonType}`
 		cell.appendChild(dragon)
 
+		// Логика для взрывного дракона
 		if (selectedDragonType === 'blast') {
 			startBlastDragon(dragon, dragonConfig, cell)
-		} else if (selectedDragonType === 'rolling') {
-			startRollingDragon(dragon, dragonConfig, cell)
-		} else {
+		}
+		// Логика для огненного дракона с солнышками
+		else if (selectedDragonType === 'fire') {
+			// Интервал стрельбы
 			const shootIntervalId = setInterval(
 				() => shoot(dragon, dragonConfig),
 				dragonConfig.shootInterval
 			)
 			dragon.dataset.shootIntervalId = shootIntervalId
 
-			// Добавляем генерацию солнышек для fire дракона
-			if (selectedDragonType === 'fire' && dragonConfig.fireDrops) {
-				const fireDropIntervalId = setInterval(
-					() => createFireDrops(dragon, dragonConfig),
-					dragonConfig.fireDrops.interval
-				)
-				dragon.dataset.fireDropIntervalId = fireDropIntervalId
-			}
+			// Интервал генерации солнышек
+			const fireIntervalId = setInterval(
+				() => createFireDrops(dragon, dragonConfig),
+				dragonConfig.fireDrops.interval
+			)
+			dragon.dataset.fireIntervalId = fireIntervalId
 		}
+		// Логика для остальных драконов
+		else {
+			const shootIntervalId = setInterval(
+				() => shoot(dragon, dragonConfig),
+				dragonConfig.shootInterval
+			)
+			dragon.dataset.shootIntervalId = shootIntervalId
+		}
+	}
+}
+
+function createFireDrops(dragon, config) {
+	if (isGameOver || !dragon.isConnected) return
+
+	const dropsConfig = config.fireDrops
+	const dragonRect = dragon.getBoundingClientRect()
+	const gridRect = grid.getBoundingClientRect()
+
+	for (let i = 0; i < dropsConfig.amount; i++) {
+		setTimeout(() => {
+			const sun = document.createElement('div')
+			sun.className = 'sun'
+			sun.dataset.value = dropsConfig.value
+
+			const offsetX = (Math.random() - 0.5) * dragonRect.width * 2
+			const offsetY = (Math.random() - 0.5) * dragonRect.height * 2
+
+			sun.style.left = `${
+				dragonRect.left - gridRect.left + dragonRect.width / 2 + offsetX
+			}px`
+			sun.style.top = `${
+				dragonRect.top - gridRect.top + dragonRect.height / 2 + offsetY
+			}px`
+
+			grid.appendChild(sun)
+
+			// Анимация падения
+			sun.animate([{ top: sun.style.top }, { top: `${gridRect.height}px` }], {
+				duration: 10000,
+				easing: 'linear',
+			})
+
+			// Обработка сбора
+			sun.addEventListener('click', () => {
+				if (!sun.classList.contains('collected')) {
+					collectSun(sun)
+				}
+			})
+
+			// Автоудаление через 5 секунд
+			setTimeout(() => {
+				if (sun.isConnected && !sun.classList.contains('collected')) {
+					sun.remove()
+				}
+			}, 5000)
+		}, i * 300)
 	}
 }
 
@@ -470,7 +538,7 @@ function triggerExplosion(dragon, config, cell) {
 			if (currentHealth <= 0) {
 				score += parseInt(zombie.dataset.points)
 				scoreCountDisplay.textContent = score
-  				localStorage.setItem('score', score)
+				localStorage.setItem('score', score)
 				zombie.remove()
 			} else {
 				zombie.classList.add('damaged')
@@ -715,18 +783,29 @@ function spawnZombie() {
 
 function collectSun(sun) {
 	sun.classList.add('collected')
-	const counter = document.getElementById('sunCount')
-	const counterRect = counter.getBoundingClientRect()
+	const value = parseInt(sun.dataset.value) || 50
+
+	sunCount += value
+	sunCountDisplay.textContent = sunCount
+
+	// Анимация
+	const counterRect = sunCountDisplay.getBoundingClientRect()
 	const sunRect = sun.getBoundingClientRect()
 
 	sun.style.position = 'fixed'
 	sun.style.left = `${sunRect.left}px`
 	sun.style.top = `${sunRect.top}px`
 
-	sunCount += 50
-	sunCountDisplay.textContent = sunCount
-
-	setTimeout(() => sun.remove(), 500)
+	sun.animate(
+		[
+			{ transform: 'scale(1)', opacity: 1 },
+			{ transform: 'scale(0)', opacity: 0 },
+		],
+		{
+			duration: 500,
+			easing: 'ease-out',
+		}
+	).onfinish = () => sun.remove()
 }
 
 function spawnSun() {

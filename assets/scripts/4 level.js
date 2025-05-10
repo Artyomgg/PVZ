@@ -10,23 +10,22 @@ let modalLose = document.querySelector('.modal.lose')
 let modalWin = document.querySelector('.modal.win')
 let isGameOver = false
 
-
 window.addEventListener('load', () => {
-    const skin1 = localStorage.getItem('dragonSkin1') 
-    const skin2 = localStorage.getItem('dragonSkin2') 
-    const skin3 = localStorage.getItem('dragonSkin3') 
-    
-    let styleText = ''
-    
-    if (skin1 === 'skinone') {
-        styleText += `
+	const skin1 = localStorage.getItem('dragonSkin1')
+	const skin2 = localStorage.getItem('dragonSkin2')
+	const skin3 = localStorage.getItem('dragonSkin3')
+
+	let styleText = ''
+
+	if (skin1 === 'skinone') {
+		styleText += `
             .dragon.fire::before {
                 content: url('/assets/img/Dragons/dragonskinone.png') !important;
             }
         `
-    }
-    if (skin2 === 'skintwo') {
-        styleText += `
+	}
+	if (skin2 === 'skintwo') {
+		styleText += `
             .dragon.poison::before {
                 content: url('/assets/img/Dragons/dragonskintwo.png') !important;
 				scale: 11.5%;
@@ -34,9 +33,9 @@ window.addEventListener('load', () => {
 				top: -570%;
             }
         `
-    }
+	}
 	if (skin3 === 'skinthree') {
-        styleText += `
+		styleText += `
             .dragon.ice::before {
                 content: url('/assets/img/Dragons/dragonskinthree.png') !important;
 				scale: 11.5%;
@@ -44,15 +43,14 @@ window.addEventListener('load', () => {
 				top: -660%;
             }
         `
-    }
+	}
 
-    if (styleText) {
-        const style = document.createElement('style')
-        style.textContent = styleText
-        document.head.appendChild(style)
-    }
+	if (styleText) {
+		const style = document.createElement('style')
+		style.textContent = styleText
+		document.head.appendChild(style)
+	}
 })
-
 
 if (!modalLose || !modalWin) {
 	console.error('Modal elements not found!')
@@ -91,8 +89,8 @@ const dragonTypes = {
 		damage: 100,
 		flashDuration: 1000,
 		flashCount: 3,
-		explosionRadius: 3
-		}
+		explosionRadius: 3,
+	},
 }
 
 // 2. МАССИВ ЗОМБИ
@@ -177,121 +175,120 @@ function placeDragon(cell) {
 
 	const dragonConfig = dragonTypes[selectedDragonType]
 	if (sunCount >= dragonConfig.cost && !cell.hasChildNodes()) {
-			sunCount -= dragonConfig.cost
-			sunCountDisplay.textContent = sunCount
+		sunCount -= dragonConfig.cost
+		sunCountDisplay.textContent = sunCount
 
-			const dragon = document.createElement('div')
-			dragon.className = `dragon ${selectedDragonType}`
-			cell.appendChild(dragon)
+		const dragon = document.createElement('div')
+		dragon.className = `dragon ${selectedDragonType}`
+		cell.appendChild(dragon)
 
-			// Интервал для стрельбы
-			if (selectedDragonType === 'blast') {
-					startBlastDragon(dragon, dragonConfig, cell)
-			} else {
-					const shootIntervalId = setInterval(
-							() => shoot(dragon, dragonConfig),
-							dragonConfig.shootInterval
-					)
-					dragon.dataset.shootIntervalId = shootIntervalId
+		// Интервал для стрельбы
+		if (selectedDragonType === 'blast') {
+			startBlastDragon(dragon, dragonConfig, cell)
+		} else {
+			const shootIntervalId = setInterval(
+				() => shoot(dragon, dragonConfig),
+				dragonConfig.shootInterval
+			)
+			dragon.dataset.shootIntervalId = shootIntervalId
 
-					// Для fire дракона - интервал спавна солнца
-					if (selectedDragonType === 'fire') {
-							const sunIntervalId = setInterval(
-									() => spawnSunNearDragon(dragon, cell),
-									dragonConfig.sunSpawnInterval
-							)
-							dragon.dataset.sunIntervalId = sunIntervalId
-					}
+			// Для fire дракона - интервал спавна солнца
+			if (selectedDragonType === 'fire') {
+				const sunIntervalId = setInterval(
+					() => spawnSunNearDragon(dragon, cell),
+					dragonConfig.sunSpawnInterval
+				)
+				dragon.dataset.sunIntervalId = sunIntervalId
 			}
+		}
 	}
 }
 
-
 function startBlastDragon(dragon, config, cell) {
 	let flashCount = 0
-  
+
 	const flashInterval = setInterval(() => {
-	if (isGameOver = !dragon.isConnected) {
-	  clearInterval(flashInterval)
-	  return
-	}
-  
-	dragon.classList.toggle('flashing')
-	flashCount++
-  
-	if (flashCount >= config.flashCount * 2) {
-	  clearInterval(flashInterval)
-	  triggerExplosion(dragon, config, cell)
-	}
+		if ((isGameOver = !dragon.isConnected)) {
+			clearInterval(flashInterval)
+			return
+		}
+
+		dragon.classList.toggle('flashing')
+		flashCount++
+
+		if (flashCount >= config.flashCount * 2) {
+			clearInterval(flashInterval)
+			triggerExplosion(dragon, config, cell)
+		}
 	}, config.flashDuration / 2)
 	dragon.dataset.flashIntervalId = flashInterval
-  }
-  
-  function triggerExplosion(dragon, config, cell) {
+}
+
+function triggerExplosion(dragon, config, cell) {
 	if (isGameOver || !dragon.isConnected) return
-  
+
 	const explosion = document.createElement('div')
 	explosion.className = 'blast-explosion'
 	const cellRect = cell.getBoundingClientRect()
 	const gridRect = grid.getBoundingClientRect()
 	explosion.style.left = `${
-	cellRect.left - gridRect.left + cellRect.width / 2 - 180
+		cellRect.left - gridRect.left + cellRect.width / 2 - 180
 	}px`
 	explosion.style.top = `${
-	cellRect.top - gridRect.top + cellRect.height / 2 - 180
+		cellRect.top - gridRect.top + cellRect.height / 2 - 180
 	}px`
 	grid.appendChild(explosion)
 	setTimeout(() => explosion.remove(), 500)
-  
+
 	const cellIndex = Array.from(grid.children).indexOf(cell)
 	const row = Math.floor(cellIndex / 8)
 	const col = cellIndex % 8
 	const radius = config.explosionRadius
-  
+
 	const zombies = document.querySelectorAll('.zombie')
 	zombies.forEach(zombie => {
-	const zombieRow = parseInt(zombie.dataset.row)
-	const zombieRect = zombie.getBoundingClientRect()
-	const cellCenterX = cellRect.left + cellRect.width / 2
-	const cellCenterY = cellRect.top + cellRect.height / 2
-	const zombieCenterX = zombieRect.left + zombieRect.width / 2
-	const zombieCenterY = zombieRect.top + zombieRect.height / 2
-  
-	const rowDiff = Math.abs(zombieRow - row)
-	const colDiff =
-	  Math.abs(zombieCenterX - cellCenterX) / cellRect.width +
-	  Math.abs(zombieCenterY - cellCenterY) / cellRect.height
-  
-	if (rowDiff <= radius && colDiff <= radius) {
-	  let currentHealth = parseInt(zombie.dataset.health)
-	  currentHealth -= config.damage
-	  zombie.dataset.health = currentHealth.toString()
-  
-	  const hitEffect = document.createElement('div')
-	  hitEffect.className = 'hit-effect'
-	  hitEffect.style.left = `${zombieRect.left - gridRect.left}px`;
-	  hitEffect.style.top = `${zombieRect.top - gridRect.top}px`;
-	  grid.appendChild(hitEffect)
-	  setTimeout(() => hitEffect.remove(), 500)
-  
-	  if (currentHealth <= 0) {
-	  score += parseInt(zombie.dataset.points)
-	  scoreCountDisplay.textContent = score
-	  zombie.remove()
-	  if (score >= 1500) {
-		clearInterval(zombieSpawnInterval)
-		modalWin.classList.add('visible')
-		IntoLocalStorage(1)
-	  }
-	  } else {
-	  zombie.classList.add('damaged')
-	  setTimeout(() => zombie.classList.remove('damaged'), 200)
-	  }
-	}
+		const zombieRow = parseInt(zombie.dataset.row)
+		const zombieRect = zombie.getBoundingClientRect()
+		const cellCenterX = cellRect.left + cellRect.width / 2
+		const cellCenterY = cellRect.top + cellRect.height / 2
+		const zombieCenterX = zombieRect.left + zombieRect.width / 2
+		const zombieCenterY = zombieRect.top + zombieRect.height / 2
+
+		const rowDiff = Math.abs(zombieRow - row)
+		const colDiff =
+			Math.abs(zombieCenterX - cellCenterX) / cellRect.width +
+			Math.abs(zombieCenterY - cellCenterY) / cellRect.height
+
+		if (rowDiff <= radius && colDiff <= radius) {
+			let currentHealth = parseInt(zombie.dataset.health)
+			currentHealth -= config.damage
+			zombie.dataset.health = currentHealth.toString()
+
+			const hitEffect = document.createElement('div')
+			hitEffect.className = 'hit-effect'
+			hitEffect.style.left = `${zombieRect.left - gridRect.left}px`
+			hitEffect.style.top = `${zombieRect.top - gridRect.top}px`
+			grid.appendChild(hitEffect)
+			setTimeout(() => hitEffect.remove(), 500)
+
+			if (currentHealth <= 0) {
+				score += parseInt(zombie.dataset.points)
+				scoreCountDisplay.textContent = score
+				zombie.remove()
+				if (score >= 1500) {
+					clearInterval(zombieSpawnInterval)
+					modalWin.classList.add('visible')
+					IntoLocalStorage(1)
+				}
+			} else {
+				zombie.classList.add('damaged')
+				setTimeout(() => zombie.classList.remove('damaged'), 200)
+			}
+		}
 	})
-  
+
 	dragon.remove()
-  }
+}
 
 // Функция спавна солнца рядом с драконом
 function spawnSunNearDragon(dragon, cell) {
@@ -672,4 +669,3 @@ function applyDamage(zombie, damage) {
 let zombieSpawnInterval = setInterval(spawnZombie, zombieInterval)
 let sunSpawnInterval = setInterval(spawnSun, sunInterval)
 let difficultyInterval = setInterval(increaseDifficulty, 30000)
-
