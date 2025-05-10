@@ -8,43 +8,41 @@ let modalLose = document.querySelector('.modal.lose')
 let modalWin = document.querySelector('.modal.win')
 let isGameOver = false
 
-
 window.addEventListener('load', () => {
-  const skin1 = localStorage.getItem('dragonSkin1') 
-  const skin2 = localStorage.getItem('dragonSkin2') 
-  const skin3 = localStorage.getItem('dragonSkin3') 
-  
-  let styleText = ''
-  
-  if (skin1 === 'skinone') {
-      styleText += `
+	const skin1 = localStorage.getItem('dragonSkin1')
+	const skin2 = localStorage.getItem('dragonSkin2')
+	const skin3 = localStorage.getItem('dragonSkin3')
+
+	let styleText = ''
+
+	if (skin1 === 'skinone') {
+		styleText += `
           .dragon.fire {
                 background-image: url('/assets/img/Dragons/dragonskinone.png')
           }
       `
-  }
-  if (skin2 === 'skintwo') {
-      styleText += `
+	}
+	if (skin2 === 'skintwo') {
+		styleText += `
           .dragon.poison {
               background-image: url('/assets/img/Dragons/dragonskintwo.png');
           }
       `
-  }
-if (skin3 === 'skinthree') {
-      styleText += `
+	}
+	if (skin3 === 'skinthree') {
+		styleText += `
           .dragon.ice {
               background-image: url('/assets/img/Dragons/dragonskinthree.png')
           }
       `
-  }
+	}
 
-  if (styleText) {
-      const style = document.createElement('style')
-      style.textContent = styleText
-      document.head.appendChild(style)
-  }
+	if (styleText) {
+		const style = document.createElement('style')
+		style.textContent = styleText
+		document.head.appendChild(style)
+	}
 })
-
 
 if (!modalLose || !modalWin) {
 	console.error('Modal elements not found!')
@@ -79,6 +77,11 @@ const zombieTypes = {
 for (let i = 0; i < 40; i++) {
 	const cell = document.createElement('div')
 	cell.className = 'cell'
+	// Добавляем данные о позиции клетки
+	const row = Math.floor(i / 8)
+	const col = i % 8
+	cell.dataset.row = row
+	cell.dataset.col = col
 	cell.addEventListener('click', () => placeDragon(cell))
 	grid.appendChild(cell)
 }
@@ -282,19 +285,19 @@ function spawnZombie() {
 	const zombie = document.createElement('div')
 	zombie.className = `zombie ${zombieType}`
 
-	// Добавляем флаг уязвимости
 	let isVulnerable = true
 	const baseSpeed = zombieConfig.speed
 	const cellWidth = grid.offsetWidth / 8
 	let currentPosition = 0
 
+	// Устанавливаем ряд зомби
+	const row = Math.floor(Math.random() * 5)
+	zombie.dataset.row = row
+	zombie.style.top = `${row * 20}%`
 	zombie.style.setProperty('--move-duration', `${baseSpeed}s`)
 	zombie.dataset.health = zombieConfig.health
 	zombie.dataset.points = zombieConfig.points
 
-	// Позиционирование
-	const row = Math.floor(Math.random() * 5)
-	zombie.style.top = `${row * 20}%`
 	grid.appendChild(zombie)
 
 	const moveZombie = () => {
@@ -302,16 +305,15 @@ function spawnZombie() {
 
 		currentPosition += cellWidth * 0.015
 		zombie.style.left = `${currentPosition}px`
-
-		// Постоянная проверка достижения конца
 		checkGameOver()
 		requestAnimationFrame(moveZombie)
 	}
 
-	// Проверка конца пути
 	const checkGameOver = () => {
 		const zombieRect = zombie.getBoundingClientRect()
-		const firstCell = document.querySelector(`.cell:nth-child(${row * 8 + 1})`)
+		const firstCell = document.querySelector(
+			`.cell[data-row="${row}"][data-col="0"]`
+		)
 
 		if (
 			firstCell &&
@@ -321,7 +323,6 @@ function spawnZombie() {
 		}
 	}
 
-	// Обработка столкновения с драконами
 	const checkCollision = setInterval(() => {
 		if (!zombie.isConnected) {
 			clearInterval(checkCollision)
@@ -329,30 +330,32 @@ function spawnZombie() {
 		}
 
 		const zombieRect = zombie.getBoundingClientRect()
+		const zombieRow = zombie.dataset.row
 
 		document.querySelectorAll('.dragon').forEach(dragon => {
 			if (!dragon.isConnected || !isVulnerable) return
 
 			const dragonRect = dragon.getBoundingClientRect()
-			if (isColliding(zombieRect, dragonRect)) {
+			const dragonRow = dragon.parentElement.dataset.row
+
+			if (isColliding(zombieRect, dragonRect) && zombieRow === dragonRow) {
 				isVulnerable = false
 
 				anime({
 					targets: zombie,
-					translateX: '-=96', // Прыжок ровно на 1 клетку назад
+					translateX: '-=96',
 					translateY: ['-60px', '0px'],
 					easing: 'easeOutQuad',
 					duration: 800,
 					complete: () => {
 						isVulnerable = true
-						checkGameOver() // Проверяем после прыжка
+						checkGameOver()
 					},
 				})
 			}
 		})
 	}, 100)
 
-	// Обработка попаданий снарядов
 	const hitCheck = setInterval(() => {
 		if (!zombie.isConnected) {
 			clearInterval(hitCheck)
@@ -367,7 +370,6 @@ function spawnZombie() {
 						projectile.getBoundingClientRect()
 					)
 				) {
-					// Логика получения урона
 					const damage = projectile.classList.contains('fireball')
 						? dragonTypes.fire.damage
 						: dragonTypes.ice.damage
@@ -386,7 +388,6 @@ function spawnZombie() {
 		}
 	}, 50)
 
-	// Запуск движения
 	moveZombie()
 }
 
