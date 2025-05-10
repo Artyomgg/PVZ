@@ -64,6 +64,6 @@ body {
     }
     100% {
         transform: rotateX(20deg) translateY(-600%);
-        opacity: 0;
+        opacity: 1;
     }
 }
