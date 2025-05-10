@@ -470,7 +470,7 @@ function triggerExplosion(dragon, config, cell) {
 			if (currentHealth <= 0) {
 				score += parseInt(zombie.dataset.points)
 				scoreCountDisplay.textContent = score
-				localStorage.setItem('money', +localStorage.getItem('money') + score)
+  				localStorage.setItem('score', score)
 				zombie.remove()
 			} else {
 				zombie.classList.add('damaged')
@@ -701,7 +701,7 @@ function spawnZombie() {
 				if (currentHealth <= 0) {
 					score += parseInt(zombie.dataset.points)
 					scoreCountDisplay.textContent = score
-					localStorage.setItem('money', +localStorage.getItem('money') + score)
+					localStorage.setItem('score', score)
 					zombie.remove()
 					clearInterval(checkCollision)
 				} else {
@@ -814,7 +814,7 @@ function applyDamage(zombie, damage) {
 	if (currentHealth <= 0) {
 		score += parseInt(zombie.dataset.points)
 		scoreCountDisplay.textContent = score
-		localStorage.setItem('money', +localStorage.getItem('money') + score)
+		localStorage.setItem('score', score)
 		zombie.remove()
 	} else {
 		zombie.classList.add('damaged')

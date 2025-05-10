@@ -1,6 +1,6 @@
 const menuButtons = document.querySelectorAll(".menu-button");
 localStorage.removeItem('money')
-localStorage.setItem('money', 160);
+localStorage.setItem('money', 0);
 
 const startButton = menuButtons[0];
 const soundToggleButton = menuButtons[1];

@@ -6,9 +6,10 @@ const overlay = document.querySelector('.gif-overlay')
 
 
 window.onload = function() {
-  money = money + +localStorage.getItem('money') 
+  money += +localStorage.getItem('score')
   localStorage.setItem('money', money)
-  emeralds.innerText = money 
+  emeralds.innerText = money
+  localStorage.removeItem('score')
 }
 
 //проигрывание гифки
@@ -22,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  if(money + +localStorage.getItem('money')>=160){
+  if(money>=160){
     button1.addEventListener('click', (e) => {
       money -= 160
       localStorage.setItem('money', money)
@@ -33,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
     })
   } else button1.href="gacha.html"
 
-  if(money + +localStorage.getItem('money') >=1600){
+  if(money>=1600){
     button10.addEventListener('click', (e) => {
       money -= 1600
       localStorage.setItem('money', money)
