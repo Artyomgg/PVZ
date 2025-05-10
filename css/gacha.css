@@ -82,15 +82,15 @@ body {
 
 .shadow2{
   width: 65%;
-  height: 55%;
-  margin-top: -70%;
+  height: 65%;
+  margin-top: -75%;
   background: rgba(59, 45, 37, 0.729);
 }
 
 .shadow3{
   width: 45%;
-  height: 45%;
-  margin-top: -19%;
+  height: 48%;
+  margin-top: -24%;
   background: rgba(59, 45, 37, 0.729);
 }
 
@@ -175,19 +175,6 @@ a {
     color:#ffffff;
     background: rgba(117, 44, 142, 0.997);
     transform: scale(1.05);
-}
-
-.tablet {
-  background: rgb(79, 51, 67);
-  border-radius: 16px;
-  box-shadow: -5px -5px 0 rgb(53, 40, 33);
-  border: 2px solid rgb(74, 59, 49);
-  width: 60%;
-  height: 60%;
-  display: flex;
-  justify-content: center;
-  align-items: center;  
-  flex-direction: row;
 }
 
 .back {
