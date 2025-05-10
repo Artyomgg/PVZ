@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  if(money>=160){
+  if(money + localStorage.getItem('money')>=160){
     button1.addEventListener('click', (e) => {
       money -= 160
       localStorage.setItem('money', money)
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
     })
   } else button1.href="gacha.html"
 
-  if(money>=1600){
+  if(money + localStorage.getItem('money')>=1600){
     button10.addEventListener('click', (e) => {
       money -= 1600
       localStorage.setItem('money', money)
