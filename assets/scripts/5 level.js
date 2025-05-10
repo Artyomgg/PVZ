@@ -656,7 +656,7 @@ function damageZombiesInArea(cell, width, height, damage) {
     })
 }
 
-// Функция для запуска катсцены в стиле "Звездных войн"
+
 function startCutscene() {
     stopAllIntervals()
 
