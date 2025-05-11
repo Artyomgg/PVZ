@@ -237,53 +237,53 @@ function placeDragon(cell) {
 	}
 }
 
-function createFireDrops(dragon, config) {
-	if (isGameOver || !dragon.isConnected) return
+// function createFireDrops(dragon, config) {
+// 	if (isGameOver || !dragon.isConnected) return
 
-	const dropsConfig = config.fireDrops
-	const dragonRect = dragon.getBoundingClientRect()
-	const gridRect = grid.getBoundingClientRect()
+// 	const dropsConfig = config.fireDrops
+// 	const dragonRect = dragon.getBoundingClientRect()
+// 	const gridRect = grid.getBoundingClientRect()
 
-	for (let i = 0; i < dropsConfig.amount; i++) {
-		setTimeout(() => {
-			const sun = document.createElement('div')
-			sun.className = 'sun'
-			sun.dataset.value = dropsConfig.value
+// 	for (let i = 0; i < dropsConfig.amount; i++) {
+// 		setTimeout(() => {
+// 			const sun = document.createElement('div')
+// 			sun.className = 'sun'
+// 			sun.dataset.value = dropsConfig.value
 
-			const offsetX = (Math.random() - 0.5) * dragonRect.width * 2
-			const offsetY = (Math.random() - 0.5) * dragonRect.height * 2
+// 			const offsetX = (Math.random() - 0.5) * dragonRect.width * 2
+// 			const offsetY = (Math.random() - 0.5) * dragonRect.height * 2
 
-			sun.style.left = `${
-				dragonRect.left - gridRect.left + dragonRect.width / 2 + offsetX
-			}px`
-			sun.style.top = `${
-				dragonRect.top - gridRect.top + dragonRect.height / 2 + offsetY
-			}px`
+// 			sun.style.left = `${
+// 				dragonRect.left - gridRect.left + dragonRect.width / 2 + offsetX
+// 			}px`
+// 			sun.style.top = `${
+// 				dragonRect.top - gridRect.top + dragonRect.height / 2 + offsetY
+// 			}px`
 
-			grid.appendChild(sun)
+// 			grid.appendChild(sun)
 
-			// Анимация падения
-			sun.animate([{ top: sun.style.top }, { top: `${gridRect.height}px` }], {
-				duration: 10000,
-				easing: 'linear',
-			})
+// 			// Анимация падения
+// 			sun.animate([{ top: sun.style.top }, { top: `${gridRect.height}px` }], {
+// 				duration: 10000,
+// 				easing: 'linear',
+// 			})
 
-			// Обработка сбора
-			sun.addEventListener('click', () => {
-				if (!sun.classList.contains('collected')) {
-					collectSun(sun)
-				}
-			})
+// 			// Обработка сбора
+// 			sun.addEventListener('click', () => {
+// 				if (!sun.classList.contains('collected')) {
+// 					collectSun(sun)
+// 				}
+// 			})
 
-			// Автоудаление через 5 секунд
-			setTimeout(() => {
-				if (sun.isConnected && !sun.classList.contains('collected')) {
-					sun.remove()
-				}
-			}, 5000)
-		}, i * 300)
-	}
-}
+// 			// Автоудаление через 5 секунд
+// 			setTimeout(() => {
+// 				if (sun.isConnected && !sun.classList.contains('collected')) {
+// 					sun.remove()
+// 				}
+// 			}, 5000)
+// 		}, i * 300)
+// 	}
+// }
 
 // Функция создания солнышек для fire дракона
 function createFireDrops(dragon, config) {
