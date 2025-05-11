@@ -819,13 +819,16 @@ button {
 
 .smoke {
 	width: 300px;
-	height: 1000px;
-	background: rgba(128, 128, 128, 0.99);
-	position: fixed;
+	height: 100%;
+	background: rgba(128, 128, 128);
+	position: absolute; /* Меняем с fixed на absolute */
 	z-index: 100;
-	top: 0;
+	top: 50%; /* Центрируем по вертикали */
+	transform: translateY(-50%); /* Корректируем позицию */
 	right: 100%;
-	animation: moveToGrid 2s ease-in-out 1s both;
+	animation: moveToGrid 2s ease-in-out 1s forwards,
+		moveTurn 20s linear infinite 5s;
+	opacity: 0; /* Добавляем начальную прозрачность для анимации */
 }
 
 @keyframes moveToGrid {
@@ -834,13 +837,35 @@ button {
 		opacity: 0;
 	}
 	60% {
-		right: 160px;
+		right: 0px;
 	}
 	75% {
 		opacity: 0.4;
 	}
 	100% {
 		opacity: 1;
-		right: 160px;
+		right: 0px;
+	}
+}
+
+@keyframes moveTurn {
+	10% {
+		right: -300px;
+		opacity: 0;
+	}
+	16.66% {
+		right: -300px;
+		opacity: 0;
+	}
+	20.66% {
+		right: 0px;
+		opacity: 0.4;
+	}
+	26.66%{
+		opacity: 1;
+	}
+	100% {
+		right: 0px;
+		opacity: 1;
 	}
 }

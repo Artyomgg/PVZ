@@ -11,8 +11,6 @@ let modalWin = document.querySelector('.modal.win')
 const SMOKE = document.querySelector('.smoke')
 let isGameOver = false
 
-setInterval(SmokeOpacity, 10000)
-
 window.addEventListener('load', () => {
 	const skin1 = localStorage.getItem('dragonSkin1')
 	const skin2 = localStorage.getItem('dragonSkin2')
@@ -672,11 +670,3 @@ function applyDamage(zombie, damage) {
 let zombieSpawnInterval = setInterval(spawnZombie, zombieInterval)
 let sunSpawnInterval = setInterval(spawnSun, sunInterval)
 let difficultyInterval = setInterval(increaseDifficulty, 30000)
-
-function SmokeOpacity() {
-	SMOKE.style.opacity = '0'
-	setTimeout(smokeOne, 2000)
-	function smokeOne() {
-		SMOKE.style.opacity = '1'
-	}
-}
