@@ -11,8 +11,8 @@ const lockElement = document.createElement('div')
 lockElement.className = 'level-lock'
 lockElement.innerHTML =
 	'<img src="../assets/img/Islands/цепь.png" alt="Locked">'
-lockElement.style.width = '65%'; 
-lockElement.style.height = 'auto';
+lockElement.style.width = '65%'
+lockElement.style.height = 'auto'
 lockElement.style.left = '49%'
 levelItem.appendChild(lockElement)
 
@@ -21,7 +21,7 @@ const islands = {
 	2: '../assets/img/Islands/island2.png',
 	3: '../assets/img/Islands/island3.png',
 	4: '../assets/img/Islands/island4.png',
-	5: '../assets/img/Islands/island1.png',
+	5: '../assets/img/Islands/island5.png',
 }
 
 function updateLevel() {
