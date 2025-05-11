@@ -11,8 +11,6 @@ let modalWin = document.querySelector('.modal.win')
 const SMOKE = document.querySelector('.smoke')
 let isGameOver = false
 
-const function
-
 setInterval(SmokeOpacity, 10000)
 
 window.addEventListener('load', () => {
