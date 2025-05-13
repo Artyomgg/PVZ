@@ -1,4 +1,3 @@
-import { IntoLocalStorage } from './intoLocalStorage.js'
 let sunCount = 100
 let score = 0
 let selectedDragonType = null
@@ -301,10 +300,12 @@ function spawnZombie() {
 
 	grid.appendChild(zombie)
 
-	const moveZombie = () => {
+	// В функции moveZombie():
+	function moveZombie() {
 		if (!zombie.isConnected || isGameOver) return
 
-		currentPosition += cellWidth * 0.015
+		const speedMultiplier = parseFloat(zombie.dataset.slowMultiplier) || 1
+		currentPosition += cellWidth * 0.015 * speedMultiplier
 		zombie.style.left = `${currentPosition}px`
 		checkGameOver()
 		requestAnimationFrame(moveZombie)
@@ -364,13 +365,13 @@ function spawnZombie() {
 		}
 
 		if (isVulnerable) {
+			const zombieRect = zombie.getBoundingClientRect() // <-- Перемещаем сюда
 			document.querySelectorAll('.projectile').forEach(projectile => {
-				if (
-					isColliding(
-						zombie.getBoundingClientRect(),
-						projectile.getBoundingClientRect()
-					)
-				) {
+				if (!projectile.isConnected) return // Добавляем проверку существования
+
+				const projectileRect = projectile.getBoundingClientRect()
+
+				if (isColliding(zombieRect, projectileRect)) {
 					const damage = projectile.classList.contains('fireball')
 						? dragonTypes.fire.damage
 						: dragonTypes.ice.damage
@@ -381,6 +382,8 @@ function spawnZombie() {
 						zombie.remove()
 						score += parseInt(zombie.dataset.points)
 						scoreCountDisplay.textContent = score
+					} else if (projectile.classList.contains('iceball')) {
+						freezeZombie(zombie)
 					}
 
 					projectile.remove()
@@ -430,6 +433,27 @@ function increaseDifficulty() {
 	zombieInterval = Math.max(2000, zombieInterval - 500)
 	clearInterval(zombieSpawnInterval)
 	zombieSpawnInterval = setInterval(spawnZombie, zombieInterval)
+}
+
+function freezeZombie(zombie) {
+	if (!zombie.isConnected) return
+
+	if (zombie.dataset.freezeTimeoutId) {
+		clearTimeout(zombie.dataset.freezeTimeoutId)
+	}
+
+	zombie.dataset.slowMultiplier = 0.3 // Сильное замедление
+	zombie.classList.add('frozen')
+
+	const timeoutId = setTimeout(() => {
+		if (zombie.isConnected) {
+			zombie.dataset.slowMultiplier = 1
+			zombie.classList.remove('frozen')
+			delete zombie.dataset.freezeTimeoutId
+		}
+	}, 1000)
+
+	zombie.dataset.freezeTimeoutId = timeoutId
 }
 
 let zombieSpawnInterval = setInterval(spawnZombie, zombieInterval)
