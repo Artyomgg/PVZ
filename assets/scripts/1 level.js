@@ -168,35 +168,6 @@ function placeDragon(cell) {
 	}
 }
 
-function spawnSunNearDragon(dragon, cell) {
-	if (isGameOver || Math.random() > dragonTypes.fire.sunSpawnChance) return
-
-	const sun = document.createElement('div')
-	sun.className = 'sun'
-
-	const cellRect = cell.getBoundingClientRect()
-	const gridRect = grid.getBoundingClientRect()
-
-	sun.style.left = `${
-		cellRect.left - gridRect.left + (Math.random() * 150 - 30)
-	}px`
-	sun.style.top = `${cellRect.top - gridRect.top + (Math.random() * 60 - 30)}px`
-
-	grid.appendChild(sun)
-
-	sun.addEventListener('click', () => {
-		if (!sun.classList.contains('collected')) {
-			collectSun(sun)
-		}
-	})
-
-	setTimeout(() => {
-		if (sun.isConnected && !sun.classList.contains('collected')) {
-			sun.remove()
-		}
-	}, 10000)
-}
-
 function collectSun(sun) {
 	sun.classList.add('collected')
 	const counter = document.getElementById('sunCount')
@@ -280,119 +251,109 @@ function createIceballTrail(projectile) {
 function spawnZombie() {
 	if (isGameOver) return
 
+	// Конфигурация зомби
 	const zombieType = 'normal'
 	const zombieConfig = zombieTypes[zombieType]
+
+	// Создание элемента
 	const zombie = document.createElement('div')
 	zombie.className = `zombie ${zombieType}`
 
-	let isVulnerable = true
-	const baseSpeed = zombieConfig.speed
-	const cellWidth = grid.offsetWidth / 8
-	let currentPosition = 0
-
-	// Устанавливаем ряд зомби
+	// Позиционирование
 	const row = Math.floor(Math.random() * 5)
+	const topPosition = row * 20 + 10 // 10%, 30%, 50%, 70%, 90%
+	zombie.style.top = `${topPosition}%`
+	zombie.style.left = '100%'
 	zombie.dataset.row = row
-	zombie.style.top = `${row * 20}%`
-	zombie.style.setProperty('--move-duration', `${baseSpeed}s`)
 	zombie.dataset.health = zombieConfig.health
 	zombie.dataset.points = zombieConfig.points
 
+	// Добавление в DOM
 	grid.appendChild(zombie)
 
-	// В функции moveZombie():
-	function moveZombie() {
+	// Переменные движения
+	let lastTime = performance.now()
+	let currentPosition = 0
+
+	// Функция анимации
+	const animate = timestamp => {
 		if (!zombie.isConnected || isGameOver) return
 
+		// Расчет дельта-времени
+		const deltaTime = timestamp - lastTime
+		lastTime = timestamp
+
+		// Расчет скорости
 		const speedMultiplier = parseFloat(zombie.dataset.slowMultiplier) || 1
-		currentPosition += cellWidth * 0.015 * speedMultiplier
-		zombie.style.left = `${currentPosition}px`
-		checkGameOver()
-		requestAnimationFrame(moveZombie)
-	}
+		const movement = (zombieConfig.speed * deltaTime * speedMultiplier) / 1000
+		currentPosition += movement
 
-	const checkGameOver = () => {
+		// Обновление позиции
+		zombie.style.left = `calc(100% - ${currentPosition}px)`
+
+		// Проверка границ
 		const zombieRect = zombie.getBoundingClientRect()
-		const firstCell = document.querySelector(
-			`.cell[data-row="${row}"][data-col="0"]`
-		)
-
-		if (
-			firstCell &&
-			zombieRect.right <= firstCell.getBoundingClientRect().left
-		) {
+		if (zombieRect.right <= grid.getBoundingClientRect().left + 50) {
 			GameOver()
+			return
 		}
+
+		requestAnimationFrame(animate)
 	}
 
-	const checkCollision = setInterval(() => {
+	// Запуск анимации
+	requestAnimationFrame(animate)
+
+	// Обработка столкновений с драконами
+	const collisionInterval = setInterval(() => {
 		if (!zombie.isConnected) {
-			clearInterval(checkCollision)
+			clearInterval(collisionInterval)
 			return
 		}
 
 		const zombieRect = zombie.getBoundingClientRect()
-		const zombieRow = zombie.dataset.row
-
 		document.querySelectorAll('.dragon').forEach(dragon => {
-			if (!dragon.isConnected || !isVulnerable) return
-
 			const dragonRect = dragon.getBoundingClientRect()
-			const dragonRow = dragon.parentElement.dataset.row
-
-			if (isColliding(zombieRect, dragonRect) && zombieRow === dragonRow) {
-				isVulnerable = false
-
-				anime({
-					targets: zombie,
-					translateX: '-=96',
-					translateY: ['-60px', '0px'],
-					easing: 'easeOutQuad',
-					duration: 800,
-					complete: () => {
-						isVulnerable = true
-						checkGameOver()
-					},
-				})
+			if (isColliding(zombieRect, dragonRect)) {
+				// Логика повреждения дракона
+				console.log('Dragon attacked!')
 			}
 		})
 	}, 100)
 
-	const hitCheck = setInterval(() => {
+	// Обработка попаданий снарядов
+	const hitInterval = setInterval(() => {
 		if (!zombie.isConnected) {
-			clearInterval(hitCheck)
+			clearInterval(hitInterval)
 			return
 		}
 
-		if (isVulnerable) {
-			const zombieRect = zombie.getBoundingClientRect() // <-- Перемещаем сюда
-			document.querySelectorAll('.projectile').forEach(projectile => {
-				if (!projectile.isConnected) return // Добавляем проверку существования
-
-				const projectileRect = projectile.getBoundingClientRect()
-
-				if (isColliding(zombieRect, projectileRect)) {
-					const damage = projectile.classList.contains('fireball')
-						? dragonTypes.fire.damage
-						: dragonTypes.ice.damage
-
-					zombie.dataset.health = parseInt(zombie.dataset.health) - damage
-
-					if (zombie.dataset.health <= 0) {
-						zombie.remove()
-						score += parseInt(zombie.dataset.points)
-						scoreCountDisplay.textContent = score
-					} else if (projectile.classList.contains('iceball')) {
-						freezeZombie(zombie)
-					}
-
-					projectile.remove()
-				}
-			})
-		}
+		const zombieRect = zombie.getBoundingClientRect()
+		document.querySelectorAll('.projectile').forEach(projectile => {
+			if (isColliding(zombieRect, projectile.getBoundingClientRect())) {
+				handleProjectileHit(zombie, projectile)
+			}
+		})
 	}, 50)
+}
 
-	moveZombie()
+// Вспомогательная функция для обработки попаданий
+function handleProjectileHit(zombie, projectile) {
+	const damage = projectile.classList.contains('fireball')
+		? dragonTypes.fire.damage
+		: dragonTypes.ice.damage
+
+	zombie.dataset.health -= damage
+
+	if (zombie.dataset.health <= 0) {
+		score += parseInt(zombie.dataset.points)
+		scoreCountDisplay.textContent = score
+		zombie.remove()
+	} else if (projectile.classList.contains('iceball')) {
+		freezeZombie(zombie)
+	}
+
+	projectile.remove()
 }
 
 // Вспомогательная функция для анимации
@@ -438,20 +399,36 @@ function increaseDifficulty() {
 function freezeZombie(zombie) {
 	if (!zombie.isConnected) return
 
+	// Сохраняем текущую трансформацию
+	const currentTransform = window.getComputedStyle(zombie).transform
+
+	// Сброс предыдущей заморозки
 	if (zombie.dataset.freezeTimeoutId) {
 		clearTimeout(zombie.dataset.freezeTimeoutId)
+		zombie.classList.remove('frozen')
+		const existingIce = zombie.querySelector('.ice-overlay')
+		if (existingIce) existingIce.remove()
 	}
 
-	zombie.dataset.slowMultiplier = 0.3 // Сильное замедление
+	// Визуальные эффекты
+	zombie.dataset.slowMultiplier = 0
 	zombie.classList.add('frozen')
 
+	const iceOverlay = document.createElement('div')
+	iceOverlay.className = 'ice-overlay'
+	zombie.appendChild(iceOverlay)
+
+	// Таймер разморозки
 	const timeoutId = setTimeout(() => {
 		if (zombie.isConnected) {
 			zombie.dataset.slowMultiplier = 1
 			zombie.classList.remove('frozen')
-			delete zombie.dataset.freezeTimeoutId
+			iceOverlay.remove()
+
+			// Восстанавливаем исходную трансформацию
+			zombie.style.transform = currentTransform
 		}
-	}, 1000)
+	}, 1500)
 
 	zombie.dataset.freezeTimeoutId = timeoutId
 }
