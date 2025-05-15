@@ -68,7 +68,7 @@ const dragonTypes = {
 const zombieTypes = {
 	normal: {
 		health: 4,
-		speed: 25,
+		speed: 50,
 		points: 100,
 		spawnChance: 1,
 	},
@@ -259,7 +259,7 @@ function spawnZombie() {
 	const zombie = document.createElement('div')
 	zombie.className = `zombie ${zombieType}`
 
-	// Установка начальных параметров
+	// Инициализация параметров
 	const row = Math.floor(Math.random() * 5)
 	const topPosition = row * 20 + 10
 	zombie.style.top = `${topPosition}%`
@@ -267,35 +267,37 @@ function spawnZombie() {
 	zombie.dataset.row = row
 	zombie.dataset.health = zombieConfig.health
 	zombie.dataset.points = zombieConfig.points
-	zombie.dataset.slowMultiplier = '1' // Инициализация множителя скорости
+	zombie.dataset.slowMultiplier = '1' // Начальный множитель скорости
+	zombie.dataset.baseSpeed = zombieConfig.speed.toString() // Сохраняем базовую скорость
 
 	grid.appendChild(zombie)
 
-	// Переменные для анимации движения
-	let lastTime = performance.now()
+	// Переменные для анимации
+	let startTime = null
 	let currentPosition = 0
 
-	// Основная функция анимации
+	// Функция анимации движения
 	const animate = timestamp => {
 		if (!zombie.isConnected || isGameOver) return
 
-		// Расчет временных интервалов
-		const deltaTime = timestamp - lastTime
-		lastTime = timestamp
+		// Инициализация времени начала
+		if (!startTime) startTime = timestamp
+		const deltaTime = timestamp - startTime
+		startTime = timestamp
 
-		// Получение текущего множителя скорости
+		// Расчет скорости
+		const baseSpeed = parseFloat(zombie.dataset.baseSpeed)
 		const speedMultiplier = parseFloat(zombie.dataset.slowMultiplier)
-
-		// Расчет движения
-		const movement = (zombieConfig.speed * deltaTime * speedMultiplier) / 1000
-		currentPosition += movement
+		const movement = (baseSpeed * deltaTime * speedMultiplier) / 1000
 
 		// Обновление позиции
+		currentPosition += movement
 		zombie.style.left = `calc(100% - ${currentPosition}px)`
 
 		// Проверка достижения базы
 		const zombieRect = zombie.getBoundingClientRect()
-		if (zombieRect.right <= grid.getBoundingClientRect().left + 50) {
+		const gridRect = grid.getBoundingClientRect()
+		if (zombieRect.right <= gridRect.left + 50) {
 			GameOver()
 			return
 		}
@@ -338,8 +340,16 @@ function spawnZombie() {
 	}, 50)
 }
 
-// Вспомогательная функция для обработки попаданий
 function handleProjectileHit(zombie, projectile) {
+	// Создаем эффект попадания
+	const hitEffect = document.createElement('div')
+	hitEffect.className = 'hit-effect'
+	const zombieRect = zombie.getBoundingClientRect()
+	hitEffect.style.left = `${zombieRect.left}px`
+	hitEffect.style.top = `${zombieRect.top}px`
+	document.body.appendChild(hitEffect)
+	setTimeout(() => hitEffect.remove(), 500)
+
 	const damage = projectile.classList.contains('fireball')
 		? dragonTypes.fire.damage
 		: dragonTypes.ice.damage
@@ -350,8 +360,14 @@ function handleProjectileHit(zombie, projectile) {
 		score += parseInt(zombie.dataset.points)
 		scoreCountDisplay.textContent = score
 		zombie.remove()
-	} else if (projectile.classList.contains('iceball')) {
-		freezeZombie(zombie)
+	} else {
+		// Анимация получения урона
+		zombie.classList.add('damaged')
+		setTimeout(() => zombie.classList.remove('damaged'), 200)
+
+		if (projectile.classList.contains('iceball')) {
+			freezeZombie(zombie)
+		}
 	}
 
 	projectile.remove()
