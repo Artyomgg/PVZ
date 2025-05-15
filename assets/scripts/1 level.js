@@ -54,8 +54,6 @@ const dragonTypes = {
 		damage: 1,
 		shootInterval: 1500,
 		projectileClass: 'fireball',
-		sunSpawnInterval: 5000,
-		sunSpawnChance: 0.2,
 	},
 	ice: {
 		cost: 75,
@@ -267,8 +265,10 @@ function spawnZombie() {
 	zombie.dataset.row = row
 	zombie.dataset.health = zombieConfig.health
 	zombie.dataset.points = zombieConfig.points
-	zombie.dataset.slowMultiplier = '1' // Начальный множитель скорости
-	zombie.dataset.baseSpeed = zombieConfig.speed.toString() // Сохраняем базовую скорость
+	zombie.dataset.slowMultiplier = '1'
+	zombie.dataset.baseSpeed = zombieConfig.speed.toString()
+	zombie.dataset.isStopped = 'false' // Новый параметр для отслеживания состояния
+	zombie.dataset.isJumping = 'false' // Флаг прыжка
 
 	grid.appendChild(zombie)
 
@@ -276,9 +276,10 @@ function spawnZombie() {
 	let startTime = null
 	let currentPosition = 0
 
-	// Функция анимации движения
+	// Основная функция анимации движения
 	const animate = timestamp => {
 		if (!zombie.isConnected || isGameOver) return
+		if (zombie.dataset.isStopped === 'true') return
 
 		// Инициализация времени начала
 		if (!startTime) startTime = timestamp
@@ -291,8 +292,10 @@ function spawnZombie() {
 		const movement = (baseSpeed * deltaTime * speedMultiplier) / 1000
 
 		// Обновление позиции
-		currentPosition += movement
-		zombie.style.left = `calc(100% - ${currentPosition}px)`
+		if (zombie.dataset.isJumping === 'false') {
+			currentPosition += movement
+			zombie.style.left = `calc(100% - ${currentPosition}px)`
+		}
 
 		// Проверка достижения базы
 		const zombieRect = zombie.getBoundingClientRect()
@@ -310,8 +313,11 @@ function spawnZombie() {
 
 	// Проверка столкновений с драконами
 	const collisionInterval = setInterval(() => {
-		if (!zombie.isConnected) {
-			clearInterval(collisionInterval)
+		if (
+			!zombie.isConnected ||
+			zombie.dataset.isStopped === 'true' ||
+			zombie.dataset.isJumping === 'true'
+		) {
 			return
 		}
 
@@ -319,7 +325,7 @@ function spawnZombie() {
 		document.querySelectorAll('.dragon').forEach(dragon => {
 			const dragonRect = dragon.getBoundingClientRect()
 			if (isColliding(zombieRect, dragonRect)) {
-				console.log('Dragon attacked!')
+				handleZombieCollision(zombie, dragon)
 			}
 		})
 	}, 100)
@@ -338,6 +344,53 @@ function spawnZombie() {
 			}
 		})
 	}, 50)
+}
+
+// Обработчик столкновения с драконом
+function handleZombieCollision(zombie, dragon) {
+	if (zombie.dataset.isJumping === 'true') return
+
+	// Останавливаем зомби
+	zombie.dataset.slowMultiplier = '0'
+	zombie.dataset.isStopped = 'true'
+	zombie.classList.add('stunned')
+
+	// Запускаем таймер для прыжка
+	setTimeout(() => {
+		if (zombie.isConnected) {
+			performJump(zombie, dragon)
+		}
+	}, 1500)
+}
+
+// Анимация прыжка
+function performJump(zombie, dragon) {
+	const startPosition = parseFloat(
+		zombie.style.left.replace('calc(100% - ', '').replace('px)', '')
+	)
+	const dragonRect = dragon.getBoundingClientRect()
+	const jumpDistance = dragonRect.width + 100
+
+	zombie.dataset.isJumping = 'true'
+	zombie.classList.remove('stunned')
+	zombie.classList.add('jumping')
+
+	anime({
+		targets: zombie,
+		translateY: [-150, 0],
+		left: `calc(100% - ${startPosition - jumpDistance}px)`,
+		duration: 1000,
+		easing: 'easeOutQuad',
+		complete: () => {
+			if (zombie.isConnected) {
+				zombie.dataset.isJumping = 'false'
+				zombie.dataset.slowMultiplier = '1'
+				zombie.dataset.isStopped = 'false'
+				zombie.classList.remove('jumping')
+				zombie.style.transform = ''
+			}
+		},
+	})
 }
 
 function handleProjectileHit(zombie, projectile) {

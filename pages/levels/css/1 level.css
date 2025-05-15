@@ -576,3 +576,34 @@ button {
 		opacity: 0.8;
 	}
 }
+
+/* Улучшенные стили для прыжка */
+.zombie.jumping {
+	transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+		filter 0.3s ease;
+	filter: drop-shadow(0 -5px 10px rgba(0, 0, 0, 0.3));
+	will-change: transform, left;
+}
+
+/* Эффект приземления */
+@keyframes landEffect {
+	0% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.1) translateY(-10px);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+.land-effect {
+	position: absolute;
+	width: 80px;
+	height: 30px;
+	background: rgba(0, 0, 0, 0.1);
+	border-radius: 50%;
+	animation: landEffect 0.5s ease-out;
+	z-index: -1;
+}

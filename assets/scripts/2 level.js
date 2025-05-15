@@ -10,23 +10,22 @@ let modalLose = document.querySelector('.modal.lose')
 let modalWin = document.querySelector('.modal.win')
 let isGameOver = false
 
-
 window.addEventListener('load', () => {
-    const skin1 = localStorage.getItem('dragonSkin1') 
-    const skin2 = localStorage.getItem('dragonSkin2') 
-    const skin3 = localStorage.getItem('dragonSkin3') 
-    
-    let styleText = ''
-    
-    if (skin1 === 'skinone') {
-        styleText += `
+	const skin1 = localStorage.getItem('dragonSkin1')
+	const skin2 = localStorage.getItem('dragonSkin2')
+	const skin3 = localStorage.getItem('dragonSkin3')
+
+	let styleText = ''
+
+	if (skin1 === 'skinone') {
+		styleText += `
             .dragon.fire::before {
                 content: url('/assets/img/Dragons/dragonskinone.png') !important;
             }
         `
-    }
-    if (skin2 === 'skintwo') {
-        styleText += `
+	}
+	if (skin2 === 'skintwo') {
+		styleText += `
             .dragon.poison::before {
                 content: url('/assets/img/Dragons/dragonskintwo.png') !important;
 				scale: 11.5%;
@@ -34,9 +33,9 @@ window.addEventListener('load', () => {
 				top: -570%;
             }
         `
-    }
+	}
 	if (skin3 === 'skinthree') {
-        styleText += `
+		styleText += `
             .dragon.ice::before {
                 content: url('/assets/img/Dragons/dragonskinthree.png') !important;
 				scale: 11.5%;
@@ -44,15 +43,14 @@ window.addEventListener('load', () => {
 				top: -660%;
             }
         `
-    }
+	}
 
-    if (styleText) {
-        const style = document.createElement('style')
-        style.textContent = styleText
-        document.head.appendChild(style)
-    }
+	if (styleText) {
+		const style = document.createElement('style')
+		style.textContent = styleText
+		document.head.appendChild(style)
+	}
 })
-
 
 if (!modalLose || !modalWin) {
 	console.error('Modal elements not found!')
@@ -65,8 +63,6 @@ const dragonTypes = {
 		damage: 1,
 		shootInterval: 1500,
 		projectileClass: 'fireball',
-		sunSpawnInterval: 5000, // Интервал спавна солнца (5 секунд)
-		sunSpawnChance: 0.2, // Шанс спавна солнца (20%)
 	},
 	ice: {
 		cost: 75,
@@ -181,38 +177,6 @@ function placeDragon(cell) {
 			dragon.dataset.sunIntervalId = sunIntervalId
 		}
 	}
-}
-
-// Функция спавна солнца рядом с драконом
-function spawnSunNearDragon(dragon, cell) {
-	if (isGameOver || Math.random() > dragonTypes.fire.sunSpawnChance) return
-
-	const sun = document.createElement('div')
-	sun.className = 'sun'
-
-	// Позиционируем солнце рядом с драконом
-	const cellRect = cell.getBoundingClientRect()
-	const gridRect = grid.getBoundingClientRect()
-
-	sun.style.left = `${
-		cellRect.left - gridRect.left + (Math.random() * 150 - 30)
-	}px`
-	sun.style.top = `${cellRect.top - gridRect.top + (Math.random() * 60 - 30)}px`
-
-	grid.appendChild(sun)
-
-	sun.addEventListener('click', () => {
-		if (!sun.classList.contains('collected')) {
-			collectSun(sun)
-		}
-	})
-
-	// Автоматическое исчезновение через 10 секунд, если не собрано
-	setTimeout(() => {
-		if (sun.isConnected && !sun.classList.contains('collected')) {
-			sun.remove()
-		}
-	}, 10000)
 }
 
 function collectSun(sun) {
