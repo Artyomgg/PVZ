@@ -530,12 +530,15 @@ button {
 @keyframes frozenShake {
 	0% {
 		transform: translateY(-50%) rotate(-3deg);
+		transition: 0s;
 	}
 	50% {
 		transform: translateY(-50%) rotate(3deg);
+		transition: 2s all;
 	}
 	100% {
 		transform: translateY(-50%) rotate(-3deg);
+		transition: 0s all;
 	}
 }
 

@@ -255,43 +255,45 @@ function spawnZombie() {
 	const zombieType = 'normal'
 	const zombieConfig = zombieTypes[zombieType]
 
-	// Создание элемента
+	// Создание элемента зомби
 	const zombie = document.createElement('div')
 	zombie.className = `zombie ${zombieType}`
 
-	// Позиционирование
+	// Установка начальных параметров
 	const row = Math.floor(Math.random() * 5)
-	const topPosition = row * 20 + 10 // 10%, 30%, 50%, 70%, 90%
+	const topPosition = row * 20 + 10
 	zombie.style.top = `${topPosition}%`
 	zombie.style.left = '100%'
 	zombie.dataset.row = row
 	zombie.dataset.health = zombieConfig.health
 	zombie.dataset.points = zombieConfig.points
+	zombie.dataset.slowMultiplier = '1' // Инициализация множителя скорости
 
-	// Добавление в DOM
 	grid.appendChild(zombie)
 
-	// Переменные движения
+	// Переменные для анимации движения
 	let lastTime = performance.now()
 	let currentPosition = 0
 
-	// Функция анимации
+	// Основная функция анимации
 	const animate = timestamp => {
 		if (!zombie.isConnected || isGameOver) return
 
-		// Расчет дельта-времени
+		// Расчет временных интервалов
 		const deltaTime = timestamp - lastTime
 		lastTime = timestamp
 
-		// Расчет скорости
-		const speedMultiplier = parseFloat(zombie.dataset.slowMultiplier) || 1
+		// Получение текущего множителя скорости
+		const speedMultiplier = parseFloat(zombie.dataset.slowMultiplier)
+
+		// Расчет движения
 		const movement = (zombieConfig.speed * deltaTime * speedMultiplier) / 1000
 		currentPosition += movement
 
 		// Обновление позиции
 		zombie.style.left = `calc(100% - ${currentPosition}px)`
 
-		// Проверка границ
+		// Проверка достижения базы
 		const zombieRect = zombie.getBoundingClientRect()
 		if (zombieRect.right <= grid.getBoundingClientRect().left + 50) {
 			GameOver()
@@ -304,7 +306,7 @@ function spawnZombie() {
 	// Запуск анимации
 	requestAnimationFrame(animate)
 
-	// Обработка столкновений с драконами
+	// Проверка столкновений с драконами
 	const collisionInterval = setInterval(() => {
 		if (!zombie.isConnected) {
 			clearInterval(collisionInterval)
@@ -315,7 +317,6 @@ function spawnZombie() {
 		document.querySelectorAll('.dragon').forEach(dragon => {
 			const dragonRect = dragon.getBoundingClientRect()
 			if (isColliding(zombieRect, dragonRect)) {
-				// Логика повреждения дракона
 				console.log('Dragon attacked!')
 			}
 		})
