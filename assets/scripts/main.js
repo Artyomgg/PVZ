@@ -3,8 +3,6 @@ function redirect(path) {
     window.location.href = `pages/${path}.html`;
   } else if (path == "book") {
     window.location.href = `pages/${path}.html`;
-  } else if (path == "bookenemy") {
-    window.location.href = `pages/${path}.html`; 
   } else if (path == "dragon-grow") {
     window.location.href = `pages/${path}.html`;
   } else if (path == "gacha") {

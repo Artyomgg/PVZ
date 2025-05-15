@@ -20,12 +20,55 @@ body {
   background-color: var(--bg-color);
   color: var(--text-color);
   line-height: 1.6;
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   background-image: url("../assets/img/field.png"); /* Замените на путь к вашему изображению фона книги */
   background-size: cover;
   background-attachment: fixed;
+}
+
+.baza {
+  width: 40%;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.book{
+  font-family: 'Tiny5';
+  background: rgba(94, 11, 11, 0.64);
+  border-radius: 17px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 2px solid rgba(255, 134, 134, 0.049);
+  width: 45%;
+  padding: 1.5rem 1rem 0.6rem 1rem;
+  color:white;
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  transition: 0.5s;
+}
+
+.active{
+  font-family: 'Tiny5';
+  background: rgba(116, 13, 13, 0.64);
+  border-radius: 17px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 2px solid rgba(179, 31, 31, 0.692);
+  width: 45%;
+  padding: 3rem 1rem 0.6rem 1rem;
+  color:white;
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  transform: translateY(20%);
 }
 
 .back {
@@ -56,9 +99,7 @@ a {
 
 
 .app-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 2rem;
+  max-width: 60%;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -102,7 +143,6 @@ a {
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  margin-top: 1.5rem;
 }
 
 .control-btn {
