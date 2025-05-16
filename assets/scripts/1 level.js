@@ -368,21 +368,25 @@ function performJump(zombie, dragon) {
 	const startPosition = parseFloat(
 		zombie.style.left.replace('calc(100% - ', '').replace('px)', '')
 	)
-	const dragonRect = dragon.getBoundingClientRect()
-	const jumpDistance = dragonRect.width + 100
+	const jumpDistance = 300 // Фиксированная дистанция прыжка
 
 	zombie.dataset.isJumping = 'true'
 	zombie.classList.remove('stunned')
 	zombie.classList.add('jumping')
 
+	// Изменяем направление анимации на отрицательное (влево)
 	anime({
 		targets: zombie,
+		translateX: `-${jumpDistance}px`,
 		translateY: [-150, 0],
-		left: `calc(100% - ${startPosition - jumpDistance}px)`,
 		duration: 1000,
 		easing: 'easeOutQuad',
 		complete: () => {
 			if (zombie.isConnected) {
+				// Обновляем позицию после прыжка
+				const newPosition = startPosition - jumpDistance
+				zombie.style.left = `calc(100% - ${newPosition}px)`
+
 				zombie.dataset.isJumping = 'false'
 				zombie.dataset.slowMultiplier = '1'
 				zombie.dataset.isStopped = 'false'
