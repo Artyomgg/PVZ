@@ -558,8 +558,8 @@ function spawnSun() {
 }
 
 // Увеличение сложности
-let zombieInterval = 4000
-let sunInterval = 7000
+let zombieInterval = 5000
+let sunInterval = 6000
 
 function increaseDifficulty() {
 	zombieInterval = Math.max(2000, zombieInterval - 500)

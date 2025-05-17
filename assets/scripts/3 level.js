@@ -62,21 +62,21 @@ const dragonTypes = {
     },
     ice: {
         cost: 75,
-        damage: 7,
+        damage: 6,
         shootInterval: 2000,
         projectileClass: 'iceball',
         freezeDuration: 2000,
     },
     poison: {
         cost: 100,
-        damage: 10,
+        damage: 8,
         shootInterval: 2500,
         projectileClass: 'poisonball',
         poisonDuration: 2000,
     },
     lightning: {
         cost: 150,
-        damage: 16,
+        damage: 12,
         shootInterval: 2000,
         projectileClass: 'lightningball',
     },
@@ -85,22 +85,22 @@ const dragonTypes = {
 // 2. МАССИВ ЗОМБИ
 const zombieTypes = {
     normal: {
-        health: 5,
+        health: 15,
         speed: 20,
         points: 100,
-        spawnChance: 0.5,
+        spawnChance: 0.6,
     },
     armored: {
-        health: 13,
+        health: 30,
         speed: 25,
         points: 150,
-        spawnChance: 0.25,
+        spawnChance: 0.2,
     },
     hz: {
-        health: 10,
+        health: 20,
         speed: 22,
         points: 175,
-        spawnChance: 0.25,
+        spawnChance: 0.2,
     },
 }
 
@@ -584,7 +584,7 @@ function spawnSun() {
 
 // Увеличение сложности
 let zombieInterval = 4000
-let sunInterval = 5000
+let sunInterval = 8000
 
 function increaseDifficulty() {
     zombieInterval = Math.max(2000, zombieInterval - 500)

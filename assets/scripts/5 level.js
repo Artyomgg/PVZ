@@ -56,7 +56,7 @@ if (!modalLose || !modalWin) {
 const dragonTypes = {
     fire: {
         cost: 50,
-        damage: 10,
+        damage: 8,
         shootInterval: 1500,
         projectileClass: 'fireball',
         sunSpawnInterval: 5000,
@@ -64,27 +64,27 @@ const dragonTypes = {
     },
     ice: {
         cost: 75,
-        damage: 15,
+        damage: 12,
         shootInterval: 2000,
         projectileClass: 'iceball',
         freezeDuration: 2000,
     },
     poison: {
         cost: 100,
-        damage: 10,
+        damage: 8,
         shootInterval: 2500,
         projectileClass: 'poisonball',
         poisonDuration: 2000,
     },
     lightning: {
         cost: 150,
-        damage: 20,
+        damage: 16,
         shootInterval: 2000,
         projectileClass: 'lightningball',
     },
     blast: {
         cost: 200,
-        damage: 50,
+        damage: 40,
         flashDuration: 1000,
         flashCount: 3,
         explosionRadius: 2,
@@ -92,7 +92,7 @@ const dragonTypes = {
     },
     deadly: {
         cost: 250,
-        damage: 28,
+        damage: 24,
         shootInterval: 7500,
         projectileClass: 'deadlyball',
     }
@@ -101,25 +101,25 @@ const dragonTypes = {
 // 2. МАССИВ ЗОМБИ
 const zombieTypes = {
     normal: {
-        health: 10,
+        health: 30,
         speed: 20,
         points: 100,
-        spawnChance: 0.5,
+        spawnChance: 0.4,
     },
     armored: {
-        health: 20,
+        health: 60,
         speed: 25,
         points: 150,
-        spawnChance: 0.25,
+        spawnChance: 0.3,
     },
     hz: {
-        health: 25,
+        health: 45,
         speed: 22,
         points: 175,
-        spawnChance: 0.15,
+        spawnChance: 0.2,
     },
     golden: {
-        health: 28,
+        health: 50,
         speed: 19,
         points: 100,
         spawnChance: 0.1
@@ -503,7 +503,7 @@ function poisonZombie(zombie, duration) {
 function spawnBoss() {
     const boss = {
         name: 'Boss Knight',
-        health: 700,
+        health: 1000,
         speed: 30,
         points: 500,
         isAlive: true,
@@ -841,7 +841,7 @@ function spawnSun() {
     })
 }
 
-let zombieInterval = 4000
+let zombieInterval = 3000
 let sunInterval = 2000
 
 function increaseDifficulty() {
