@@ -94,6 +94,11 @@ body {
 	scale: 1.8;
 }
 
+.dragon.deadly {
+	content: url('/assets/img/Dragons/красно-серый.png');
+	scale: 1.9;
+}
+
 .dragon.blast.flashing {
 	filter: brightness(1.5) drop-shadow(0 0 10px #ff0000);
 }
@@ -175,6 +180,22 @@ body {
 }
 
 .lightningball {
+}
+
+.deadlyball {
+	background: #373636;
+	box-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000;
+}
+
+.deadlyball::after {
+	content: '';
+	position: absolute;
+	width: 40px;
+	height: 15px;
+	background: linear-gradient(90deg, #484747, transparent);
+	left: -30px;
+	top: 2.5px;
+	border-radius: 5px;
 }
 
 .trail {
