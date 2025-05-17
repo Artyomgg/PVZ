@@ -89,11 +89,18 @@ body {
     top: -570%;
 }
 
+.dragon.lightning::before {
+    content: url('/assets/img/Dragons/маленький-красный.png');
+    scale: 11.5%;
+    left: -480%;
+    top: -500%;
+}
+
 .dragon.blast::before {
     content: url('/assets/img/Dragons/средний-красный.png');
-   scale: 18.5%;
-   left: -350%;
-   top: -340%;
+    scale: 18.5%;
+    left: -350%;
+    top: -340%;
 }
 
 .dragon.blast.flashing {
@@ -161,6 +168,40 @@ body {
     animation: rotateProjectile 0.5s linear infinite;
 }
 
+.lightningball {
+    background: #f1c40f;
+    box-shadow: 0 0 15px #f1c40f, 0 0 30px #fff;
+    position: relative;
+    overflow: hidden;
+}
+
+.lightningball::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        45deg,
+        transparent 0%,
+        #fff 20%,
+        transparent 40%,
+        #fff 60%,
+        transparent 80%,
+        #fff 100%
+    );
+    animation: lightningFlash 0.2s linear infinite;
+}
+
+.lightningball::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, #f1c40f  graced 0%, #e67e22 100%);
+    border-radius: 50%;
+    animation: pulseLightning 0.5s infinite alternate;
+}
+
 .trail {
     position: absolute;
     opacity: 0.3;
@@ -205,7 +246,7 @@ body {
     gap: 20px;
     color: #fff;
     font-size: 24px;
-    text-shadow: 2px 2px 4px rgba(128, 1, 1, 0.5);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     z-index: 101;
 }
 
@@ -216,7 +257,7 @@ body {
     display: flex;
     gap: 10px;
     z-index: 101;
-    background: rgba(57, 37, 0, 0.5);
+    background: rgba(0, 71, 99, 0.5);
     padding: 10px;
     border-radius: 5px;
 }
@@ -224,7 +265,7 @@ body {
 .dragon-option {
     padding: 8px 12px;
     background: rgba(255, 255, 255, 0.1);
-    border: 2px solid #ddb643;
+    border: 2px solid #016d98;
     border-radius: 5px;
     color: #fff;
     cursor: pointer;
@@ -241,7 +282,11 @@ body {
     position: absolute;
     width: 40px;
     height: 40px;
-    background: radial-gradient(circle, rgba(255, 255, 0, 0.8) 0%, rgba(255, 0, 0, 0) 70%);
+    background: radial-gradient(
+        circle,
+        rgba(255, 255, 0, 0.8) 0%,
+        rgba(255, 0, 0, 0) 70%
+    );
     border-radius: 50%;
     pointer-events: none;
     z-index: 10;
@@ -251,9 +296,9 @@ body {
 
 .back {
     padding: 0.8rem 1.3rem;
-    background: linear-gradient(to right, #b43729, #ebc144, #b43729);
-    box-shadow: 0 2px 10px #710400, inset 0 0 20px rgba(0, 0, 0, 0.463);
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(to right, #ffdc72, #ffc20c, #ffdc72);
+    box-shadow: 0 2px 10px #00a8a8, inset 0 0 20px rgba(74, 58, 0, 0.541);
+    text-shadow: 1px 1px 2px rgb(0, 91, 209);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -262,21 +307,21 @@ body {
     position: absolute;
     top: 0.5%;
     left: 0.5%;
-    color: black;
+    color: rgb(255, 255, 255);
     transition: 0.5s;
     border-radius: 50%;
 }
 
 .back:hover {
-    color: #ffffff;
-}
-
-a {
-    text-decoration: none;
+    color: #000000;
 }
 
 button {
     font-family: 'Tiny5';
+}
+
+a {
+    text-decoration: none;
 }
 
 .zombie {
@@ -296,6 +341,10 @@ button {
 
 .zombie.armored {
     background-image: url('/assets/img/KNIGHTS/chel2.gif');
+}
+
+.zombie.hz {
+    background-image: url('/assets/img/KNIGHTS/chel3.gif');
 }
 
 .zombie.hit {
@@ -434,6 +483,199 @@ button {
     100% {
         transform: scale(1.5);
         opacity: 0;
+    }
+}
+
+.damaged {
+    filter: brightness(1.5);
+    transition: filter 0.2s;
+}
+
+.lightning-trail {
+    position: absolute;
+    width: 10px;
+    height: 40px;
+    background: linear-gradient(to bottom, #f1c40f, #e67e22);
+    transform: rotate(45deg);
+    opacity: 0.7;
+    animation: fadeTrail 0.3s forwards;
+}
+
+.lightning-hit {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle, #f1c40f, #e67e22, transparent 70%);
+    border-radius: 50%;
+    animation: lightningExplode 0.5s forwards;
+}
+
+@keyframes lightningFlash {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes pulseLightning {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+}
+
+@keyframes fadeTrail {
+    0% {
+        opacity: 0.7;
+        transform: scale(1) rotate(45deg);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.5) rotate(45deg);
+    }
+}
+
+@keyframes lightningExplode {
+    0% {
+        transform: scale(0.5);
+        opacity: 1;
+    }
+    70% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+.chain-lightning {
+    position: absolute;
+    width: 5px;
+    height: 100px;
+    background: linear-gradient(to bottom, #f1c40f, transparent);
+    transform-origin: bottom center;
+    animation: chainLightning 0.3s forwards;
+}
+
+@keyframes chainLightning {
+    0% {
+        transform: scaleY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scaleY(1);
+        opacity: 0;
+    }
+}
+
+.lightning-effect {
+    position: absolute;
+    background: radial-gradient(
+        circle,
+        rgba(241, 196, 15, 0.3) 0%,
+        rgba(230, 126, 34, 0.1) 70%,
+        transparent 100%
+    );
+    box-shadow: 0 0 30px #f1c40f inset;
+    z-index: 5;
+    pointer-events: none;
+    animation: lightningPulse 0.3s ease-out;
+}
+
+.lightning-bolt {
+    position: absolute;
+    height: 3px;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.8) 0%,
+        rgba(241, 196, 15, 1) 20%,
+        rgba(255, 255, 255, 0.8) 40%,
+        rgba(241, 196, 15, 1) 60%,
+        rgba(255, 255, 255, 0.8) 80%,
+        rgba(241, 196, 15, 1) 100%
+    );
+    box-shadow: 0 0 10px #f1c40f;
+    z-index: 10;
+    pointer-events: none;
+    animation: lightningFlash 0.1s linear infinite;
+}
+
+@keyframes lightningFlash {
+    0% {
+        opacity: 0.5;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes lightningPulse {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+.lightning-hit-effect {
+    position: absolute;
+    background: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.8) 0%,
+        rgba(241, 196, 15, 0.6) 30%,
+        rgba(230, 126, 34, 0.3) 60%,
+        transparent 80%
+    );
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 15;
+    animation: lightningHit 0.3s forwards;
+}
+
+@keyframes lightningHit {
+    0% {
+        transform: scale(0.5);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+@keyframes zombieShock {
+    0% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-5px);
+    }
+    50% {
+        transform: translateX(5px);
+    }
+    75% {
+        transform: translateX(-5px);
+    }
+    100% {
+        transform: translateX(0);
     }
 }
 

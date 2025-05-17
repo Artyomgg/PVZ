@@ -10,50 +10,95 @@ let modalLose = document.querySelector('.modal.lose')
 let modalWin = document.querySelector('.modal.win')
 let isGameOver = false
 
+window.addEventListener('load', () => {
+	const skin1 = localStorage.getItem('dragonSkin1')
+	const skin2 = localStorage.getItem('dragonSkin2')
+	const skin3 = localStorage.getItem('dragonSkin3')
+
+	let styleText = ''
+
+	if (skin1 === 'skinone') {
+		styleText += `
+          .dragon.fire {
+                background-image: url('/assets/img/Dragons/dragonskinone.png')
+          }
+      `
+	}
+	if (skin2 === 'skintwo') {
+		styleText += `
+          .dragon.poison {
+              background-image: url('/assets/img/Dragons/dragonskintwo.png');
+          }
+      `
+	}
+	if (skin3 === 'skinthree') {
+		styleText += `
+          .dragon.ice {
+              background-image: url('/assets/img/Dragons/dragonskinthree.png')
+          }
+      `
+	}
+
+	if (styleText) {
+		const style = document.createElement('style')
+		style.textContent = styleText
+		document.head.appendChild(style)
+	}
+})
+
 if (!modalLose || !modalWin) {
     console.error('Modal elements not found!')
 }
 
+// 1. МАССИВ ДРАКОНОВ
 const dragonTypes = {
     fire: {
         cost: 50,
-        damage: 2,
+        damage: 1,
         shootInterval: 1500,
         projectileClass: 'fireball',
         sunSpawnInterval: 5000,
-        sunSpawnChance: 0.2
+        sunSpawnChance: 0.1,
     },
     ice: {
         cost: 75,
-        damage: 2,
+        damage: 1,
         shootInterval: 2000,
         projectileClass: 'iceball',
-        freezeDuration: 2000
+        freezeDuration: 2000,
     },
     poison: {
         cost: 100,
-        damage: 3,
+        damage: 10,
         shootInterval: 2500,
         projectileClass: 'poisonball',
-        poisonDuration: 2000
+        poisonDuration: 2000,
     },
 }
 
+// 2. МАССИВ ЗОМБИ
 const zombieTypes = {
     normal: {
         health: 5,
-        speed: 17,
+        speed: 20,
         points: 100,
-        spawnChance: 0.8
+        spawnChance: 0.5,
     },
     armored: {
-        health: 10,
+        health: 13,
         speed: 25,
         points: 150,
-        spawnChance: 0.2
-    }
+        spawnChance: 0.25,
+    },
+    hz: {
+        health: 10,
+        speed: 22,
+        points: 175,
+        spawnChance: 0.25,
+    },
 }
 
+// Создаем сетку
 for (let i = 0; i < 40; i++) {
     const cell = document.createElement('div')
     cell.className = 'cell'
@@ -61,6 +106,7 @@ for (let i = 0; i < 40; i++) {
     grid.appendChild(cell)
 }
 
+// Обновляем меню драконов
 function updateDragonMenu() {
     const dragonMenu = document.querySelector('.dragon-menu')
     dragonMenu.innerHTML = ''
@@ -74,15 +120,16 @@ function updateDragonMenu() {
         option.addEventListener('click', () => {
             selectedDragonType = type
             document.querySelectorAll('.dragon-option').forEach(opt => {
-                opt.style.border = '2px solid #ddb643'
+                opt.style.border = '2px solid #016d98'
             })
-            option.style.border = '2px solid rgb(198, 6, 22)'
+            option.style.border = '2px solid #ff4757'
         })
 
         dragonMenu.appendChild(option)
     }
 }
 
+// Инициализируем меню драконов
 updateDragonMenu()
 
 function GameOver() {
@@ -207,10 +254,10 @@ function triggerExplosion(dragon, config, cell) {
                 score += parseInt(zombie.dataset.points)
                 scoreCountDisplay.textContent = score
                 zombie.remove()
-                if (score >= 2500) {
+                if (score >= 3500) {
                     clearInterval(zombieSpawnInterval)
                     modalWin.classList.add('visible')
-                    IntoLocalStorage(2)
+                    IntoLocalStorage(3)
                 }
             } else {
                 zombie.classList.add('damaged')
@@ -237,7 +284,7 @@ function spawnSunNearDragon(dragon, cell) {
     grid.appendChild(sun)
 
     sun.addEventListener('click', () => {
-        if (!sun.classList.contains('compiled')) {
+        if (!sun.classList.contains('collected')) {
             collectSun(sun)
         }
     })
@@ -255,7 +302,7 @@ function collectSun(sun) {
     const counterRect = counter.getBoundingClientRect()
     const sunRect = sun.getBoundingClientRect()
 
-    sun.style.position = 'fixed'
+    sun.style.position = 'fixed belts'
     sun.style.left = `${sunRect.left}px`
     sun.style.top = `${sunRect.top}px`
 
@@ -269,6 +316,11 @@ function shoot(dragon, config) {
     if (isGameOver) return
     dragon.classList.add('shooting')
     setTimeout(() => dragon.classList.remove('shooting'), 300)
+
+    if (config.projectileClass === 'lightningball') {
+        lightningAttack(dragon, config)
+        return
+    }
 
     const projectile = document.createElement('div')
     projectile.className = `projectile ${config.projectileClass}`
@@ -293,11 +345,11 @@ function shoot(dragon, config) {
     const animation = projectile.animate(
         [
             { left: `${dragonRect.left - gridRect.left}px` },
-            { left: `${gridRect.width}px` }
+            { left: `${gridRect.width}px` },
         ],
         {
             duration: 2000,
-            easing: 'linear'
+            easing: 'linear',
         }
     )
 
@@ -390,9 +442,7 @@ function spawnZombie() {
     let zombieType
 
     for (const type in zombieTypes) {
-        cumulativeChance += zombieTypes
-
-[type].spawnChance
+        cumulativeChance += zombieTypes[type].spawnChance
         if (random <= cumulativeChance) {
             zombieType = type
             break
@@ -491,10 +541,10 @@ function spawnZombie() {
                     scoreCountDisplay.textContent = score
                     zombie.remove()
                     clearInterval(checkCollision)
-                    if (score >= 2500) {
+                    if (score >= 3500) {
                         clearInterval(zombieSpawnInterval)
                         modalWin.classList.add('visible')
-                        IntoLocalStorage(2)
+                        IntoLocalStorage(3)
                     }
                 } else {
                     zombie.classList.add('damaged')
@@ -526,6 +576,7 @@ function spawnSun() {
     })
 }
 
+// Увеличение сложности
 let zombieInterval = 4000
 let sunInterval = 5000
 
@@ -534,6 +585,134 @@ function increaseDifficulty() {
     clearInterval(zombieSpawnInterval)
     zombieSpawnInterval = setInterval(spawnZombie, zombieInterval)
 }
+
+function lightningAttack(dragon, config) {
+    if (isGameOver) return
+
+    const dragonRect = dragon.getBoundingClientRect()
+    const gridRect = grid.getBoundingClientRect()
+    const cellWidth = gridRect.width / 8
+    const cellHeight = gridRect.height / 5
+
+    const dragonCell = dragon.parentElement
+    const cellIndex = Array.from(grid.children).indexOf(dragonCell)
+    const row = Math.floor(cellIndex / 8)
+    const col = cellIndex % 8
+
+    const dragonX = dragonRect.left - gridRect.left + dragonRect.width / 2
+    const dragonY = dragonRect.top - gridRect.top + dragonRect.height / 2
+
+    for (let i = 1; i <= 2; i++) {
+        if (col + i >= 8) break
+
+        const targetCellIndex = row * 8 + (col + i)
+        const targetCell = grid.children[targetCellIndex]
+
+        if (!targetCell) continue
+
+        const targetX = targetCell.offsetLeft + cellWidth / 2
+        const targetY = targetCell.offsetTop + cellHeight / 2
+
+        createLightningBolt(dragonX, dragonY, targetX, targetY)
+
+        const lightningEffect = document.createElement('div')
+        lightningEffect.className = 'lightning-effect'
+        lightningEffect.style.width = `${cellWidth}px`
+        lightningEffect.style.height = `${cellHeight}px`
+        lightningEffect.style.left = `${targetCell.offsetLeft}px`
+        lightningEffect.style.top = `${targetCell.offsetTop}px`
+        grid.appendChild(lightningEffect)
+
+        setTimeout(() => lightningEffect.remove(), 500)
+
+        damageZombiesInArea(targetCell, cellWidth, cellHeight, config.damage)
+    }
+}
+
+function createLightningBolt(x1, y1, x2, y2) {
+    const bolt = document.createElement('div')
+    bolt.className = 'lightning-bolt'
+
+    const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2))
+    const angle = (Math.atan2(y2 - y1, x2 - x1) * 180) / Math.PI
+
+    bolt.style.width = `${length}px`
+    bolt.style.left = `${x1}px`
+    bolt.style.top = `${y1}px`
+    bolt.style.transformOrigin = '0 0'
+    bolt.style.transform = `rotate(${angle}deg)`
+
+    grid.appendChild(bolt)
+    setTimeout(() => bolt.remove(), 200)
+}
+
+function damageZombiesInArea(cell, width, height, damage) {
+    const zombies = document.querySelectorAll('.zombie')
+    const gridRect = grid.getBoundingClientRect()
+    const cellRight = cell.offsetLeft + width
+    const cellBottom = cell.offsetTop + height
+
+    zombies.forEach(zombie => {
+        const zombieRect = zombie.getBoundingClientRect()
+        const zombieLeft = zombieRect.left - gridRect.left
+        const zombieRight = zombieRect.right - gridRect.left
+        const zombieTop = zombieRect.top - gridRect.top
+        const zombieBottom = zombieRect.bottom - gridRect.top
+
+        if (
+            zombieRight > cell.offsetLeft &&
+            zombieLeft < cellRight &&
+            zombieBottom > cell.offsetTop &&
+            zombieTop < cellBottom
+        ) {
+            const overlapX =
+                Math.min(zombieRight, cellRight) - Math.max(zombieLeft, cell.offsetLeft)
+            const overlapY =
+                Math.min(zombieBottom, cellBottom) - Math.max(zombieTop, cell.offsetTop)
+            const overlapArea = overlapX * overlapY
+            const zombieArea = zombieRect.width * zombieRect.height
+
+            if (overlapArea > zombieArea * 0.25) {
+                applyDamage(zombie, damage)
+            }
+        }
+    })
+}
+
+function applyDamage(zombie, damage) {
+    let currentHealth = parseInt(zombie.dataset.health)
+    currentHealth -= damage
+    zombie.dataset.health = currentHealth.toString()
+
+    const hitEffect = document.createElement('div')
+    hitEffect.className = 'lightning-hit-effect'
+    const zombieRect = zombie.getBoundingClientRect()
+    hitEffect.style.left = `${zombieRect.left - zombieRect.width / 2}px`
+    hitEffect.style.top = `${zombieRect.top - zombieRect.height / 2}px`
+    hitEffect.style.width = `${zombieRect.width * 2}px`
+    hitEffect.style.height = `${zombieRect.height * 2}px`
+    document.body.appendChild(hitEffect)
+
+    setTimeout(() => {
+        hitEffect.remove()
+    }, 300)
+
+    if (currentHealth <= 0) {
+        score += parseInt(zombie.dataset.points)
+        scoreCountDisplay.textContent = score
+        zombie.remove()
+
+        if (score >= 3500) {
+            clearInterval(zombieSpawnInterval)
+            modalWin.classList.add('visible')
+            IntoLocalStorage(3)
+        }
+    } else {
+        zombie.classList.add('damaged')
+        setTimeout(() => zombie.classList.remove('damaged'), 200)
+    }
+}
+
 
 let zombieSpawnInterval = setInterval(spawnZombie, zombieInterval)
 let sunSpawnInterval = setInterval(spawnSun, sunInterval)
