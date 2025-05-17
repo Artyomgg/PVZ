@@ -11,40 +11,50 @@ let modalWin = document.querySelector('.modal.win')
 let isGameOver = false
 
 window.addEventListener('load', () => {
-	const skin1 = localStorage.getItem('dragonSkin1')
-	const skin2 = localStorage.getItem('dragonSkin2')
-	const skin3 = localStorage.getItem('dragonSkin3')
-
-	let styleText = ''
-
-	if (skin1 === 'skinone') {
-		styleText += `
-          .dragon.fire {
-                background-image: url('/assets/img/Dragons/dragonskinone.png')
-          }
-      `
-	}
-	if (skin2 === 'skintwo') {
-		styleText += `
-          .dragon.poison {
-              background-image: url('/assets/img/Dragons/dragonskintwo.png');
-          }
-      `
-	}
+    const skin1 = localStorage.getItem('dragonSkin1') 
+    const skin2 = localStorage.getItem('dragonSkin2') 
+    const skin3 = localStorage.getItem('dragonSkin3') 
+    
+    let styleText = ''
+    
+    if (skin1 === 'skinone') {
+        styleText += `
+            .dragon.Fire::before {
+                content: url('/assets/img/Dragons/dragonskinone.png') !important;
+                scale: 11.5%;
+                left: -835%;
+                top: -850%;
+            }
+        `
+    }
+    if (skin2 === 'skintwo') {
+        styleText += `
+            .dragon.Poison::before {
+                content: url('/assets/img/Dragons/dragonskintwo.png') !important;
+                scale: 11.5%;
+                left: -600%;
+                top: -570%;
+            }
+        `
+    }
 	if (skin3 === 'skinthree') {
-		styleText += `
-          .dragon.ice {
-              background-image: url('/assets/img/Dragons/dragonskinthree.png')
-          }
-      `
-	}
+        styleText += `
+            .dragon.Ice::before {
+                content: url('/assets/img/Dragons/dragonskinthree.png') !important;
+				        scale: 11.5%;
+				        left: -750%;
+				        top: -660%;
+            }
+        `
+    }
 
-	if (styleText) {
-		const style = document.createElement('style')
-		style.textContent = styleText
-		document.head.appendChild(style)
-	}
+    if (styleText) {
+        const style = document.createElement('style')
+        style.textContent = styleText
+        document.head.appendChild(style)
+    }
 })
+
 
 if (!modalLose || !modalWin) {
     console.error('Modal elements not found!')

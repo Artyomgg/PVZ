@@ -940,20 +940,3 @@ button {
   border-radius: 50%;
   opacity: 0.7;
 }
-
-.zombie.jumping {
-    animation: zombieJump 0.8s ease-in-out, moveLeft var(--move-duration) linear;
-    z-index: 100;
-}
-
-@keyframes zombieJump {
-    0% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-100px);
-    }
-    100% {
-        transform: translateY(0);
-    }
-}
