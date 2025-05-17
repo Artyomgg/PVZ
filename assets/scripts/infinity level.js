@@ -94,9 +94,9 @@ const dragonTypes = {
 		explosionRadius: 3,
 	},
 	deadly: {
-		cost: 200,
+		cost: 275,
 		damage: 28,
-		shootInterval: 6000,
+		shootInterval: 7500,
 		projectileClass: 'deadlyball',
 	},
 }

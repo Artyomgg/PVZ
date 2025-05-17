@@ -53,9 +53,9 @@ const dragonTypes = {
 		explosionRadius: 3,
 	},
 	deadly: {
-		cost: 200,
+		cost: 275,
 		damage: 28,
-		shootInterval: 6000,
+		shootInterval: 7500,
 		projectileClass: 'deadlyball',
 	},
 }
@@ -282,13 +282,13 @@ function shoot(dragon, config) {
 			const cellWidth = gridRect.width / 8
 			const zombieCol = Math.floor((zombieRect.left - gridRect.left) / cellWidth)
 			const zombieRow = parseInt(zombie.dataset.row)
-			if (zombieRow === dragonRow && Math.abs(zombieCol - dragonCol) <= 2) {
+			if (zombieRow === dragonRow && Math.abs(zombieCol - dragonCol) <= 3) {
 				canShoot = false
 				break
 			}
 		}
 
-		//eсли есть враги ближе 2 клеток, не разрешаем стрелять
+		//eсли есть враги ближе 3 клеток, не разрешаем стрелять
 		if (!canShoot) {
 			return
 		}
