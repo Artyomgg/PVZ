@@ -54,7 +54,7 @@ if (!modalLose || !modalWin) {
 const dragonTypes = {
     fire: {
         cost: 50,
-        damage: 1,
+        damage: 2,
         shootInterval: 1500,
         projectileClass: 'fireball',
         sunSpawnInterval: 5000,
@@ -79,16 +79,16 @@ const dragonTypes = {
 // 2. МАССИВ ЗОМБИ
 const zombieTypes = {
     normal: {
-        health: 5,
+        health: 10,
         speed: 20,
         points: 100,
-        spawnChance: 0.5,
+        spawnChance: 1,
     },
     armored: {
-        health: 10,
+        health: 20,
         speed: 25,
         points: 150,
-        spawnChance: 0.25,
+        spawnChance: 0.5,
     },
 }
 
@@ -571,8 +571,8 @@ function spawnSun() {
 }
 
 // Увеличение сложности
-let zombieInterval = 4000
-let sunInterval = 5000
+let zombieInterval = 4500
+let sunInterval = 7000
 
 function increaseDifficulty() {
     zombieInterval = Math.max(2000, zombieInterval - 500)
