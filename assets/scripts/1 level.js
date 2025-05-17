@@ -411,6 +411,17 @@ function handleProjectileHit(zombie, projectile) {
 		? dragonTypes.fire.damage
 		: dragonTypes.ice.damage
 
+	//разморозка при попадании огненным снарядом
+	if (projectile.classList.contains('fireball') && zombie.classList.contains('frozen')) {
+		zombie.dataset.slowMultiplier = 1
+		zombie.classList.remove('frozen')
+		const iceOverlay = zombie.querySelector('.ice-overlay')
+		if (iceOverlay) iceOverlay.remove()
+		if (zombie.dataset.freezeTimeoutId) {
+			clearTimeout(zombie.dataset.freezeTimeoutId)
+		}
+	}
+
 	zombie.dataset.health -= damage
 
 	if (zombie.dataset.health <= 0) {
@@ -462,7 +473,7 @@ function spawnSun() {
 }
 
 let zombieInterval = 4000
-let sunInterval = 8000
+let sunInterval = 10000
 
 function increaseDifficulty() {
 	zombieInterval = Math.max(2000, zombieInterval - 500)

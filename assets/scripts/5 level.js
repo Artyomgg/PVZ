@@ -52,6 +52,12 @@ const dragonTypes = {
 		flashCount: 3,
 		explosionRadius: 3,
 	},
+	deadly: {
+		cost: 200,
+		damage: 28,
+		shootInterval: 6000,
+		projectileClass: 'deadlyball',
+	},
 }
 
 // 2. МАССИВ ЗОМБИ
@@ -259,6 +265,35 @@ function triggerExplosion(dragon, config, cell) {
 
 function shoot(dragon, config) {
 	if (isGameOver) return
+
+	//проверка дистанции рыцарей от дракона deadly
+	if (config.projectileClass === 'deadlyball') {
+		const dragonCell = dragon.parentElement
+		const dragonIndex = Array.from(grid.children).indexOf(dragonCell)
+		const dragonRow = Math.floor(dragonIndex / 8)
+		const dragonCol = dragonIndex % 8
+		
+		const zombies = document.querySelectorAll('.zombie, .boss')
+		let canShoot = true
+
+		for (const zombie of zombies) {
+			const zombieRect = zombie.getBoundingClientRect()
+			const gridRect = grid.getBoundingClientRect()
+			const cellWidth = gridRect.width / 8
+			const zombieCol = Math.floor((zombieRect.left - gridRect.left) / cellWidth)
+			const zombieRow = parseInt(zombie.dataset.row)
+			if (zombieRow === dragonRow && Math.abs(zombieCol - dragonCol) <= 2) {
+				canShoot = false
+				break
+			}
+		}
+
+		//eсли есть враги ближе 2 клеток, не разрешаем стрелять
+		if (!canShoot) {
+			return
+		}
+	}
+
 	dragon.classList.add('shooting')
 	setTimeout(() => dragon.classList.remove('shooting'), 300)
 
