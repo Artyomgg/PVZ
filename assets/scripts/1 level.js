@@ -10,6 +10,42 @@ let modalLose = document.querySelector('.modal.lose')
 let modalWin = document.querySelector('.modal.win')
 let isGameOver = false
 
+window.addEventListener('load', () => {
+	const skin1 = localStorage.getItem('dragonSkin1')
+	const skin2 = localStorage.getItem('dragonSkin2')
+	const skin3 = localStorage.getItem('dragonSkin3')
+
+	let styleText = ''
+
+	if (skin1 === 'skinone') {
+		styleText += `
+          .dragon.fire {
+                background-image: url('/assets/img/Dragons/dragonskinone.png')
+          }
+      `
+	}
+	if (skin2 === 'skintwo') {
+		styleText += `
+          .dragon.poison {
+              background-image: url('/assets/img/Dragons/dragonskintwo.png');
+          }
+      `
+	}
+	if (skin3 === 'skinthree') {
+		styleText += `
+          .dragon.ice {
+              background-image: url('/assets/img/Dragons/dragonskinthree.png')
+          }
+      `
+	}
+
+	if (styleText) {
+		const style = document.createElement('style')
+		style.textContent = styleText
+		document.head.appendChild(style)
+	}
+})
+
 if (!modalLose || !modalWin) {
   console.error('Modal elements not found!')
 }
