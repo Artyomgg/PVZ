@@ -54,7 +54,7 @@ if (!modalLose || !modalWin) {
 const dragonTypes = {
     fire: {
         cost: 50,
-        damage: 1,
+        damage: 4,
         shootInterval: 1500,
         projectileClass: 'fireball',
         sunSpawnInterval: 5000,
@@ -62,7 +62,7 @@ const dragonTypes = {
     },
     ice: {
         cost: 75,
-        damage: 1,
+        damage: 7,
         shootInterval: 2000,
         projectileClass: 'iceball',
         freezeDuration: 2000,
