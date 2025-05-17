@@ -1,3 +1,6 @@
+
+import { IntoLocalStorage } from './intoLocalStorage.js'
+
 let sunCount = 100
 let score = 0
 let selectedDragonType = null
@@ -14,41 +17,108 @@ if (!modalLose || !modalWin) {
     console.error('Modal elements not found!')
 }
 
+// Применение скинов драконов из localStorage
+window.addEventListener('load', () => {
+    const skin1 = localStorage.getItem('dragonSkin1')
+    const skin2 = localStorage.getItem('dragonSkin2')
+    const skin3 = localStorage.getItem('dragonSkin3')
+
+    let styleText = ''
+
+    if (skin1 === 'skinone') {
+        styleText += `
+            .dragon.fire {
+                background-image: url('/assets/img/Dragons/dragonskinone.png')
+            }
+        `
+    }
+    if (skin2 === 'skintwo') {
+        styleText += `
+            .dragon.poison {
+                background-image: url('/assets/img/Dragons/dragonskintwo.png');
+            }
+        `
+    }
+    if (skin3 === 'skinthree') {
+        styleText += `
+            .dragon.ice {
+                background-image: url('/assets/img/Dragons/dragonskinthree.png')
+            }
+        `
+    }
+
+    if (styleText) {
+        const style = document.createElement('style')
+        style.textContent = styleText
+        document.head.appendChild(style)
+    }
+})
+
 // 1. МАССИВ ДРАКОНОВ
 const dragonTypes = {
     fire: {
         cost: 50,
         damage: 10,
         shootInterval: 1500,
-        projectileClass: 'fireball'
+        projectileClass: 'fireball',
+        sunSpawnInterval: 5000,
+        sunSpawnChance: 0.1,
     },
     ice: {
         cost: 75,
         damage: 15,
         shootInterval: 2000,
-        projectileClass: 'iceball'
+        projectileClass: 'iceball',
+        freezeDuration: 2000,
     },
     poison: {
         cost: 100,
         damage: 10,
         shootInterval: 2500,
-        projectileClass: 'poisonball'
+        projectileClass: 'poisonball',
+        poisonDuration: 2000,
     },
     lightning: {
         cost: 150,
         damage: 20,
         shootInterval: 2000,
-        projectileClass: 'lightningball'
+        projectileClass: 'lightningball',
+    },
+    blast: {
+        cost: 200,
+        damage: 50,
+        flashDuration: 1000,
+        flashCount: 3,
+        explosionRadius: 2,
+        projectileClass: 'none'
     }
 }
 
 // 2. МАССИВ ЗОМБИ
 const zombieTypes = {
+    normal: {
+        health: 10,
+        speed: 20,
+        points: 100,
+        spawnChance: 0.5,
+    },
+    armored: {
+        health: 20,
+        speed: 25,
+        points: 150,
+        spawnChance: 0.25,
+    },
+    hz: {
+        health: 25,
+        speed: 22,
+        points: 175,
+        spawnChance: 0.15,
+    },
     golden: {
         health: 28,
         speed: 19,
         points: 100,
-        spawnChance: 1
+        spawnChance: 0.1
     }
 }
 
@@ -69,12 +139,12 @@ function updateDragonMenu() {
         const option = document.createElement('div')
         option.className = 'dragon-option'
         option.dataset.type = type
-        option.textContent = `${type} (${dragonTypes[type].cost} 🔥)`
+        option.textContent = `${type.charAt(0).toUpperCase() + type.slice(1)} (${dragonTypes[type].cost} 🔥)`
 
         option.addEventListener('click', () => {
             selectedDragonType = type
             document.querySelectorAll('.dragon-option').forEach(opt => {
-                opt.style.border = '2px solid rgb(101, 26, 30)'
+                opt.style.border = '2px solid #651a1a'
             })
             option.style.border = '2px solid #ff4757'
         })
@@ -89,6 +159,17 @@ updateDragonMenu()
 function GameOver() {
     isGameOver = true
     modalLose.classList.add('visible')
+
+    document.querySelectorAll('.dragon').forEach(dragon => {
+        clearInterval(dragon.dataset.shootIntervalId)
+        if (dragon.dataset.sunIntervalId) {
+            clearInterval(dragon.dataset.sunIntervalId)
+        }
+        if (dragon.dataset.flashIntervalId) {
+            clearInterval(dragon.dataset.flashIntervalId)
+        }
+    })
+
     stopAllIntervals()
 }
 
@@ -110,12 +191,145 @@ function placeDragon(cell) {
         dragon.className = `dragon ${selectedDragonType}`
         cell.appendChild(dragon)
 
-        const intervalId = setInterval(
-            () => shoot(dragon, dragonConfig),
-            dragonConfig.shootInterval
-        )
-        dragon.dataset.intervalId = intervalId
+        if (selectedDragonType === 'blast') {
+            startBlastDragon(dragon, dragonConfig, cell)
+        } else {
+            const shootIntervalId = setInterval(
+                () => shoot(dragon, dragonConfig),
+                dragonConfig.shootInterval
+            )
+            dragon.dataset.shootIntervalId = shootIntervalId
+
+            if (selectedDragonType === 'fire') {
+                const sunIntervalId = setInterval(
+                    () => spawnSunNearDragon(dragon, cell),
+                    dragonConfig.sunSpawnInterval
+                )
+                dragon.dataset.sunIntervalId = sunIntervalId
+            }
+        }
     }
+}
+
+function startBlastDragon(dragon, config, cell) {
+    let flashCount = 0
+
+    const flashInterval = setInterval(() => {
+        if (isGameOver || !dragon.isConnected) {
+            clearInterval(flashInterval)
+            return
+        }
+
+        dragon.classList.toggle('flashing')
+        flashCount++
+
+        if (flashCount >= config.flashCount * 2) {
+            clearInterval(flashInterval)
+            triggerExplosion(dragon, config, cell)
+        }
+    }, config.flashDuration / 2)
+    dragon.dataset.flashIntervalId = flashInterval
+}
+
+function triggerExplosion(dragon, config, cell) {
+    if (isGameOver || !dragon.isConnected) return
+
+    const explosion = document.createElement('div')
+    explosion.className = 'blast-explosion'
+    const cellRect = cell.getBoundingClientRect()
+    const gridRect = grid.getBoundingClientRect()
+    explosion.style.left = `${cellRect.left - gridRect.left + cellRect.width / 2 - 180}px`
+    explosion.style.top = `${cellRect.top - gridRect.top + cellRect.height / 2 - 180}px`
+    grid.appendChild(explosion)
+    setTimeout(() => explosion.remove(), 500)
+
+    const cellIndex = Array.from(grid.children).indexOf(cell)
+    const row = Math.floor(cellIndex / 8)
+    const col = cellIndex % 8
+    const radius = config.explosionRadius
+
+    const zombies = document.querySelectorAll('.zombie')
+    const boss = document.querySelector('.boss')
+
+    zombies.forEach(zombie => {
+        const zombieRow = parseInt(zombie.dataset.row)
+        const zombieRect = zombie.getBoundingClientRect()
+        const cellCenterX = cellRect.left + cellRect.width / 2
+        const cellCenterY = cellRect.top + cellRect.height / 2
+        const zombieCenterX = zombieRect.left + zombieRect.width / 2
+        const zombieCenterY = zombieRect.top + zombieRect.height / 2
+
+        const rowDiff = Math.abs(zombieRow - row)
+        const colDiff =
+            Math.abs(zombieCenterX - cellCenterX) / cellRect.width +
+            Math.abs(zombieCenterY - cellCenterY) / cellRect.height
+
+        if (rowDiff <= radius && colDiff <= radius) {
+            applyDamage(zombie, config.damage)
+        }
+    })
+
+    if (boss && boss.isConnected) {
+        const bossRect = boss.getBoundingClientRect()
+        const cellCenterX = cellRect.left + cellRect.width / 2
+        const cellCenterY = cellRect.top + cellRect.height / 2
+        const bossCenterX = bossRect.left + bossRect.width / 2
+        const bossCenterY = bossRect.top + bossRect.height / 2
+
+        const rowDiff = Math.abs(Math.floor(bossRect.top / (gridRect.height / 5)) - row)
+        const colDiff =
+            Math.abs(bossCenterX - cellCenterX) / cellRect.width +
+            Math.abs(bossCenterY - cellCenterY) / cellRect.height
+
+        if (rowDiff <= radius && colDiff <= radius) {
+            applyDamage(boss, config.damage)
+        }
+    }
+
+    dragon.remove()
+}
+
+function spawnSunNearDragon(dragon, cell) {
+    if (isGameOver || Math.random() > dragonTypes.fire.sunSpawnChance) return
+
+    const sun = document.createElement('div')
+    sun.className = 'sun'
+
+    const cellRect = cell.getBoundingClientRect()
+    const gridRect = grid.getBoundingClientRect()
+
+    sun.style.left = `${cellRect.left - gridRect.left + (Math.random() * 150 - 30)}px`
+    sun.style.top = `${cellRect.top - gridRect.top + (Math.random() * 60 - 30)}px`
+
+    grid.appendChild(sun)
+
+    sun.addEventListener('click', () => {
+        if (!sun.classList.contains('collected')) {
+            collectSun(sun)
+        }
+    })
+
+    setTimeout(() => {
+        if (sun.isConnected && !sun.classList.contains('collected')) {
+            sun.remove()
+        }
+    }, 10000)
+}
+
+function collectSun(sun) {
+    sun.classList.add('collected')
+    const counter = document.getElementById('sunCount')
+    const counterRect = counter.getBoundingClientRect()
+    const sunRect = sun.getBoundingClientRect()
+
+    sun.style.position = 'fixed'
+    sun.style.left = `${sunRect.left}px`
+    sun.style.top = `${sunRect.top}px`
+
+    sunCount += 50
+    sunCountDisplay.textContent = sunCount
+
+    setTimeout(() => sun.remove(), 500)
 }
 
 function shoot(dragon, config) {
@@ -144,6 +358,8 @@ function shoot(dragon, config) {
         trailInterval = createFireballTrail(projectile)
     } else if (config.projectileClass === 'iceball') {
         trailInterval = createIceballTrail(projectile)
+    } else if (config.projectileClass === 'poisonball') {
+        trailInterval = createPoisonballTrail(projectile)
     }
 
     const animation = projectile.animate(
@@ -185,24 +401,57 @@ function createIceballTrail(projectile) {
     }, 50)
 }
 
-function createLightningTrail(projectile) {
+function createPoisonballTrail(projectile) {
     return setInterval(() => {
         const trail = document.createElement('div')
-        trail.className = 'lightning-trail'
+        trail.className = 'poisonball trail'
         trail.style.left = projectile.style.left
         trail.style.top = projectile.style.top
         grid.appendChild(trail)
-        setTimeout(() => trail.remove(), 300)
-
-        if (Math.random() > 0.7) {
-            const bolt = document.createElement('div')
-            bolt.className = 'chain-lightning'
-            bolt.style.left = projectile.style.left
-            bolt.style.top = projectile.style.top
-            grid.appendChild(bolt)
-            setTimeout(() => bolt.remove(), 300)
-        }
+        setTimeout(() => trail.remove(), 200)
     }, 50)
+}
+
+function freezeZombie(zombie, duration) {
+    if (zombie.classList.contains('frozen')) return
+
+    zombie.classList.add('frozen')
+    zombie.dataset.slowMultiplier = '0'
+
+    const iceOverlay = document.createElement('div')
+    iceOverlay.className = 'ice-overlay'
+    zombie.appendChild(iceOverlay)
+
+    const timeoutId = setTimeout(() => {
+        if (zombie.isConnected) {
+            zombie.classList.remove('frozen')
+            zombie.dataset.slowMultiplier = '1'
+            iceOverlay.remove()
+            delete zombie.dataset.freezeTimeoutId
+        }
+    }, duration)
+
+    zombie.dataset.freezeTimeoutId = timeoutId
+}
+
+function poisonZombie(zombie, duration) {
+    if (zombie.classList.contains('poisoned')) return
+
+    zombie.classList.add('poisoned')
+
+    const poisonOverlay = document.createElement('div')
+    poisonOverlay.className = 'poison-overlay'
+    zombie.appendChild(poisonOverlay)
+
+    const timeoutId = setTimeout(() => {
+        if (zombie.isConnected) {
+            zombie.classList.remove('poisoned')
+            poisonOverlay.remove()
+            delete zombie.dataset.poisonTimeoutId
+        }
+    }, duration)
+
+    zombie.dataset.poisonTimeoutId = timeoutId
 }
 
 // Босс
@@ -277,7 +526,13 @@ function bossBurnAttack(bossElement) {
         // Уничтожаем драконов в клетке
         const dragon = targetCell.querySelector('.dragon')
         if (dragon) {
-            clearInterval(dragon.dataset.intervalId)
+            clearInterval(dragon.dataset.shootIntervalId)
+            if (dragon.dataset.sunIntervalId) {
+                clearInterval(dragon.dataset.sunIntervalId)
+            }
+            if (dragon.dataset.flashIntervalId) {
+                clearInterval(dragon.dataset.flashIntervalId)
+            }
             dragon.remove()
         }
 
@@ -376,6 +631,7 @@ function spawnZombie() {
     zombie.dataset.health = zombieConfig.health.toString()
     zombie.dataset.points = zombieConfig.points.toString()
     zombie.dataset.row = row.toString()
+    zombie.dataset.slowMultiplier = '1'
 
     grid.appendChild(zombie)
 
@@ -425,7 +681,23 @@ function spawnZombie() {
                 for (const type in dragonTypes) {
                     if (projectile.classList.contains(dragonTypes[type].projectileClass)) {
                         damage = dragonTypes[type].damage
+                        if (type === 'ice') {
+                            freezeZombie(zombie, dragonTypes.ice.freezeDuration)
+                        } else if (type === 'poison') {
+                            poisonZombie(zombie, dragonTypes.poison.poisonDuration)
+                        }
                         break
+                    }
+                }
+
+                if (projectile.classList.contains('fireball') && zombie.classList.contains('frozen')) {
+                    zombie.dataset.slowMultiplier = '1'
+                    zombie.classList.remove('frozen')
+                    const iceOverlay = zombie.querySelector('.ice-overlay')
+                    if (iceOverlay) iceOverlay.remove()
+                    if (zombie.dataset.freezeTimeoutId) {
+                        clearTimeout(zombie.dataset.freezeTimeoutId)
+                        delete zombie.dataset.freezeTimeoutId
                     }
                 }
 
@@ -440,7 +712,7 @@ function spawnZombie() {
                     scoreCountDisplay.textContent = score
                     zombie.remove()
                     clearInterval(checkCollision)
-                    if (score >= 2500) {
+                    if (score >= 2500 && !document.querySelector('.boss')) {
                         isGameOver = true
                         clearInterval(zombieSpawnInterval)
                         startCutscene()
@@ -503,28 +775,12 @@ function spawnZombie() {
     }, 100)
 }
 
-function collectSun(sun) {
-    sun.classList.add('collected')
-    const counter = document.getElementById('sunCount')
-    const counterRect = counter.getBoundingClientRect()
-    const sunRect = sun.getBoundingClientRect()
-
-    sun.style.position = 'fixed'
-    sun.style.left = `${sunRect.left}px`
-    sun.style.top = `${sunRect.top}px`
-
-    sunCount += 50
-    sunCountDisplay.textContent = sunCount
-
-    setTimeout(() => sun.remove(), 500)
-}
-
 function spawnSun() {
     if (isGameOver) return
 
     const sun = document.createElement('div')
     sun.className = 'sun'
-    sun.style.left = `${Math.random() * 150}%`
+    sun.style.left = `${Math.random() * 90}%`
     grid.appendChild(sun)
 
     sun.addEventListener('click', () => {
@@ -585,6 +841,16 @@ function lightningAttack(dragon, config) {
         lightningEffect.style.left = `${targetCell.offsetLeft}px`
         lightningEffect.style.top = `${targetCell.offsetTop}px`
         grid.appendChild(lightningEffect)
+
+        // Добавляем эффект цепной молнии
+        if (Math.random() > 0.7) {
+            const chainBolt = document.createElement('div')
+            chainBolt.className = 'chain-lightning'
+            chainBolt.style.left = `${targetX}px`
+            chainBolt.style.top = `${targetY}px`
+            grid.appendChild(chainBolt)
+            setTimeout(() => chainBolt.remove(), 300)
+        }
 
         setTimeout(() => lightningEffect.remove(), 500)
 
@@ -656,7 +922,6 @@ function damageZombiesInArea(cell, width, height, damage) {
     })
 }
 
-
 function startCutscene() {
     stopAllIntervals()
 
@@ -671,7 +936,7 @@ function startCutscene() {
     crawlContainer.className = 'crawl-container'
     cutscene.appendChild(crawlContainer)
 
-    // Тут пока что хз
+    // Текст катсцены
     const crawl = document.createElement('div')
     crawl.className = 'crawl'
     crawl.innerHTML = `
@@ -686,6 +951,7 @@ function startCutscene() {
     setTimeout(() => {
         cutscene.remove()
         modalWin.classList.add('visible')
+        IntoLocalStorage(5)
     }, 15000)
 }
 
@@ -712,13 +978,10 @@ function applyDamage(entity, damage) {
         scoreCountDisplay.textContent = score
         entity.remove()
 
-        
         if (entity.classList.contains('boss')) {
             isGameOver = true
             startCutscene()
-        }
-        
-        else if (score >= 2500) {
+        } else if (score >= 2500 && !document.querySelector('.boss')) {
             isGameOver = true
             startCutscene()
         }

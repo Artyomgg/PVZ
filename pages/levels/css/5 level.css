@@ -9,7 +9,7 @@
 body {
     background: url('/assets/img/backgroundlevel5.jpg') no-repeat;
     background-size: 100% 100%;
-    background-position: center;
+    background_constructive: center;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -94,12 +94,32 @@ body {
     scale: 11.5%;
     left: -480%;
     top: -500%;
-    position: absolute;
-    transform: translate(-50%, -50%);
+}
+
+.dragon.blast::before {
+    content: url('/assets/img/Dragons/средний-красный.png');
+    scale: 18.5%;
+    left: -350%;
+    top: -340%;
+}
+
+.dragon.blast.flashing {
+    filter: brightness(1.5) drop-shadow(0 0 10px #ff0000);
 }
 
 .dragon.shooting {
     animation: dragonShoot 0.3s ease-in-out;
+}
+
+.blast-explosion {
+    position: absolute;
+    width: 360px;
+    height: 360px;
+    background: radial-gradient(circle, rgba(255, 255, 0, 0.8) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10;
+    animation: blastExplosion 0.5s ease-out forwards;
 }
 
 .projectile {
@@ -326,8 +346,50 @@ button {
     z-index: 10;
 }
 
+.zombie.normal {
+    background-image: url('/assets/img/KNIGHTS/chel.gif');
+}
+
+.zombie.armored {
+    background-image: url('/assets/img/KNIGHTS/chel2.gif');
+}
+
+.zombie.hz {
+    background-image: url('/assets/img/KNIGHTS/chel3.gif');
+}
+
 .zombie.golden {
     background-image: url('/assets/img/KNIGHTS/chel4.gif');
+}
+
+.zombie.hit {
+    animation: hitFlash 0.2s;
+}
+
+.zombie.frozen {
+    animation-play-state: paused;
+}
+
+.zombie .ice-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(112, 161, 255, 0.5);
+    z-index: 11;
+    pointer-events: none;
+}
+
+.zombie .poison-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(123, 237, 159, 0.5);
+    z-index: 11;
+    pointer-events: none;
 }
 
 .boss {
@@ -452,14 +514,15 @@ button {
     }
 }
 
-@keyframes explode {
+@keyframes hitFlash {
     0% {
-        transform: scale(0);
-        opacity: 1;
+        filter: brightness(1);
+    }
+    50% {
+        filter: brightness(1.5);
     }
     100% {
-        transform: scale(2);
-        opacity: 0;
+        filter: brightness(1);
     }
 }
 
@@ -470,6 +533,17 @@ button {
     }
     100% {
         transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+    }
+}
+
+@keyframes blastExplosion {
+    0% {
+        transform: scale(0.5);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.5);
         opacity: 0;
     }
 }
@@ -629,6 +703,15 @@ button {
     animation: lightningHit 0.3s forwards;
 }
 
+.chain-lightning {
+    position: absolute;
+    width: 5px;
+    height: 100px;
+    background: linear-gradient(to bottom, #f1c40f, transparent);
+    transform-origin: bottom center;
+    animation: chainLightning 0.3s forwards;
+}
+
 @keyframes lightningHit {
     0% {
         transform: scale(0.5);
@@ -714,4 +797,52 @@ button {
 
 .lose {
     background: rgba(149, 31, 31, 0.747);
+}
+
+.cutscene {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 1000001;
+    overflow: hidden;
+}
+
+.crawl-container {
+    perspective: 500px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.crawl {
+    color: #ff0;
+    font-size: 2em;
+    text-align: justify;
+    width: 50%;
+    transform: rotateX(20deg);
+    animation: crawl 60s linear forwards;
+}
+
+.crawl h1 {
+    text-align: center;
+    font-size: 2.5em;
+    margin-bottom: 1em;
+}
+
+.crawl p {
+    margin-bottom: 2em;
+}
+
+@keyframes crawl {
+    0% {
+        transform: rotateX(20deg) translateY(100%);
+    }
+    100% {
+        transform: rotateX(20deg) translateY(-200%);
+    }
 }
