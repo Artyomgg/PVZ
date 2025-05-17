@@ -57,49 +57,49 @@ if (!modalLose || !modalWin) {
 
 // 1. МАССИВ ДРАКОНОВ
 const dragonTypes = {
-  Fire: {
-    cost: 50,
-    damage: 4,
-    shootInterval: 1500,
-    projectileClass: "fireball",
-    fireDrops: {
-      interval: 9000,
-      amount: 1,
-      value: 25,
+    fire: {
+        cost: 50,
+        damage: 8,
+        shootInterval: 1500,
+        projectileClass: 'fireball',
+        sunSpawnInterval: 5000,
+        sunSpawnChance: 0.1,
     },
-  },
-  Ice: {
-    cost: 75,
-    damage: 15,
-    shootInterval: 2000,
-    projectileClass: "iceball",
-  },
-  Poison: {
-    cost: 100,
-    damage: 10,
-    shootInterval: 2500,
-    projectileClass: "poisonball",
-  },
-  Lightning: {
-    cost: 150,
-    damage: 20,
-    shootInterval: 2000,
-    projectileClass: "lightningball",
-  },
-  Blast: {
-    cost: 100,
-    damage: 30,
-    flashDuration: 1000,
-    flashCount: 3,
-    explosionRadius: 3,
-  },
-  Deadly: {
-    cost: 250,
-    damage: 28,
-    shootInterval: 6000,
-    projectileClass: "deadlyball",
-  },
-};
+    ice: {
+        cost: 75,
+        damage: 12,
+        shootInterval: 2000,
+        projectileClass: 'iceball',
+        freezeDuration: 2000,
+    },
+    poison: {
+        cost: 100,
+        damage: 8,
+        shootInterval: 2500,
+        projectileClass: 'poisonball',
+        poisonDuration: 2000,
+    },
+    lightning: {
+        cost: 150,
+        damage: 16,
+        shootInterval: 2000,
+        projectileClass: 'lightningball',
+    },
+    blast: {
+        cost: 200,
+        damage: 40,
+        flashDuration: 1000,
+        flashCount: 3,
+        explosionRadius: 2,
+        projectileClass: 'none'
+    },
+    deadly: {
+        cost: 250,
+        damage: 24,
+        shootInterval: 7500,
+        projectileClass: 'deadlyball',
+    }
+}
 
 // 2. МАССИВ ЗОМБИ
 const zombieTypes = {
