@@ -62,7 +62,7 @@ const dragonTypes = {
 	},
 	ice: {
 		cost: 75,
-		damage: 1,
+		damage: 2,
 		shootInterval: 2000,
 		projectileClass: 'iceball',
 		freezeDuration: 2000,
@@ -72,22 +72,10 @@ const dragonTypes = {
 // 2. МАССИВ ЗОМБИ
 const zombieTypes = {
 	normal: {
-		health: 5,
+		health: 4,
 		speed: 20,
 		points: 100,
 		spawnChance: 0.5,
-	},
-	armored: {
-		health: 13,
-		speed: 25,
-		points: 150,
-		spawnChance: 0.25,
-	},
-	hz: {
-		health: 10,
-		speed: 22,
-		points: 175,
-		spawnChance: 0.25,
 	},
 }
 
