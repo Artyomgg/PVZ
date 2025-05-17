@@ -103,11 +103,9 @@ body {
     top: -340%;
 }
 
-.dragon.deadly::before {
+.dragon.deadly {
     content: url('/assets/img/Dragons/красно-серый.png');
-    scale: 19%;
-    left: -300%;
-    top: -300%;
+    scale: 1.9;
 }
 
 .dragon.blast.flashing {
