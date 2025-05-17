@@ -62,14 +62,14 @@ const dragonTypes = {
     },
     ice: {
         cost: 75,
-        damage: 1,
+        damage: 2,
         shootInterval: 2000,
         projectileClass: 'iceball',
         freezeDuration: 2000,
     },
     poison: {
         cost: 100,
-        damage: 10,
+        damage: 3,
         shootInterval: 2500,
         projectileClass: 'poisonball',
         poisonDuration: 2000,
@@ -85,15 +85,9 @@ const zombieTypes = {
         spawnChance: 0.5,
     },
     armored: {
-        health: 13,
+        health: 10,
         speed: 25,
         points: 150,
-        spawnChance: 0.25,
-    },
-    hz: {
-        health: 10,
-        speed: 22,
-        points: 175,
         spawnChance: 0.25,
     },
 }
