@@ -54,7 +54,7 @@ if (!modalLose || !modalWin) {
 const dragonTypes = {
 	fire: {
 		cost: 50,
-		damage: 1,
+		damage: 4,
 		shootInterval: 1500,
 		projectileClass: 'fireball',
 		sunSpawnInterval: 5000,
@@ -62,7 +62,7 @@ const dragonTypes = {
 	},
 	ice: {
 		cost: 75,
-		damage: 1,
+		damage: 7,
 		shootInterval: 2000,
 		projectileClass: 'iceball',
 		freezeDuration: 2000,
@@ -81,8 +81,8 @@ const dragonTypes = {
 		projectileClass: 'lightningball',
 	},
 	blast: {
-        cost: 125,
-        damage: 4,
+        cost: 200,
+        damage: 50,
         flashDuration: 1000,
         flashCount: 3,
         explosionRadius: 2,
@@ -93,19 +93,19 @@ const dragonTypes = {
 // 2. МАССИВ ЗОМБИ
 const zombieTypes = {
 	normal: {
-		health: 5,
+		health: 10,
 		speed: 20,
 		points: 100,
 		spawnChance: 0.5,
 	},
 	armored: {
-		health: 13,
+		health: 20,
 		speed: 25,
 		points: 150,
 		spawnChance: 0.25,
 	},
 	hz: {
-		health: 10,
+		health: 25,
 		speed: 22,
 		points: 175,
 		spawnChance: 0.25,
