@@ -260,7 +260,7 @@ function triggerExplosion(dragon, config, cell) {
                 score += parseInt(zombie.dataset.points)
                 scoreCountDisplay.textContent = score
                 zombie.remove()
-                if (score >= 3500) {
+                if (score >= 3000) {
                     clearInterval(zombieSpawnInterval)
                     modalWin.classList.add('visible')
                     IntoLocalStorage(3)
@@ -547,7 +547,7 @@ function spawnZombie() {
                     scoreCountDisplay.textContent = score
                     zombie.remove()
                     clearInterval(checkCollision)
-                    if (score >= 3500) {
+                    if (score >= 3000) {
                         clearInterval(zombieSpawnInterval)
                         modalWin.classList.add('visible')
                         IntoLocalStorage(3)
@@ -708,7 +708,7 @@ function applyDamage(zombie, damage) {
         scoreCountDisplay.textContent = score
         zombie.remove()
 
-        if (score >= 3500) {
+        if (score >= 3000) {
             clearInterval(zombieSpawnInterval)
             modalWin.classList.add('visible')
             IntoLocalStorage(3)

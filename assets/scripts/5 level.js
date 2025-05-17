@@ -757,7 +757,7 @@ function spawnZombie() {
                     scoreCountDisplay.textContent = score
                     zombie.remove()
                     clearInterval(checkCollision)
-                    if (score >= 2500 && !document.querySelector('.boss')) {
+                    if (score >= 5000 && !document.querySelector('.boss')) {
                         isGameOver = true
                         clearInterval(zombieSpawnInterval)
                         startCutscene()
@@ -1026,7 +1026,7 @@ function applyDamage(entity, damage) {
         if (entity.classList.contains('boss')) {
             isGameOver = true
             startCutscene()
-        } else if (score >= 2500 && !document.querySelector('.boss')) {
+        } else if (score >= 5000 && !document.querySelector('.boss')) {
             isGameOver = true
             startCutscene()
         }
