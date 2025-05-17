@@ -958,16 +958,13 @@ function checkZombieDragonCollisions() {
       const dragonIndex = Array.from(grid.children).indexOf(dragonCell);
       const dragonRow = Math.floor(dragonIndex / 8);
 
-      // Check if zombie and dragon are in the same row
       if (zombieRow === dragonRow) {
-        // Check for collision
         if (
           zombieRect.right > dragonRect.left &&
           zombieRect.left < dragonRect.right &&
           zombieRect.bottom > dragonRect.top &&
           zombieRect.top < dragonRect.bottom
         ) {
-          // Make zombie jump over dragon
           makeZombieJump(zombie, dragon);
         }
       }
