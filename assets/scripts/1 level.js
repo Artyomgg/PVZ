@@ -27,15 +27,9 @@ const dragonTypes = {
     cost: 75,
     damage: 2,
     shootInterval: 2000,
-    projectileClass: 'iceball'
+    projectileClass: 'iceball',
+    freezeDuration: 2000
   },
-  blast: {
-    cost: 100,
-    damage: 5,
-    flashDuration: 1000,
-    flashCount: 3,
-    explosionRadius: 3
-  }
 }
 
 const zombieTypes = {
@@ -330,6 +324,28 @@ function createIceballTrail(projectile) {
   }, 50)
 }
 
+function freezeZombie(zombie, duration) {
+  if (zombie.classList.contains('frozen')) return
+
+  zombie.classList.add('frozen')
+  zombie.dataset.slowMultiplier = '0'
+
+  const iceOverlay = document.createElement('div')
+  iceOverlay.className = 'ice-overlay'
+  zombie.appendChild(iceOverlay)
+
+  const timeoutId = setTimeout(() => {
+    if (zombie.isConnected) {
+      zombie.classList.remove('frozen')
+      zombie.dataset.slowMultiplier = '1'
+      iceOverlay.remove()
+      delete zombie.dataset.freezeTimeoutId
+    }
+  }, duration)
+
+  zombie.dataset.freezeTimeoutId = timeoutId
+}
+
 function spawnZombie() {
   if (isGameOver) return
 
@@ -356,6 +372,7 @@ function spawnZombie() {
   zombie.dataset.health = zombieConfig.health.toString()
   zombie.dataset.points = zombieConfig.points.toString()
   zombie.dataset.row = row.toString()
+  zombie.dataset.slowMultiplier = '1'
 
   grid.appendChild(zombie)
 
@@ -405,7 +422,21 @@ function spawnZombie() {
         for (const type in dragonTypes) {
           if (projectile.classList.contains(dragonTypes[type].projectileClass)) {
             damage = dragonTypes[type].damage
+            if (type === 'ice') {
+              freezeZombie(zombie, dragonTypes.ice.freezeDuration)
+            }
             break
+          }
+        }
+
+        if (projectile.classList.contains('fireball') && zombie.classList.contains('frozen')) {
+          zombie.dataset.slowMultiplier = 1
+          zombie.classList.remove('frozen')
+          const iceOverlay = zombie.querySelector('.ice-overlay')
+          if (iceOverlay) iceOverlay.remove()
+          if (zombie.dataset.freezeTimeoutId) {
+            clearTimeout(zombie.dataset.freezeTimeoutId)
+            delete zombie.dataset.freezeTimeoutId
           }
         }
 
