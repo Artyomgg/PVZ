@@ -101,7 +101,7 @@ function updateDragonMenu() {
 		option.addEventListener('click', () => {
 			selectedDragonType = type
 			document.querySelectorAll('.dragon-option').forEach(opt => {
-				opt.style.border = '2px solid #016d98'
+				opt.style.border = '2px solid #3d8f4c'
 			})
 			option.style.border = '2px solid #ff4757'
 		})
