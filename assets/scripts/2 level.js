@@ -37,14 +37,6 @@ const dragonTypes = {
         projectileClass: 'poisonball',
         poisonDuration: 2000
     },
-    blast: {
-        cost: 125,
-        damage: 4,
-        flashDuration: 1000,
-        flashCount: 3,
-        explosionRadius: 2,
-        projectileClass: 'none'
-    }
 }
 
 const zombieTypes = {
