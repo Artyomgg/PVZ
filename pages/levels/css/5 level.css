@@ -9,7 +9,7 @@
 body {
     background: url('/assets/img/backgroundlevel5.jpg') no-repeat;
     background-size: 100% 100%;
-    background_constructive: center;
+    background-position: center;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -101,6 +101,13 @@ body {
     scale: 18.5%;
     left: -350%;
     top: -340%;
+}
+
+.dragon.deadly::before {
+    content: url('/assets/img/Dragons/красно-серый.png');
+    scale: 19%;
+    left: -300%;
+    top: -300%;
 }
 
 .dragon.blast.flashing {
@@ -202,11 +209,43 @@ body {
     animation: pulseLightning 0.5s infinite alternate;
 }
 
+.deadlyball {
+    background: #373636;
+    box-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000;
+}
+
+.deadlyball::after {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 15px;
+    background: linear-gradient(90deg, #484747, transparent);
+    left: -30px;
+    top: 2.5px;
+    border-radius: 5px;
+}
+
 .trail {
     position: absolute;
     opacity: 0.3;
     transform: scale(0.5);
     pointer-events: none;
+}
+
+.fireball.trail {
+    background: #ff6600;
+}
+
+.iceball.trail {
+    background: #70a1ff;
+}
+
+.poisonball.trail {
+    background: #7bed9f;
+}
+
+.deadlyball.trail {
+    background: #484747;
 }
 
 .lightning-trail {

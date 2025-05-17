@@ -1,4 +1,3 @@
-
 import { IntoLocalStorage } from './intoLocalStorage.js'
 
 let sunCount = 100
@@ -12,12 +11,6 @@ let modalWin = document.querySelector('.modal.win')
 let isGameOver = false
 let bossSpawned = false
 
-// Проверяем, что элементы найдены
-if (!modalLose || !modalWin) {
-    console.error('Modal elements not found!')
-}
-
-// Применение скинов драконов из localStorage
 window.addEventListener('load', () => {
     const skin1 = localStorage.getItem('dragonSkin1')
     const skin2 = localStorage.getItem('dragonSkin2')
@@ -53,6 +46,11 @@ window.addEventListener('load', () => {
         document.head.appendChild(style)
     }
 })
+
+if (!modalLose || !modalWin) {
+    console.error('Modal elements not found!')
+}
+
 
 // 1. МАССИВ ДРАКОНОВ
 const dragonTypes = {
@@ -91,6 +89,12 @@ const dragonTypes = {
         flashCount: 3,
         explosionRadius: 2,
         projectileClass: 'none'
+    },
+    deadly: {
+        cost: 250,
+        damage: 28,
+        shootInterval: 7500,
+        projectileClass: 'deadlyball',
     }
 }
 
@@ -334,6 +338,34 @@ function collectSun(sun) {
 
 function shoot(dragon, config) {
     if (isGameOver) return
+
+    // Проверка дистанции для deadly дракона
+    if (config.projectileClass === 'deadlyball') {
+        const dragonCell = dragon.parentElement
+        const dragonIndex = Array.from(grid.children).indexOf(dragonCell)
+        const dragonRow = Math.floor(dragonIndex / 8)
+        const dragonCol = dragonIndex % 8
+
+        const zombies = document.querySelectorAll('.zombie, .boss')
+        let canShoot = true
+
+        for (const zombie of zombies) {
+            const zombieRect = zombie.getBoundingClientRect()
+            const gridRect = grid.getBoundingClientRect()
+            const cellWidth = gridRect.width / 8
+            const zombieCol = Math.floor((zombieRect.left - gridRect.left) / cellWidth)
+            const zombieRow = parseInt(zombie.dataset.row) || Math.floor(zombieRect.top / (gridRect.height / 5))
+            if (zombieRow === dragonRow && Math.abs(zombieCol - dragonCol) <= 3) {
+                canShoot = false
+                break
+            }
+        }
+
+        if (!canShoot) {
+            return
+        }
+    }
+
     dragon.classList.add('shooting')
     setTimeout(() => dragon.classList.remove('shooting'), 300)
 
@@ -360,6 +392,8 @@ function shoot(dragon, config) {
         trailInterval = createIceballTrail(projectile)
     } else if (config.projectileClass === 'poisonball') {
         trailInterval = createPoisonballTrail(projectile)
+    } else if (config.projectileClass === 'deadlyball') {
+        trailInterval = createDeadlyballTrail(projectile)
     }
 
     const animation = projectile.animate(
@@ -405,6 +439,17 @@ function createPoisonballTrail(projectile) {
     return setInterval(() => {
         const trail = document.createElement('div')
         trail.className = 'poisonball trail'
+        trail.style.left = projectile.style.left
+        trail.style.top = projectile.style.top
+        grid.appendChild(trail)
+        setTimeout(() => trail.remove(), 200)
+    }, 50)
+}
+
+function createDeadlyballTrail(projectile) {
+    return setInterval(() => {
+        const trail = document.createElement('div')
+        trail.className = 'deadlyball trail'
         trail.style.left = projectile.style.left
         trail.style.top = projectile.style.top
         grid.appendChild(trail)
