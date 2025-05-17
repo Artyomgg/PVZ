@@ -63,7 +63,7 @@ const dragonTypes = {
 	ice: {
 		cost: 75,
 		damage: 2,
-		shootInterval: 2000,
+		shootInterval: 3000,
 		projectileClass: 'iceball',
 		freezeDuration: 2000,
 	},
@@ -75,7 +75,7 @@ const zombieTypes = {
 		health: 4,
 		speed: 20,
 		points: 100,
-		spawnChance: 0.5,
+		spawnChance: 1,
 	},
 }
 
@@ -235,10 +235,10 @@ function triggerExplosion(dragon, config, cell) {
 				score += parseInt(zombie.dataset.points)
 				scoreCountDisplay.textContent = score
 				zombie.remove()
-				if (score >= 3500) {
+				if (score >= 1000) {
 					clearInterval(zombieSpawnInterval)
 					modalWin.classList.add('visible')
-					IntoLocalStorage(3)
+					IntoLocalStorage(1)
 				}
 			} else {
 				zombie.classList.add('damaged')
@@ -522,10 +522,10 @@ function spawnZombie() {
 					scoreCountDisplay.textContent = score
 					zombie.remove()
 					clearInterval(checkCollision)
-					if (score >= 3500) {
+					if (score >= 1000) {
 						clearInterval(zombieSpawnInterval)
 						modalWin.classList.add('visible')
-						IntoLocalStorage(3)
+						IntoLocalStorage(1)
 					}
 				} else {
 					zombie.classList.add('damaged')
@@ -559,7 +559,7 @@ function spawnSun() {
 
 // Увеличение сложности
 let zombieInterval = 4000
-let sunInterval = 10000
+let sunInterval = 7000
 
 function increaseDifficulty() {
 	zombieInterval = Math.max(2000, zombieInterval - 500)
@@ -683,10 +683,10 @@ function applyDamage(zombie, damage) {
 		scoreCountDisplay.textContent = score
 		zombie.remove()
 
-		if (score >= 3500) {
+		if (score >= 1000) {
 			clearInterval(zombieSpawnInterval)
 			modalWin.classList.add('visible')
-			IntoLocalStorage(3)
+			IntoLocalStorage(1)
 		}
 	} else {
 		zombie.classList.add('damaged')
