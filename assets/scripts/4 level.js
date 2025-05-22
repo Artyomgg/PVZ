@@ -61,35 +61,35 @@ if (!modalLose || !modalWin) {
 
 // 1. МАССИВ ДРАКОНОВ
 const dragonTypes = {
-	fire: {
-		cost: 50,
-		damage: 4,
-		shootInterval: 1500,
-		projectileClass: 'fireball',
-		sunSpawnInterval: 5000,
-		sunSpawnChance: 0.1,
-	},
-	ice: {
-		cost: 75,
-		damage: 6,
-		shootInterval: 2000,
-		projectileClass: 'iceball',
-		freezeDuration: 2000,
-	},
-	poison: {
-		cost: 100,
-		damage: 8,
-		shootInterval: 2500,
-		projectileClass: 'poisonball',
-		poisonDuration: 2000,
-	},
-	lightning: {
-		cost: 150,
-		damage: 12,
-		shootInterval: 2000,
-		projectileClass: 'lightningball',
-	},
-	blast: {
+    Fire: {
+        cost: 50,
+        damage: 8,
+        shootInterval: 1500,
+        projectileClass: 'fireball',
+        sunSpawnInterval: 5000,
+        sunSpawnChance: 0.1,
+    },
+    Ice: {
+        cost: 75,
+        damage: 12,
+        shootInterval: 2000,
+        projectileClass: 'iceball',
+        freezeDuration: 2000,
+    },
+    Poison: {
+        cost: 100,
+        damage: 8,
+        shootInterval: 2500,
+        projectileClass: 'poisonball',
+        poisonDuration: 2000,
+    },
+    Lightning: {
+        cost: 150,
+        damage: 16,
+        shootInterval: 2000,
+        projectileClass: 'lightningball',
+    },
+    Blast: {
         cost: 200,
         damage: 40,
         flashDuration: 1000,
@@ -98,6 +98,7 @@ const dragonTypes = {
         projectileClass: 'none'
     }
 }
+
 
 // 2. МАССИВ ЗОМБИ
 const zombieTypes = {
@@ -190,7 +191,7 @@ function placeDragon(cell) {
 		dragon.className = `dragon ${selectedDragonType}`
 		cell.appendChild(dragon)
 
-		if (selectedDragonType === 'blast') {
+		if (selectedDragonType === 'Blast') {
 			startBlastDragon(dragon, dragonConfig, cell)
 		} else {
 			const shootIntervalId = setInterval(

@@ -63,7 +63,7 @@ if (!modalLose || !modalWin) {
 
 // 1. МАССИВ ДРАКОНОВ
 const dragonTypes = {
-    fire: {
+    Fire: {
         cost: 50,
         damage: 8,
         shootInterval: 1500,
@@ -71,27 +71,27 @@ const dragonTypes = {
         sunSpawnInterval: 5000,
         sunSpawnChance: 0.1,
     },
-    ice: {
+    Ice: {
         cost: 75,
         damage: 12,
         shootInterval: 2000,
         projectileClass: 'iceball',
         freezeDuration: 2000,
     },
-    poison: {
+    Poison: {
         cost: 100,
         damage: 8,
         shootInterval: 2500,
         projectileClass: 'poisonball',
         poisonDuration: 2000,
     },
-    lightning: {
+    Lightning: {
         cost: 150,
         damage: 16,
         shootInterval: 2000,
         projectileClass: 'lightningball',
     },
-    blast: {
+    Blast: {
         cost: 200,
         damage: 40,
         flashDuration: 1000,
@@ -99,7 +99,7 @@ const dragonTypes = {
         explosionRadius: 2,
         projectileClass: 'none'
     },
-    deadly: {
+    Deadly: {
         cost: 250,
         damage: 24,
         shootInterval: 7500,
@@ -204,7 +204,7 @@ function placeDragon(cell) {
         dragon.className = `dragon ${selectedDragonType}`
         cell.appendChild(dragon)
 
-        if (selectedDragonType === 'blast') {
+        if (selectedDragonType === 'Blast') {
             startBlastDragon(dragon, dragonConfig, cell)
         } else {
             const shootIntervalId = setInterval(

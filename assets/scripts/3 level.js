@@ -61,34 +61,34 @@ if (!modalLose || !modalWin) {
 
 // 1. МАССИВ ДРАКОНОВ
 const dragonTypes = {
-    fire: {
+    Fire: {
         cost: 50,
-        damage: 4,
+        damage: 8,
         shootInterval: 1500,
         projectileClass: 'fireball',
         sunSpawnInterval: 5000,
         sunSpawnChance: 0.1,
     },
-    ice: {
+    Ice: {
         cost: 75,
-        damage: 6,
+        damage: 12,
         shootInterval: 2000,
         projectileClass: 'iceball',
         freezeDuration: 2000,
     },
-    poison: {
+    Poison: {
         cost: 100,
         damage: 8,
         shootInterval: 2500,
         projectileClass: 'poisonball',
         poisonDuration: 2000,
     },
-    lightning: {
+    Lightning: {
         cost: 150,
-        damage: 12,
+        damage: 16,
         shootInterval: 2000,
         projectileClass: 'lightningball',
-    },
+    }
 }
 
 // 2. МАССИВ ЗОМБИ

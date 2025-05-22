@@ -62,7 +62,7 @@ if (!modalLose || !modalWin) {
 
 // 1. МАССИВ ДРАКОНОВ
 const dragonTypes = {
-    fire: {
+    Fire: {
         cost: 50,
         damage: 2,
         shootInterval: 1500,
@@ -70,14 +70,14 @@ const dragonTypes = {
         sunSpawnInterval: 5000,
         sunSpawnChance: 0.1,
     },
-    ice: {
+    Ice: {
         cost: 75,
         damage: 2,
         shootInterval: 2000,
         projectileClass: 'iceball',
         freezeDuration: 2000,
     },
-    poison: {
+    Poison: {
         cost: 100,
         damage: 3,
         shootInterval: 2500,
