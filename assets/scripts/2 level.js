@@ -63,7 +63,7 @@ if (!modalLose || !modalWin) {
 // 1. МАССИВ ДРАКОНОВ
 const dragonTypes = {
     Fire: {
-        cost: 50,
+        cost: 60,
         damage: 2,
         shootInterval: 1500,
         projectileClass: 'fireball',
@@ -72,7 +72,7 @@ const dragonTypes = {
     },
     Ice: {
         cost: 75,
-        damage: 2,
+        damage: 3,
         shootInterval: 2000,
         projectileClass: 'iceball',
         freezeDuration: 2000,
@@ -89,7 +89,7 @@ const dragonTypes = {
 // 2. МАССИВ ЗОМБИ
 const zombieTypes = {
     normal: {
-        health: 10,
+        health: 12,
         speed: 20,
         points: 100,
         spawnChance: 1,
@@ -582,7 +582,7 @@ function spawnSun() {
 
 // Увеличение сложности
 let zombieInterval = 4500
-let sunInterval = 7000
+let sunInterval = 8000
 
 function increaseDifficulty() {
     zombieInterval = Math.max(2000, zombieInterval - 500)

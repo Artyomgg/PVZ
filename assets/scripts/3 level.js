@@ -62,8 +62,8 @@ if (!modalLose || !modalWin) {
 // 1. МАССИВ ДРАКОНОВ
 const dragonTypes = {
     Fire: {
-        cost: 50,
-        damage: 8,
+        cost: 60,
+        damage: 2,
         shootInterval: 1500,
         projectileClass: 'fireball',
         sunSpawnInterval: 5000,
@@ -71,21 +71,21 @@ const dragonTypes = {
     },
     Ice: {
         cost: 75,
-        damage: 12,
+        damage: 4,
         shootInterval: 2000,
         projectileClass: 'iceball',
         freezeDuration: 2000,
     },
     Poison: {
         cost: 100,
-        damage: 8,
+        damage: 3,
         shootInterval: 2500,
         projectileClass: 'poisonball',
         poisonDuration: 2000,
     },
     Lightning: {
-        cost: 150,
-        damage: 16,
+        cost: 80,
+        damage: 6,
         shootInterval: 2000,
         projectileClass: 'lightningball',
     }
@@ -94,22 +94,22 @@ const dragonTypes = {
 // 2. МАССИВ ЗОМБИ
 const zombieTypes = {
     normal: {
-        health: 15,
-        speed: 20,
+        health: 12,
+        speed: 22,
         points: 100,
-        spawnChance: 0.6,
+        spawnChance: 0.8,
     },
     armored: {
-        health: 30,
-        speed: 25,
-        points: 150,
-        spawnChance: 0.2,
-    },
-    hz: {
         health: 20,
         speed: 22,
+        points: 150,
+        spawnChance: 0.5,
+    },
+    hz: {
+        health: 25,
+        speed: 22,
         points: 175,
-        spawnChance: 0.2,
+        spawnChance: 0.5,
     },
 }
 
@@ -269,7 +269,7 @@ function triggerExplosion(dragon, config, cell) {
                 score += parseInt(zombie.dataset.points)
                 scoreCountDisplay.textContent = score
                 zombie.remove()
-                if (score >= 3000) {
+                if (score >= 2000) {
                     clearInterval(zombieSpawnInterval)
                     modalWin.classList.add('visible')
                     IntoLocalStorage(3)
@@ -556,7 +556,7 @@ function spawnZombie() {
                     scoreCountDisplay.textContent = score
                     zombie.remove()
                     clearInterval(checkCollision)
-                    if (score >= 3000) {
+                    if (score >= 2000) {
                         clearInterval(zombieSpawnInterval)
                         modalWin.classList.add('visible')
                         IntoLocalStorage(3)
@@ -593,7 +593,7 @@ function spawnSun() {
 
 // Увеличение сложности
 let zombieInterval = 4000
-let sunInterval = 8000
+let sunInterval = 6500
 
 function increaseDifficulty() {
     zombieInterval = Math.max(2000, zombieInterval - 500)
@@ -717,7 +717,7 @@ function applyDamage(zombie, damage) {
         scoreCountDisplay.textContent = score
         zombie.remove()
 
-        if (score >= 3000) {
+        if (score >= 2000) {
             clearInterval(zombieSpawnInterval)
             modalWin.classList.add('visible')
             IntoLocalStorage(3)
@@ -731,4 +731,4 @@ function applyDamage(zombie, damage) {
 
 let zombieSpawnInterval = setInterval(spawnZombie, zombieInterval)
 let sunSpawnInterval = setInterval(spawnSun, sunInterval)
-let difficultyInterval = setInterval(increaseDifficulty, 30000)
+let difficultyInterval = setInterval(increaseDifficulty, 20000)

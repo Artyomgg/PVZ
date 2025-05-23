@@ -62,8 +62,8 @@ if (!modalLose || !modalWin) {
 // 1. МАССИВ ДРАКОНОВ
 const dragonTypes = {
     Fire: {
-        cost: 50,
-        damage: 8,
+        cost: 60,
+        damage: 2,
         shootInterval: 1500,
         projectileClass: 'fireball',
         sunSpawnInterval: 5000,
@@ -71,27 +71,27 @@ const dragonTypes = {
     },
     Ice: {
         cost: 75,
-        damage: 12,
+        damage: 4,
         shootInterval: 2000,
         projectileClass: 'iceball',
         freezeDuration: 2000,
     },
     Poison: {
         cost: 100,
-        damage: 8,
+        damage: 3,
         shootInterval: 2500,
         projectileClass: 'poisonball',
         poisonDuration: 2000,
     },
     Lightning: {
-        cost: 150,
-        damage: 16,
+        cost: 80,
+        damage: 6,
         shootInterval: 2000,
         projectileClass: 'lightningball',
     },
     Blast: {
-        cost: 200,
-        damage: 40,
+        cost: 100,
+        damage: 20,
         flashDuration: 1000,
         flashCount: 3,
         explosionRadius: 2,
@@ -103,23 +103,23 @@ const dragonTypes = {
 // 2. МАССИВ ЗОМБИ
 const zombieTypes = {
 	normal: {
-		health: 20,
-		speed: 20,
-		points: 100,
-		spawnChance: 0.5,
-	},
-	armored: {
-		health: 40,
-		speed: 25,
-		points: 150,
-		spawnChance: 0.3,
-	},
-	hz: {
-		health: 30,
-		speed: 22,
-		points: 175,
-		spawnChance: 0.2,
-	},
+        health: 12,
+        speed: 22,
+        points: 100,
+        spawnChance: 0.8,
+    },
+    armored: {
+        health: 20,
+        speed: 22,
+        points: 150,
+        spawnChance: 0.5,
+    },
+    hz: {
+        health: 25,
+        speed: 22,
+        points: 175,
+        spawnChance: 0.5,
+    },
 }
 
 // Создаем сетку
@@ -601,8 +601,8 @@ function spawnSun() {
 }
 
 // Увеличение сложности
-let zombieInterval = 3500
-let sunInterval = 6000
+let zombieInterval = 4000
+let sunInterval = 6500
 
 function increaseDifficulty() {
 	zombieInterval = Math.max(2000, zombieInterval - 500)
