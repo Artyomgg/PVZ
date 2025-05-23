@@ -109,24 +109,6 @@ const dragonTypes = {
 
 // 2. МАССИВ ЗОМБИ
 const zombieTypes = {
-    normal: {
-        health: 30,
-        speed: 20,
-        points: 100,
-        spawnChance: 0.4,
-    },
-    armored: {
-        health: 60,
-        speed: 25,
-        points: 150,
-        spawnChance: 0.3,
-    },
-    hz: {
-        health: 45,
-        speed: 22,
-        points: 175,
-        spawnChance: 0.2,
-    },
     golden: {
         health: 50,
         speed: 19,
@@ -213,7 +195,7 @@ function placeDragon(cell) {
             )
             dragon.dataset.shootIntervalId = shootIntervalId
 
-            if (selectedDragonType === 'fire') {
+            if (selectedDragonType === 'Fire') {
                 const sunIntervalId = setInterval(
                     () => spawnSunNearDragon(dragon, cell),
                     dragonConfig.sunSpawnInterval
@@ -851,7 +833,7 @@ function spawnSun() {
 }
 
 let zombieInterval = 3000
-let sunInterval = 2000
+let sunInterval = 8000
 
 function increaseDifficulty() {
     zombieInterval = Math.max(2000, zombieInterval - 500)

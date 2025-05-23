@@ -63,7 +63,7 @@ if (!modalLose || !modalWin) {
 // 1. МАССИВ ДРАКОНОВ
 const dragonTypes = {
     Fire: {
-        cost: 60,
+        cost: 50,
         damage: 2,
         shootInterval: 1500,
         projectileClass: 'fireball',
@@ -514,10 +514,10 @@ function spawnZombie() {
                 for (const type in dragonTypes) {
                     if (projectile.classList.contains(dragonTypes[type].projectileClass)) {
                         damage = dragonTypes[type].damage
-                        if (type === 'ice') {
-                            freezeZombie(zombie, dragonTypes.ice.freezeDuration)
-                        } else if (type === 'poison') {
-                            poisonZombie(zombie, dragonTypes.poison.poisonDuration)
+                        if (type === 'Ice') {
+                            freezeZombie(zombie, dragonTypes.Ice.freezeDuration)
+                        } else if (type === 'Poison') {
+                            poisonZombie(zombie, dragonTypes.Poison.poisonDuration)
                         }
                         break
                     }
@@ -582,7 +582,7 @@ function spawnSun() {
 
 // Увеличение сложности
 let zombieInterval = 4500
-let sunInterval = 8000
+let sunInterval = 7500
 
 function increaseDifficulty() {
     zombieInterval = Math.max(2000, zombieInterval - 500)

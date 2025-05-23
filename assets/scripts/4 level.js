@@ -62,7 +62,7 @@ if (!modalLose || !modalWin) {
 // 1. МАССИВ ДРАКОНОВ
 const dragonTypes = {
     Fire: {
-        cost: 60,
+        cost: 50,
         damage: 2,
         shootInterval: 1500,
         projectileClass: 'fireball',
@@ -84,7 +84,7 @@ const dragonTypes = {
         poisonDuration: 2000,
     },
     Lightning: {
-        cost: 80,
+        cost: 150,
         damage: 6,
         shootInterval: 2000,
         projectileClass: 'lightningball',
@@ -531,17 +531,17 @@ function spawnZombie() {
 				setTimeout(() => hitEffect.remove(), 500)
 
 				let damage = 1
-				for (const type in dragonTypes) {
-					if (projectile.classList.contains(dragonTypes[type].projectileClass)) {
-						damage = dragonTypes[type].damage
-						if (type === 'ice') {
-							freezeZombie(zombie, dragonTypes.ice.freezeDuration)
-						} else if (type === 'poison') {
-							poisonZombie(zombie, dragonTypes.poison.poisonDuration)
-						}
-						break
-					}
-				}
+                for (const type in dragonTypes) {
+                    if (projectile.classList.contains(dragonTypes[type].projectileClass)) {
+                        damage = dragonTypes[type].damage
+                        if (type === 'Ice') {
+                            freezeZombie(zombie, dragonTypes.Ice.freezeDuration)
+                        } else if (type === 'Poison') {
+                            poisonZombie(zombie, dragonTypes.Poison.poisonDuration)
+                        }
+                        break
+                    }
+                }
 
 				if (projectile.classList.contains('fireball') && zombie.classList.contains('frozen')) {
 					zombie.dataset.slowMultiplier = '1'
@@ -602,7 +602,7 @@ function spawnSun() {
 
 // Увеличение сложности
 let zombieInterval = 4000
-let sunInterval = 6500
+let sunInterval = 8000
 
 function increaseDifficulty() {
 	zombieInterval = Math.max(2000, zombieInterval - 500)

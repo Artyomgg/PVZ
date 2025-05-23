@@ -501,10 +501,10 @@ function spawnZombie() {
 				for (const type in dragonTypes) {
 					if (projectile.classList.contains(dragonTypes[type].projectileClass)) {
 						damage = dragonTypes[type].damage
-						if (type === 'ice') {
-							freezeZombie(zombie, dragonTypes.ice.freezeDuration)
-						} else if (type === 'poison') {
-							poisonZombie(zombie, dragonTypes.poison.poisonDuration)
+						if (type === 'Ice') {
+							freezeZombie(zombie, dragonTypes.Ice.freezeDuration)
+						} else if (type === 'Poison') {
+							poisonZombie(zombie, dragonTypes.Poison.poisonDuration)
 						}
 						break
 					}
@@ -569,7 +569,7 @@ function spawnSun() {
 
 // Увеличение сложности
 let zombieInterval = 5000
-let sunInterval = 6000
+let sunInterval = 6500
 
 function increaseDifficulty() {
 	zombieInterval = Math.max(2000, zombieInterval - 500)

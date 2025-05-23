@@ -89,6 +89,11 @@ body {
   top: -570%;
 }
 
+.dragon.Lightning {
+  content: url("/assets/img/Dragons/маленький-красный.png");
+  scale: 1.6;
+}
+
 .dragon.Blast {
   content: url("/assets/img/Dragons/красный-большой.png");
   scale: 1.8;
