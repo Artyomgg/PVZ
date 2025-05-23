@@ -216,11 +216,11 @@ function placeDragon(cell) {
     cell.appendChild(dragon);
 
     // Логика для взрывного дракона
-    if (selectedDragonType === "blast") {
+    if (selectedDragonType === "Blast") {
       startBlastDragon(dragon, dragonConfig, cell);
     }
     // Логика для огненного дракона с солнышками
-    else if (selectedDragonType === "fire") {
+    else if (selectedDragonType === "Fire") {
       // Интервал стрельбы
       const shootIntervalId = setInterval(
         () => shoot(dragon, dragonConfig),
@@ -870,7 +870,7 @@ function spawnSun() {
 
 // Увеличение сложности
 let zombieInterval = 4000;
-let sunInterval = 5000;
+let sunInterval = 8500;
 
 function increaseDifficulty() {
   zombieInterval = Math.max(2000, zombieInterval - 500);
