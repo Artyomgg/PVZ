@@ -8,47 +8,50 @@ let modalLose = document.querySelector(".modal.lose");
 let modalWin = document.querySelector(".modal.win");
 let isGameOver = false;
 
-window.addEventListener("load", () => {
-  const skin1 = localStorage.getItem("dragonSkin1");
-  const skin2 = localStorage.getItem("dragonSkin2");
-  const skin3 = localStorage.getItem("dragonSkin3");
+window.addEventListener('load', () => {
+    const skin1 = localStorage.getItem('dragonSkin1') 
+    const skin2 = localStorage.getItem('dragonSkin2') 
+    const skin3 = localStorage.getItem('dragonSkin3') 
+    
+    let styleText = ''
+    
+    if (skin1 === 'skinone') {
+        styleText += `
+            .dragon.Fire::before {
+                content: url('/assets/img/Dragons/dragonskinone.png') !important;
+                scale: 11.5%;
+                left: -835%;
+                top: -850%;
+            }
+        `
+    }
+    if (skin2 === 'skintwo') {
+        styleText += `
+            .dragon.Poison::before {
+                content: url('/assets/img/Dragons/dragonskintwo.png') !important;
+                scale: 11.5%;
+                left: -600%;
+                top: -570%;
+            }
+        `
+    }
+	if (skin3 === 'skinthree') {
+        styleText += `
+            .dragon.Ice::before {
+                content: url('/assets/img/Dragons/dragonskinthree.png') !important;
+				        scale: 11.5%;
+				        left: -750%;
+				        top: -660%;
+            }
+        `
+    }
 
-  let styleText = "";
-
-  if (skin1 === "skinone") {
-    styleText += `
-           .dragon.fire::before {
-               content: url('/assets/img/Dragons/dragonskinone.png') !important;
-           }
-       `;
-  }
-  if (skin2 === "skintwo") {
-    styleText += `
-           .dragon.poison::before {
-               content: url('/assets/img/Dragons/dragonskintwo.png') !important;
-				scale: 11.5%;
-				left: -600%;
-				top: -570%;
-           }
-       `;
-  }
-  if (skin3 === "skinthree") {
-    styleText += `
-           .dragon.ice::before {
-               content: url('/assets/img/Dragons/dragonskinthree.png') !important;
-				scale: 11.5%;
-				left: -750%;
-				top: -660%;
-           }
-       `;
-  }
-
-  if (styleText) {
-    const style = document.createElement("style");
-    style.textContent = styleText;
-    document.head.appendChild(style);
-  }
-});
+    if (styleText) {
+        const style = document.createElement('style')
+        style.textContent = styleText
+        document.head.appendChild(style)
+    }
+})
 
 // Проверяем, что элементы найдены
 if (!modalLose || !modalWin) {
@@ -938,6 +941,66 @@ function applyDamage(zombie, damage) {
     setTimeout(() => zombie.classList.remove("damaged"), 200);
   }
 }
+
+//коллизии + перепрыгивание
+function checkZombieDragonCollisions() {
+  const dragons = document.querySelectorAll('.dragon');
+  const zombies = document.querySelectorAll('.zombie');
+
+  zombies.forEach(zombie => {
+    if (!zombie.isConnected || zombie.classList.contains('jumping')) return;
+
+    const zombieRect = zombie.getBoundingClientRect();
+    const zombieRow = parseInt(zombie.dataset.row);
+
+    dragons.forEach(dragon => {
+      if (!dragon.isConnected) return;
+
+      const dragonRect = dragon.getBoundingClientRect();
+      const dragonCell = dragon.parentElement;
+      const dragonIndex = Array.from(grid.children).indexOf(dragonCell);
+      const dragonRow = Math.floor(dragonIndex / 8);
+
+      // Check if zombie and dragon are in the same row
+      if (zombieRow === dragonRow) {
+        // Check for collision
+        if (
+          zombieRect.right > dragonRect.left &&
+          zombieRect.left < dragonRect.right &&
+          zombieRect.bottom > dragonRect.top &&
+          zombieRect.top < dragonRect.bottom
+        ) {
+          // Make zombie jump over dragon
+          makeZombieJump(zombie, dragon);
+        }
+      }
+    });
+  });
+}
+
+function makeZombieJump(zombie, dragon) {
+  if (zombie.classList.contains('jumping')) return;
+
+  zombie.classList.add('jumping');
+  
+  const dragonHeight = dragon.getBoundingClientRect().height;
+  const jumpHeight = -(dragonHeight + 20); 
+
+  const jumpAnimation = zombie.animate([
+    { transform: 'translateY(0)' },
+    { transform: `translateY(${jumpHeight}px)` },
+    { transform: 'translateY(0)' }
+  ], {
+    duration: 800,
+    easing: 'ease-in-out'
+  });
+
+  jumpAnimation.onfinish = () => {
+    zombie.classList.remove('jumping');
+  };
+}
+
+setInterval(checkZombieDragonCollisions, 100);
 
 // Game loops
 let zombieSpawnInterval = setInterval(spawnZombie, zombieInterval);

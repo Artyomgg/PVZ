@@ -12,30 +12,39 @@ let isGameOver = false
 let bossSpawned = false
 
 window.addEventListener('load', () => {
-    const skin1 = localStorage.getItem('dragonSkin1')
-    const skin2 = localStorage.getItem('dragonSkin2')
-    const skin3 = localStorage.getItem('dragonSkin3')
-
+    const skin1 = localStorage.getItem('dragonSkin1') 
+    const skin2 = localStorage.getItem('dragonSkin2') 
+    const skin3 = localStorage.getItem('dragonSkin3') 
+    
     let styleText = ''
-
+    
     if (skin1 === 'skinone') {
         styleText += `
-            .dragon.fire {
-                background-image: url('/assets/img/Dragons/dragonskinone.png')
+            .dragon.Fire::before {
+                content: url('/assets/img/Dragons/dragonskinone.png') !important;
+                scale: 11.5%;
+                left: -835%;
+                top: -850%;
             }
         `
     }
     if (skin2 === 'skintwo') {
         styleText += `
-            .dragon.poison {
-                background-image: url('/assets/img/Dragons/dragonskintwo.png');
+            .dragon.Poison::before {
+                content: url('/assets/img/Dragons/dragonskintwo.png') !important;
+                scale: 11.5%;
+                left: -600%;
+                top: -570%;
             }
         `
     }
-    if (skin3 === 'skinthree') {
+	if (skin3 === 'skinthree') {
         styleText += `
-            .dragon.ice {
-                background-image: url('/assets/img/Dragons/dragonskinthree.png')
+            .dragon.Ice::before {
+                content: url('/assets/img/Dragons/dragonskinthree.png') !important;
+				        scale: 11.5%;
+				        left: -750%;
+				        top: -660%;
             }
         `
     }
@@ -503,7 +512,7 @@ function poisonZombie(zombie, duration) {
 function spawnBoss() {
     const boss = {
         name: 'Boss Knight',
-        health: 1000,
+        health: 10,
         speed: 30,
         points: 500,
         isAlive: true,
