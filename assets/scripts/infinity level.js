@@ -219,7 +219,7 @@ function placeDragon(cell) {
     if (selectedDragonType === "Blast") {
       startBlastDragon(dragon, dragonConfig, cell);
     }
-    // Логика для огненного дракона с солнышками
+    // Логика для огненного дракона с огоньками
     else if (selectedDragonType === "Fire") {
       // Интервал стрельбы
       const shootIntervalId = setInterval(
@@ -228,7 +228,7 @@ function placeDragon(cell) {
       );
       dragon.dataset.shootIntervalId = shootIntervalId;
 
-      // Интервал генерации солнышек
+      // Интервал генерации огоньков
       const fireIntervalId = setInterval(
         () => createFireDrops(dragon, dragonConfig),
         dragonConfig.fireDrops.interval
