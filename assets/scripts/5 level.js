@@ -494,7 +494,7 @@ function poisonZombie(zombie, duration) {
 function spawnBoss() {
     const boss = {
         name: 'Boss Knight',
-        health: 1000,
+        health: 10,
         speed: 30,
         points: 500,
         isAlive: true,

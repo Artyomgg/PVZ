@@ -60,7 +60,7 @@ if (!modalLose || !modalWin) {
 
 // 1. МАССИВ ДРАКОНОВ
 const dragonTypes = {
-    Fire: {
+    fire: {
         cost: 50,
         damage: 1,
         shootInterval: 1500,
@@ -68,35 +68,41 @@ const dragonTypes = {
         sunSpawnInterval: 5000,
         sunSpawnChance: 0.1,
     },
-    Ice: {
+    ice: {
         cost: 75,
         damage: 2,
         shootInterval: 2000,
         projectileClass: 'iceball',
         freezeDuration: 2000,
     },
-    Poison: {
+    poison: {
         cost: 100,
         damage: 2,
         shootInterval: 2500,
         projectileClass: 'poisonball',
         poisonDuration: 2000,
     },
-    Lightning: {
+    lightning: {
         cost: 150,
         damage: 8,
         shootInterval: 2000,
         projectileClass: 'lightningball',
     },
+<<<<<<< HEAD
+    blast: {
+        cost: 200,
+        damage: 40,
+=======
     Blast: {
         cost: 100,
         damage: 11,
+>>>>>>> e2d874fb63a0525dea864796efd3dbf4e47f142c
         flashDuration: 1000,
         flashCount: 3,
         explosionRadius: 2,
         projectileClass: 'none'
     },
-    Deadly: {
+    deadly: {
         cost: 250,
         damage: 11,
         shootInterval: 7500,
@@ -1022,13 +1028,16 @@ function checkZombieDragonCollisions() {
       const dragonIndex = Array.from(grid.children).indexOf(dragonCell);
       const dragonRow = Math.floor(dragonIndex / 8);
 
+      // Check if zombie and dragon are in the same row
       if (zombieRow === dragonRow) {
+        // Check for collision
         if (
           zombieRect.right > dragonRect.left &&
           zombieRect.left < dragonRect.right &&
           zombieRect.bottom > dragonRect.top &&
           zombieRect.top < dragonRect.bottom
         ) {
+          // Make zombie jump over dragon
           makeZombieJump(zombie, dragon);
         }
       }
