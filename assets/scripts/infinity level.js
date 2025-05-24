@@ -88,15 +88,9 @@ const dragonTypes = {
         shootInterval: 2000,
         projectileClass: 'lightningball',
     },
-<<<<<<< HEAD
-    blast: {
-        cost: 200,
-        damage: 40,
-=======
     Blast: {
         cost: 100,
         damage: 11,
->>>>>>> e2d874fb63a0525dea864796efd3dbf4e47f142c
         flashDuration: 1000,
         flashCount: 3,
         explosionRadius: 2,
