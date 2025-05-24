@@ -68,47 +68,43 @@ body {
     transform: translate(-50%, -50%);
 }
 
-.dragon.fire::before {
-    content: url('/assets/img/Dragons/красно-белый.png');
-    scale: 11.5%;
-    left: -835%;
-    top: -850%;
+.dragon.Fire::before {
+  content: url("/assets/img/Dragons/красно-белый.png");
+  scale: 11.5%;
+  left: -835%;
+  top: -850%;
 }
 
-.dragon.ice::before {
-    content: url('/assets/img/Dragons/синий-большой.png');
-    scale: 11.5%;
-    left: -750%;
-    top: -660%;
+.dragon.Ice::before {
+  content: url("/assets/img/Dragons/синий-большой.png");
+  scale: 11.5%;
+  left: -750%;
+  top: -660%;
 }
 
-.dragon.poison::before {
-    content: url('/assets/img/Dragons/фиолетово-синий.png');
-    scale: 11.5%;
-    left: -600%;
-    top: -570%;
+.dragon.Poison::before {
+  content: url("/assets/img/Dragons/фиолетово-синий.png");
+  scale: 11.5%;
+  left: -600%;
+  top: -570%;
 }
 
-.dragon.lightning::before {
-    content: url('/assets/img/Dragons/маленький-красный.png');
-    scale: 11.5%;
-    left: -480%;
-    top: -500%;
+.dragon.Lightning {
+  content: url("/assets/img/Dragons/маленький-красный.png");
+  scale: 1.6;
 }
 
-.dragon.blast::before {
-    content: url('/assets/img/Dragons/средний-красный.png');
-    scale: 18.5%;
-    left: -350%;
-    top: -340%;
+.dragon.Blast {
+  content: url("/assets/img/Dragons/красный-большой.png");
+  scale: 1.8;
 }
 
-.dragon.deadly {
-    content: url('/assets/img/Dragons/красно-серый.png');
-    scale: 1.9;
+.dragon.Deadly {
+  content: url("/assets/img/Dragons/красно-серый.png");
+  scale: 1.9;
 }
 
-.dragon.blast.flashing {
+.dragon.Blast.flashing {
     filter: brightness(1.5) drop-shadow(0 0 10px #ff0000);
 }
 
@@ -381,18 +377,6 @@ button {
     background-position: center;
     animation: moveLeft var(--move-duration) linear forwards;
     z-index: 10;
-}
-
-.zombie.normal {
-    background-image: url('/assets/img/KNIGHTS/chel.gif');
-}
-
-.zombie.armored {
-    background-image: url('/assets/img/KNIGHTS/chel2.gif');
-}
-
-.zombie.hz {
-    background-image: url('/assets/img/KNIGHTS/chel3.gif');
 }
 
 .zombie.golden {

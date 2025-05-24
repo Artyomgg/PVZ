@@ -61,37 +61,37 @@ if (!modalLose || !modalWin) {
 
 // 1. МАССИВ ДРАКОНОВ
 const dragonTypes = {
-	fire: {
-		cost: 50,
-		damage: 4,
-		shootInterval: 1500,
-		projectileClass: 'fireball',
-		sunSpawnInterval: 5000,
-		sunSpawnChance: 0.1,
-	},
-	ice: {
-		cost: 75,
-		damage: 6,
-		shootInterval: 2000,
-		projectileClass: 'iceball',
-		freezeDuration: 2000,
-	},
-	poison: {
-		cost: 100,
-		damage: 8,
-		shootInterval: 2500,
-		projectileClass: 'poisonball',
-		poisonDuration: 2000,
-	},
-	lightning: {
-		cost: 150,
-		damage: 12,
-		shootInterval: 2000,
-		projectileClass: 'lightningball',
-	},
-	blast: {
-        cost: 200,
-        damage: 40,
+    Fire: {
+        cost: 50,
+        damage: 1,
+        shootInterval: 1500,
+        projectileClass: 'fireball',
+        sunSpawnInterval: 5000,
+        sunSpawnChance: 0.1,
+    },
+    Ice: {
+        cost: 75,
+        damage: 1,
+        shootInterval: 3000,
+        projectileClass: 'iceball',
+        freezeDuration: 2000,
+    },
+    Poison: {
+        cost: 100,
+        damage: 2,
+        shootInterval: 2500,
+        projectileClass: 'poisonball',
+        poisonDuration: 2000,
+    },
+    Lightning: {
+        cost: 150,
+        damage: 6,
+        shootInterval: 2000,
+        projectileClass: 'lightningball',
+    },
+    Blast: {
+        cost: 100,
+        damage: 13,
         flashDuration: 1000,
         flashCount: 3,
         explosionRadius: 2,
@@ -99,26 +99,27 @@ const dragonTypes = {
     }
 }
 
+
 // 2. МАССИВ ЗОМБИ
 const zombieTypes = {
 	normal: {
-		health: 20,
-		speed: 20,
-		points: 100,
-		spawnChance: 0.5,
-	},
-	armored: {
-		health: 40,
-		speed: 25,
-		points: 150,
-		spawnChance: 0.3,
-	},
-	hz: {
-		health: 30,
-		speed: 22,
-		points: 175,
-		spawnChance: 0.2,
-	},
+        health: 6,
+        speed: 22,
+        points: 100,
+        spawnChance: 0.6,
+    },
+    armored: {
+        health: 8,
+        speed: 22,
+        points: 150,
+        spawnChance: 0.3,
+    },
+    hz: {
+        health: 12,
+        speed: 22,
+        points: 175,
+        spawnChance: 0.1,
+    },
 }
 
 // Создаем сетку
@@ -190,7 +191,7 @@ function placeDragon(cell) {
 		dragon.className = `dragon ${selectedDragonType}`
 		cell.appendChild(dragon)
 
-		if (selectedDragonType === 'blast') {
+		if (selectedDragonType === 'Blast') {
 			startBlastDragon(dragon, dragonConfig, cell)
 		} else {
 			const shootIntervalId = setInterval(
@@ -277,7 +278,7 @@ function triggerExplosion(dragon, config, cell) {
 				score += parseInt(zombie.dataset.points)
 				scoreCountDisplay.textContent = score
 				zombie.remove()
-				if (score >= 4000) {
+				if (score >= 3000) {
 					clearInterval(zombieSpawnInterval)
 					modalWin.classList.add('visible')
 					IntoLocalStorage(4)
@@ -530,17 +531,17 @@ function spawnZombie() {
 				setTimeout(() => hitEffect.remove(), 500)
 
 				let damage = 1
-				for (const type in dragonTypes) {
-					if (projectile.classList.contains(dragonTypes[type].projectileClass)) {
-						damage = dragonTypes[type].damage
-						if (type === 'ice') {
-							freezeZombie(zombie, dragonTypes.ice.freezeDuration)
-						} else if (type === 'poison') {
-							poisonZombie(zombie, dragonTypes.poison.poisonDuration)
-						}
-						break
-					}
-				}
+                for (const type in dragonTypes) {
+                    if (projectile.classList.contains(dragonTypes[type].projectileClass)) {
+                        damage = dragonTypes[type].damage
+                        if (type === 'Ice') {
+                            freezeZombie(zombie, dragonTypes.Ice.freezeDuration)
+                        } else if (type === 'Poison') {
+                            poisonZombie(zombie, dragonTypes.Poison.poisonDuration)
+                        }
+                        break
+                    }
+                }
 
 				if (projectile.classList.contains('fireball') && zombie.classList.contains('frozen')) {
 					zombie.dataset.slowMultiplier = '1'
@@ -564,7 +565,7 @@ function spawnZombie() {
 					scoreCountDisplay.textContent = score
 					zombie.remove()
 					clearInterval(checkCollision)
-					if (score >=4000) {
+					if (score >=3000) {
 						clearInterval(zombieSpawnInterval)
 						modalWin.classList.add('visible')
 						IntoLocalStorage(4)
@@ -600,8 +601,8 @@ function spawnSun() {
 }
 
 // Увеличение сложности
-let zombieInterval = 3500
-let sunInterval = 6000
+let zombieInterval = 4000
+let sunInterval = 9000
 
 function increaseDifficulty() {
 	zombieInterval = Math.max(2000, zombieInterval - 500)
@@ -725,7 +726,7 @@ function applyDamage(zombie, damage) {
 		scoreCountDisplay.textContent = score
 		zombie.remove()
 
-		if (score >= 4000) {
+		if (score >= 3000) {
 			clearInterval(zombieSpawnInterval)
 			modalWin.classList.add('visible')
 			IntoLocalStorage(4)
@@ -735,6 +736,63 @@ function applyDamage(zombie, damage) {
 		setTimeout(() => zombie.classList.remove('damaged'), 200)
 	}
 }
+
+//коллизии + перепрыгивание
+function checkZombieDragonCollisions() {
+  const dragons = document.querySelectorAll('.dragon');
+  const zombies = document.querySelectorAll('.zombie');
+
+  zombies.forEach(zombie => {
+    if (!zombie.isConnected || zombie.classList.contains('jumping')) return;
+
+    const zombieRect = zombie.getBoundingClientRect();
+    const zombieRow = parseInt(zombie.dataset.row);
+
+    dragons.forEach(dragon => {
+      if (!dragon.isConnected) return;
+
+      const dragonRect = dragon.getBoundingClientRect();
+      const dragonCell = dragon.parentElement;
+      const dragonIndex = Array.from(grid.children).indexOf(dragonCell);
+      const dragonRow = Math.floor(dragonIndex / 8);
+
+      if (zombieRow === dragonRow) {
+        if (
+          zombieRect.right > dragonRect.left &&
+          zombieRect.left < dragonRect.right &&
+          zombieRect.bottom > dragonRect.top &&
+          zombieRect.top < dragonRect.bottom
+        ) {
+          makeZombieJump(zombie, dragon);
+        }
+      }
+    });
+  });
+}
+
+function makeZombieJump(zombie, dragon) {
+  if (zombie.classList.contains('jumping')) return;
+
+  zombie.classList.add('jumping');
+  
+  const dragonHeight = dragon.getBoundingClientRect().height;
+  const jumpHeight = -(dragonHeight + 20); 
+
+  const jumpAnimation = zombie.animate([
+    { transform: 'translateY(0)' },
+    { transform: `translateY(${jumpHeight}px)` },
+    { transform: 'translateY(0)' }
+  ], {
+    duration: 800,
+    easing: 'ease-in-out'
+  });
+
+  jumpAnimation.onfinish = () => {
+    zombie.classList.remove('jumping');
+  };
+}
+
+setInterval(checkZombieDragonCollisions, 100);
 
 
 let zombieSpawnInterval = setInterval(spawnZombie, zombieInterval)

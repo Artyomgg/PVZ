@@ -68,6 +68,7 @@ body {
 	transform: translate(-50%, -50%);
 }
 
+<<<<<<< HEAD
 .dragon.fire::before {
 	content: url('/assets/img/Dragons/красно-белый.png');
 	scale: 11.5%;
@@ -105,6 +106,45 @@ body {
 
 .dragon.blast.flashing {
 	filter: brightness(1.5) drop-shadow(0 0 10px #ff0000);
+=======
+.dragon.Fire::before {
+  content: url("/assets/img/Dragons/красно-белый.png");
+  scale: 11.5%;
+  left: -835%;
+  top: -850%;
+}
+
+.dragon.Ice::before {
+  content: url("/assets/img/Dragons/синий-большой.png");
+  scale: 11.5%;
+  left: -750%;
+  top: -660%;
+}
+
+.dragon.Poison::before {
+  content: url("/assets/img/Dragons/фиолетово-синий.png");
+  scale: 11.5%;
+  left: -600%;
+  top: -570%;
+}
+
+.dragon.Lightning {
+  content: url("/assets/img/Dragons/маленький-красный.png");
+  scale: 1.6;
+}
+
+.dragon.Blast {
+  content: url("/assets/img/Dragons/красный-большой.png");
+  scale: 1.8;
+}
+
+.dragon.Deadly {
+  content: url("/assets/img/Dragons/красно-серый.png");
+  scale: 1.9;
+}
+.dragon.Blast.flashing {
+    filter: brightness(1.5) drop-shadow(0 0 10px #ff0000);
+>>>>>>> e2d874fb63a0525dea864796efd3dbf4e47f142c
 }
 
 .dragon.shooting {

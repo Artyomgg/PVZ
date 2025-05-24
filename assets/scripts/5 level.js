@@ -63,45 +63,45 @@ if (!modalLose || !modalWin) {
 
 // 1. МАССИВ ДРАКОНОВ
 const dragonTypes = {
-    fire: {
+    Fire: {
         cost: 50,
-        damage: 8,
+        damage: 2,
         shootInterval: 1500,
         projectileClass: 'fireball',
         sunSpawnInterval: 5000,
         sunSpawnChance: 0.1,
     },
-    ice: {
+    Ice: {
         cost: 75,
-        damage: 12,
+        damage: 2,
         shootInterval: 2000,
         projectileClass: 'iceball',
         freezeDuration: 2000,
     },
-    poison: {
+    Poison: {
         cost: 100,
-        damage: 8,
+        damage: 3,
         shootInterval: 2500,
         projectileClass: 'poisonball',
         poisonDuration: 2000,
     },
-    lightning: {
+    Lightning: {
         cost: 150,
-        damage: 16,
+        damage: 8,
         shootInterval: 2000,
         projectileClass: 'lightningball',
     },
-    blast: {
-        cost: 200,
-        damage: 40,
+    Blast: {
+        cost: 100,
+        damage: 13,
         flashDuration: 1000,
         flashCount: 3,
         explosionRadius: 2,
         projectileClass: 'none'
     },
-    deadly: {
+    Deadly: {
         cost: 250,
-        damage: 24,
+        damage: 13,
         shootInterval: 7500,
         projectileClass: 'deadlyball',
     }
@@ -109,29 +109,11 @@ const dragonTypes = {
 
 // 2. МАССИВ ЗОМБИ
 const zombieTypes = {
-    normal: {
-        health: 30,
-        speed: 20,
-        points: 100,
-        spawnChance: 0.4,
-    },
-    armored: {
-        health: 60,
-        speed: 25,
-        points: 150,
-        spawnChance: 0.3,
-    },
-    hz: {
-        health: 45,
-        speed: 22,
-        points: 175,
-        spawnChance: 0.2,
-    },
     golden: {
-        health: 50,
+        health: 13,
         speed: 19,
         points: 100,
-        spawnChance: 0.1
+        spawnChance: 0.1,
     }
 }
 
@@ -204,7 +186,7 @@ function placeDragon(cell) {
         dragon.className = `dragon ${selectedDragonType}`
         cell.appendChild(dragon)
 
-        if (selectedDragonType === 'blast') {
+        if (selectedDragonType === 'Blast') {
             startBlastDragon(dragon, dragonConfig, cell)
         } else {
             const shootIntervalId = setInterval(
@@ -213,7 +195,7 @@ function placeDragon(cell) {
             )
             dragon.dataset.shootIntervalId = shootIntervalId
 
-            if (selectedDragonType === 'fire') {
+            if (selectedDragonType === 'Fire') {
                 const sunIntervalId = setInterval(
                     () => spawnSunNearDragon(dragon, cell),
                     dragonConfig.sunSpawnInterval
@@ -851,7 +833,7 @@ function spawnSun() {
 }
 
 let zombieInterval = 3000
-let sunInterval = 2000
+let sunInterval = 8000
 
 function increaseDifficulty() {
     zombieInterval = Math.max(2000, zombieInterval - 500)
@@ -995,8 +977,8 @@ function startCutscene() {
     crawl.className = 'crawl'
     crawl.innerHTML = `
         <h1>Победа!</h1>
-        <p>Давным-давно, в далекой-далекой галактике...</p>
-        <p>Отважные драконы сражались против орд нежити. Их огненные и ледяные атаки уничтожили могущественного Рыцаря Босса, восстановив мир на пятом уровне.</p>
+        <p>Поднимем же флаконы с брагой!</p>
+        <p>Так и был повержен безликий герой, и забылся подвиг его. Настала новая эра баллад про драконов — что общей силой своих когтей и крыльев смогли одолеть страшного врага.</p>
         <p>Теперь герои готовятся к новым приключениям, чтобы защитить свои земли от будущих угроз...</p>
     `
     crawlContainer.appendChild(crawl)
@@ -1044,6 +1026,63 @@ function applyDamage(entity, damage) {
         setTimeout(() => entity.classList.remove('damaged'), 200)
     }
 }
+
+//коллизии + перепрыгивание
+function checkZombieDragonCollisions() {
+  const dragons = document.querySelectorAll('.dragon');
+  const zombies = document.querySelectorAll('.zombie');
+
+  zombies.forEach(zombie => {
+    if (!zombie.isConnected || zombie.classList.contains('jumping')) return;
+
+    const zombieRect = zombie.getBoundingClientRect();
+    const zombieRow = parseInt(zombie.dataset.row);
+
+    dragons.forEach(dragon => {
+      if (!dragon.isConnected) return;
+
+      const dragonRect = dragon.getBoundingClientRect();
+      const dragonCell = dragon.parentElement;
+      const dragonIndex = Array.from(grid.children).indexOf(dragonCell);
+      const dragonRow = Math.floor(dragonIndex / 8);
+
+      if (zombieRow === dragonRow) {
+        if (
+          zombieRect.right > dragonRect.left &&
+          zombieRect.left < dragonRect.right &&
+          zombieRect.bottom > dragonRect.top &&
+          zombieRect.top < dragonRect.bottom
+        ) {
+          makeZombieJump(zombie, dragon);
+        }
+      }
+    });
+  });
+}
+
+function makeZombieJump(zombie, dragon) {
+  if (zombie.classList.contains('jumping')) return;
+
+  zombie.classList.add('jumping');
+  
+  const dragonHeight = dragon.getBoundingClientRect().height;
+  const jumpHeight = -(dragonHeight + 20); 
+
+  const jumpAnimation = zombie.animate([
+    { transform: 'translateY(0)' },
+    { transform: `translateY(${jumpHeight}px)` },
+    { transform: 'translateY(0)' }
+  ], {
+    duration: 800,
+    easing: 'ease-in-out'
+  });
+
+  jumpAnimation.onfinish = () => {
+    zombie.classList.remove('jumping');
+  };
+}
+
+setInterval(checkZombieDragonCollisions, 100);
 
 let zombieSpawnInterval = setInterval(spawnZombie, zombieInterval)
 let sunSpawnInterval = setInterval(spawnSun, sunInterval)
