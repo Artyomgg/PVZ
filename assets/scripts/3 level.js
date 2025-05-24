@@ -78,14 +78,14 @@ const dragonTypes = {
     },
     Poison: {
         cost: 100,
-        damage: 3,
+        damage: 6,
         shootInterval: 2500,
         projectileClass: 'poisonball',
         poisonDuration: 2000,
     },
     Lightning: {
         cost: 150,
-        damage: 6,
+        damage: 8,
         shootInterval: 2000,
         projectileClass: 'lightningball',
     }

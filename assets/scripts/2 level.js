@@ -65,7 +65,7 @@ const dragonTypes = {
     Fire: {
         cost: 50,
         damage: 2,
-        shootInterval: 1500,
+        shootInterval: 2000,
         projectileClass: 'fireball',
         sunSpawnInterval: 5000,
         sunSpawnChance: 0.1,
@@ -79,7 +79,7 @@ const dragonTypes = {
     },
     Poison: {
         cost: 100,
-        damage: 3,
+        damage: 5,
         shootInterval: 2500,
         projectileClass: 'poisonball',
         poisonDuration: 2000,
