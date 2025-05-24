@@ -109,7 +109,7 @@ const zombieTypes = {
         spawnChance: 0.6,
     },
     armored: {
-        health: 8,
+        health: 7,
         speed: 22,
         points: 150,
         spawnChance: 0.3,

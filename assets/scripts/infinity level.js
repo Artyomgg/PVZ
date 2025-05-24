@@ -1,5 +1,6 @@
 let sunCount = 100;
 let score = 0;
+let lastScoreThreshold = 0;
 let selectedDragonType = null;
 const grid = document.getElementById("grid");
 const sunCountDisplay = document.getElementById("sunCount");
@@ -60,7 +61,7 @@ if (!modalLose || !modalWin) {
 
 // 1. МАССИВ ДРАКОНОВ
 const dragonTypes = {
-    fire: {
+    Fire: {
         cost: 50,
         damage: 1,
         shootInterval: 1500,
@@ -68,21 +69,21 @@ const dragonTypes = {
         sunSpawnInterval: 5000,
         sunSpawnChance: 0.1,
     },
-    ice: {
+    Ice: {
         cost: 75,
-        damage: 2,
+        damage: 1,
         shootInterval: 2000,
         projectileClass: 'iceball',
         freezeDuration: 2000,
     },
-    poison: {
+    Poison: {
         cost: 100,
         damage: 2,
         shootInterval: 2500,
         projectileClass: 'poisonball',
         poisonDuration: 2000,
     },
-    lightning: {
+    Lightning: {
         cost: 150,
         damage: 8,
         shootInterval: 2000,
@@ -96,7 +97,7 @@ const dragonTypes = {
         explosionRadius: 2,
         projectileClass: 'none'
     },
-    deadly: {
+    Deadly: {
         cost: 250,
         damage: 11,
         shootInterval: 7500,
@@ -113,20 +114,20 @@ const zombieTypes = {
         spawnChance: 0.65,
     },
     armored: {
-        health: 9,
+        health: 8,
         speed: 22,
         points: 150,
         spawnChance: 0.2,
     },
     hz: {
-        health: 12,
+        health: 11,
         speed: 22,
         points: 175,
         spawnChance: 0.1,
     },
     golden: {
-        health: 13,
-        speed: 19,
+        health: 11,
+        speed: 18,
         points: 100,
         spawnChance: 0.05,
     }
@@ -931,7 +932,7 @@ function spawnSun() {
 
 // Увеличение сложности
 let zombieInterval = 4000;
-let sunInterval = 8500;
+let sunInterval = 7000;
 
 function increaseDifficulty() {
   zombieInterval = Math.max(2000, zombieInterval - 500);
@@ -972,6 +973,25 @@ function damageZombiesInArea(cell, width, height, damage) {
       }
     }
   });
+}
+
+function increaseEnemyHealth() {
+    const currentScore = parseInt(scoreCountDisplay.textContent);
+    const threshold = Math.floor(currentScore / 1000) * 1000;
+    
+    if (threshold > lastScoreThreshold) {
+        lastScoreThreshold = threshold;
+        // увеличиваем здоровье рыцарей когда счет увеличился на 1000
+        for (const type in zombieTypes) {
+            if (type === 'golden') {
+                alert('++')
+                zombieTypes[type].health += 4;
+            } else {
+                alert('++')
+                zombieTypes[type].health += 3;
+            }
+        }
+    }
 }
 
 function applyDamage(zombie, damage) {
