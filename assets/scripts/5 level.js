@@ -65,7 +65,7 @@ if (!modalLose || !modalWin) {
 const dragonTypes = {
     Fire: {
         cost: 50,
-        damage: 2,
+        damage: 1,
         shootInterval: 1500,
         projectileClass: 'fireball',
         sunSpawnInterval: 5000,
@@ -73,21 +73,21 @@ const dragonTypes = {
     },
     Ice: {
         cost: 75,
-        damage: 2,
-        shootInterval: 2000,
+        damage: 1,
+        shootInterval: 3000,
         projectileClass: 'iceball',
         freezeDuration: 2000,
     },
     Poison: {
         cost: 100,
-        damage: 3,
+        damage: 2,
         shootInterval: 2500,
         projectileClass: 'poisonball',
         poisonDuration: 2000,
     },
     Lightning: {
         cost: 150,
-        damage: 8,
+        damage: 6,
         shootInterval: 2000,
         projectileClass: 'lightningball',
     },
@@ -110,10 +110,10 @@ const dragonTypes = {
 // 2. МАССИВ ЗОМБИ
 const zombieTypes = {
     golden: {
-        health: 13,
+        health: 10,
         speed: 19,
         points: 100,
-        spawnChance: 0.1,
+        spawnChance: 0.5,
     }
 }
 
@@ -172,6 +172,7 @@ function stopAllIntervals() {
     clearInterval(zombieSpawnInterval)
     clearInterval(sunSpawnInterval)
     clearInterval(difficultyInterval)
+    clearInterval(bossDamageInterval)
 }
 
 function placeDragon(cell) {
@@ -494,7 +495,7 @@ function poisonZombie(zombie, duration) {
 function spawnBoss() {
     const boss = {
         name: 'Boss Knight',
-        health: 10,
+        health: 100,
         speed: 30,
         points: 500,
         isAlive: true,
@@ -573,7 +574,7 @@ function bossBurnAttack(bossElement) {
         }
 
         // Наносим урон зомби в области
-        damageZombiesInArea(targetCell, cellWidth, cellHeight, 20)
+        damageZombiesInArea(targetCell, cellWidth, cellHeight, 20)  
     }
 }
 
@@ -763,6 +764,8 @@ function spawnZombie() {
         const boss = document.querySelector('.boss')
         if (boss && boss.isConnected) {
             const bossRect = boss.getBoundingClientRect()
+            const projectiles = document.querySelectorAll('.projectile')
+            
             projectiles.forEach(projectile => {
                 if (!projectile.isConnected) return
 
@@ -832,7 +835,7 @@ function spawnSun() {
     })
 }
 
-let zombieInterval = 3000
+let zombieInterval = 8000
 let sunInterval = 8000
 
 function increaseDifficulty() {
@@ -988,7 +991,7 @@ function startCutscene() {
         cutscene.remove()
         modalWin.classList.add('visible')
         IntoLocalStorage(5)
-    }, 15000)
+    }, 20000)
 }
 
 function applyDamage(entity, damage) {
@@ -1081,6 +1084,62 @@ function makeZombieJump(zombie, dragon) {
     zombie.classList.remove('jumping');
   };
 }
+
+function checkBossDamage() {
+    const boss = document.querySelector('.boss');
+    if (!boss || !boss.isConnected || isGameOver) return;
+
+    const bossRect = boss.getBoundingClientRect();
+    const projectiles = document.querySelectorAll('.projectile');
+    
+    projectiles.forEach(projectile => {
+        if (!projectile.isConnected) return;
+        
+        const projectileRect = projectile.getBoundingClientRect();
+        
+        if (
+            projectileRect.right > bossRect.left &&
+            projectileRect.left < bossRect.right &&
+            projectileRect.bottom > bossRect.top &&
+            projectileRect.top < bossRect.bottom
+        ) {
+            const hitEffect = document.createElement('div');
+            hitEffect.className = 'hit-effect';
+            hitEffect.style.left = `${bossRect.left}px`;
+            hitEffect.style.top = `${bossRect.top}px`;
+            document.body.appendChild(hitEffect);
+            setTimeout(() => hitEffect.remove(), 500);
+
+            let damage = 1;
+            for (const type in dragonTypes) {
+                if (projectile.classList.contains(dragonTypes[type].projectileClass)) {
+                    damage = dragonTypes[type].damage;
+                    break;
+                }
+            }
+
+            let currentHealth = parseInt(boss.dataset.health);
+            currentHealth -= damage;
+            boss.dataset.health = currentHealth.toString();
+
+            projectile.remove();
+
+            if (currentHealth <= 0) {
+                score += parseInt(boss.dataset.points);
+                scoreCountDisplay.textContent = score;
+                boss.remove();
+                isGameOver = true;
+                startCutscene();
+            } else {
+                boss.classList.add('damaged');
+                setTimeout(() => boss.classList.remove('damaged'), 200);
+            }
+        }
+    });
+}
+
+// Добавляем интервал проверки урона по боссу
+let bossDamageInterval = setInterval(checkBossDamage, 50);
 
 setInterval(checkZombieDragonCollisions, 100);
 
