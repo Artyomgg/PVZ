@@ -118,7 +118,7 @@ const zombieTypes = {
         health: 25,
         speed: 22,
         points: 175,
-        spawnChance: 0.5,
+        spawnChance: 0.45,
     },
 }
 
@@ -602,7 +602,7 @@ function spawnSun() {
 
 // Увеличение сложности
 let zombieInterval = 4000
-let sunInterval = 8000
+let sunInterval = 9000
 
 function increaseDifficulty() {
 	zombieInterval = Math.max(2000, zombieInterval - 500)
