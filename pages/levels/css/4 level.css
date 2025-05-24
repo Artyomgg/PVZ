@@ -18,6 +18,94 @@ body {
 	gap: 20px;
 }
 
+.smoke {
+	width: 300px;
+	height: 100%;
+	background: rgba(128, 128, 128);
+	position: absolute; /* Меняем с fixed на absolute */
+	z-index: 100;
+	top: 50%; /* Центрируем по вертикали */
+	transform: translateY(-50%); /* Корректируем позицию */
+	right: 100%;
+	animation: moveToGrid 2s ease-in-out 1s forwards,
+		moveTurn 20s linear infinite 5s;
+	opacity: 0; /* Добавляем начальную прозрачность для анимации */
+}
+
+@keyframes moveToGrid {
+	0% {
+		right: 100%;
+		opacity: 0;
+	}
+	60% {
+		right: 0px;
+	}
+	75% {
+		opacity: 0.4;
+	}
+	100% {
+		opacity: 1;
+		right: 0px;
+	}
+}
+
+@keyframes moveTurn {
+	10% {
+		right: -300px;
+		opacity: 0;
+	}
+	16.66% {
+		right: -300px;
+		opacity: 0;
+	}
+	20.66% {
+		right: 0px;
+		opacity: 0.4;
+	}
+	26.66% {
+		opacity: 1;
+	}
+	100% {
+		right: 0px;
+		opacity: 1;
+	}
+}
+.dragon.Fire::before {
+	content: url('/assets/img/Dragons/красно-белый.png');
+	scale: 11.5%;
+	left: -835%;
+	top: -850%;
+}
+
+.dragon.Ice::before {
+	content: url('/assets/img/Dragons/синий-большой.png');
+	scale: 11.5%;
+	left: -750%;
+	top: -660%;
+}
+
+.dragon.Poison::before {
+	content: url('/assets/img/Dragons/фиолетово-синий.png');
+	scale: 11.5%;
+	left: -600%;
+	top: -570%;
+}
+
+.dragon.Lightning {
+	content: url('/assets/img/Dragons/маленький-красный.png');
+	scale: 1.6;
+}
+
+.dragon.Blast {
+	content: url('/assets/img/Dragons/красный-большой.png');
+	scale: 1.8;
+}
+
+.dragon.Deadly {
+	content: url('/assets/img/Dragons/красно-серый.png');
+	scale: 1.9;
+}
+
 .game-container {
 	width: 146vh;
 	height: 83vh;
@@ -59,6 +147,97 @@ body {
 	transition: transform 0.3s;
 }
 
+.dragon::before {
+	content: '🐉';
+	font-size: 50px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.dragon.Fire::before {
+	content: url('/assets/img/Dragons/красно-белый.png');
+	scale: 11.5%;
+	left: -835%;
+	top: -850%;
+}
+
+.dragon.Ice::before {
+	content: url('/assets/img/Dragons/синий-большой.png');
+	scale: 11.5%;
+	left: -750%;
+	top: -660%;
+}
+
+.dragon.Poison::before {
+	content: url('/assets/img/Dragons/фиолетово-синий.png');
+	scale: 11.5%;
+	left: -600%;
+	top: -570%;
+}
+
+.dragon.Lightning {
+	content: url('/assets/img/Dragons/маленький-красный.png');
+	scale: 1.6;
+}
+
+.dragon.Blast {
+	content: url('/assets/img/Dragons/красный-большой.png');
+	scale: 1.8;
+}
+
+
+.game-container {
+	width: 146vh;
+	height: 83vh;
+	background: linear-gradient(#a87a1d, #edbc78);
+	position: relative;
+	overflow: hidden;
+	border: 4px solid #6c3d00;
+	border-radius: 10px;
+	box-shadow: 0 0 20px rgba(255, 64, 0, 0.3);
+}
+
+.grid {
+	display: grid;
+	grid-template-columns: repeat(8, 1fr);
+	grid-template-rows: repeat(5, 1fr);
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+
+.cell {
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	cursor: pointer;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transition: background-color 0.3s;
+}
+
+.cell:hover {
+	background: rgba(255, 255, 255, 0.1);
+}
+
+.dragon {
+	width: 60px;
+	height: 60px;
+	position: relative;
+	z-index: 1;
+	transition: transform 0.3s;
+}
+
+.dragon::before {
+	content: '🐉';
+	font-size: 50px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
 .dragon.Fire::before {
 	content: url('/assets/img/Dragons/красно-белый.png');
 	scale: 11.5%;
@@ -94,9 +273,7 @@ body {
 	content: url('/assets/img/Dragons/красно-серый.png');
 	scale: 1.9;
 }
-
-
-.dragon.blast.flashing {
+.dragon.Blast.flashing {
 	filter: brightness(1.5) drop-shadow(0 0 10px #ff0000);
 }
 
