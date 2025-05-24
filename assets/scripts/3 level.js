@@ -63,7 +63,7 @@ if (!modalLose || !modalWin) {
 const dragonTypes = {
     Fire: {
         cost: 50,
-        damage: 2,
+        damage: 1,
         shootInterval: 1500,
         projectileClass: 'fireball',
         sunSpawnInterval: 5000,
@@ -71,21 +71,21 @@ const dragonTypes = {
     },
     Ice: {
         cost: 75,
-        damage: 4,
-        shootInterval: 2000,
+        damage: 1,
+        shootInterval: 3000,
         projectileClass: 'iceball',
         freezeDuration: 2000,
     },
     Poison: {
         cost: 100,
-        damage: 6,
+        damage: 2,
         shootInterval: 2500,
         projectileClass: 'poisonball',
         poisonDuration: 2000,
     },
     Lightning: {
         cost: 150,
-        damage: 8,
+        damage: 6,
         shootInterval: 2000,
         projectileClass: 'lightningball',
     }
@@ -94,22 +94,22 @@ const dragonTypes = {
 // 2. МАССИВ ЗОМБИ
 const zombieTypes = {
     normal: {
-        health: 12,
+        health: 6,
         speed: 22,
         points: 100,
-        spawnChance: 0.8,
+        spawnChance: 0.6,
     },
     armored: {
-        health: 20,
+        health: 9,
         speed: 22,
         points: 150,
-        spawnChance: 0.5,
+        spawnChance: 0.3,
     },
     hz: {
-        health: 25,
+        health: 12,
         speed: 22,
         points: 175,
-        spawnChance: 0.5,
+        spawnChance: 0.1,
     },
 }
 
@@ -269,7 +269,7 @@ function triggerExplosion(dragon, config, cell) {
                 score += parseInt(zombie.dataset.points)
                 scoreCountDisplay.textContent = score
                 zombie.remove()
-                if (score >= 2000) {
+                if (score >= 2500) {
                     clearInterval(zombieSpawnInterval)
                     modalWin.classList.add('visible')
                     IntoLocalStorage(3)
@@ -556,7 +556,7 @@ function spawnZombie() {
                     scoreCountDisplay.textContent = score
                     zombie.remove()
                     clearInterval(checkCollision)
-                    if (score >= 2000) {
+                    if (score >= 2500) {
                         clearInterval(zombieSpawnInterval)
                         modalWin.classList.add('visible')
                         IntoLocalStorage(3)
@@ -717,7 +717,7 @@ function applyDamage(zombie, damage) {
         scoreCountDisplay.textContent = score
         zombie.remove()
 
-        if (score >= 2000) {
+        if (score >= 2500) {
             clearInterval(zombieSpawnInterval)
             modalWin.classList.add('visible')
             IntoLocalStorage(3)
@@ -728,6 +728,62 @@ function applyDamage(zombie, damage) {
     }
 }
 
+//коллизии + перепрыгивание
+function checkZombieDragonCollisions() {
+  const dragons = document.querySelectorAll('.dragon');
+  const zombies = document.querySelectorAll('.zombie');
+
+  zombies.forEach(zombie => {
+    if (!zombie.isConnected || zombie.classList.contains('jumping')) return;
+
+    const zombieRect = zombie.getBoundingClientRect();
+    const zombieRow = parseInt(zombie.dataset.row);
+
+    dragons.forEach(dragon => {
+      if (!dragon.isConnected) return;
+
+      const dragonRect = dragon.getBoundingClientRect();
+      const dragonCell = dragon.parentElement;
+      const dragonIndex = Array.from(grid.children).indexOf(dragonCell);
+      const dragonRow = Math.floor(dragonIndex / 8);
+
+      if (zombieRow === dragonRow) {
+        if (
+          zombieRect.right > dragonRect.left &&
+          zombieRect.left < dragonRect.right &&
+          zombieRect.bottom > dragonRect.top &&
+          zombieRect.top < dragonRect.bottom
+        ) {
+          makeZombieJump(zombie, dragon);
+        }
+      }
+    });
+  });
+}
+
+function makeZombieJump(zombie, dragon) {
+  if (zombie.classList.contains('jumping')) return;
+
+  zombie.classList.add('jumping');
+  
+  const dragonHeight = dragon.getBoundingClientRect().height;
+  const jumpHeight = -(dragonHeight + 20); 
+
+  const jumpAnimation = zombie.animate([
+    { transform: 'translateY(0)' },
+    { transform: `translateY(${jumpHeight}px)` },
+    { transform: 'translateY(0)' }
+  ], {
+    duration: 800,
+    easing: 'ease-in-out'
+  });
+
+  jumpAnimation.onfinish = () => {
+    zombie.classList.remove('jumping');
+  };
+}
+
+setInterval(checkZombieDragonCollisions, 100);
 
 let zombieSpawnInterval = setInterval(spawnZombie, zombieInterval)
 let sunSpawnInterval = setInterval(spawnSun, sunInterval)

@@ -62,24 +62,24 @@ if (!modalLose || !modalWin) {
 
 // 1. МАССИВ ДРАКОНОВ
 const dragonTypes = {
-    Fire: {
-        cost: 50,
-        damage: 2,
-        shootInterval: 2000,
-        projectileClass: 'fireball',
-        sunSpawnInterval: 5000,
-        sunSpawnChance: 0.1,
-    },
-    Ice: {
-        cost: 75,
-        damage: 3,
-        shootInterval: 2000,
-        projectileClass: 'iceball',
-        freezeDuration: 2000,
-    },
+	Fire: {
+		cost: 50,
+		damage: 1,
+		shootInterval: 1500,
+		projectileClass: 'fireball',
+		sunSpawnInterval: 5000,
+		sunSpawnChance: 0.1,
+	},
+	Ice: {
+		cost: 75,
+		damage: 1,
+		shootInterval: 3000,
+		projectileClass: 'iceball',
+		freezeDuration: 2000,
+	},
     Poison: {
         cost: 100,
-        damage: 5,
+        damage: 2,
         shootInterval: 2500,
         projectileClass: 'poisonball',
         poisonDuration: 2000,
@@ -89,13 +89,13 @@ const dragonTypes = {
 // 2. МАССИВ ЗОМБИ
 const zombieTypes = {
     normal: {
-        health: 12,
+        health: 6,
         speed: 20,
         points: 100,
-        spawnChance: 1,
+        spawnChance: 0.75,
     },
     armored: {
-        health: 20,
+        health: 9,
         speed: 25,
         points: 150,
         spawnChance: 0.5,
@@ -716,6 +716,63 @@ function applyDamage(zombie, damage) {
         setTimeout(() => zombie.classList.remove('damaged'), 200)
     }
 }
+
+//коллизии + перепрыгивание
+function checkZombieDragonCollisions() {
+  const dragons = document.querySelectorAll('.dragon');
+  const zombies = document.querySelectorAll('.zombie');
+
+  zombies.forEach(zombie => {
+    if (!zombie.isConnected || zombie.classList.contains('jumping')) return;
+
+    const zombieRect = zombie.getBoundingClientRect();
+    const zombieRow = parseInt(zombie.dataset.row);
+
+    dragons.forEach(dragon => {
+      if (!dragon.isConnected) return;
+
+      const dragonRect = dragon.getBoundingClientRect();
+      const dragonCell = dragon.parentElement;
+      const dragonIndex = Array.from(grid.children).indexOf(dragonCell);
+      const dragonRow = Math.floor(dragonIndex / 8);
+
+      if (zombieRow === dragonRow) {
+        if (
+          zombieRect.right > dragonRect.left &&
+          zombieRect.left < dragonRect.right &&
+          zombieRect.bottom > dragonRect.top &&
+          zombieRect.top < dragonRect.bottom
+        ) {
+          makeZombieJump(zombie, dragon);
+        }
+      }
+    });
+  });
+}
+
+function makeZombieJump(zombie, dragon) {
+  if (zombie.classList.contains('jumping')) return;
+
+  zombie.classList.add('jumping');
+  
+  const dragonHeight = dragon.getBoundingClientRect().height;
+  const jumpHeight = -(dragonHeight + 20); 
+
+  const jumpAnimation = zombie.animate([
+    { transform: 'translateY(0)' },
+    { transform: `translateY(${jumpHeight}px)` },
+    { transform: 'translateY(0)' }
+  ], {
+    duration: 800,
+    easing: 'ease-in-out'
+  });
+
+  jumpAnimation.onfinish = () => {
+    zombie.classList.remove('jumping');
+  };
+}
+
+setInterval(checkZombieDragonCollisions, 100);
 
 
 let zombieSpawnInterval = setInterval(spawnZombie, zombieInterval)

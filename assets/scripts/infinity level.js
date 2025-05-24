@@ -62,7 +62,7 @@ if (!modalLose || !modalWin) {
 const dragonTypes = {
     Fire: {
         cost: 50,
-        damage: 8,
+        damage: 1,
         shootInterval: 1500,
         projectileClass: 'fireball',
         sunSpawnInterval: 5000,
@@ -70,27 +70,27 @@ const dragonTypes = {
     },
     Ice: {
         cost: 75,
-        damage: 12,
+        damage: 2,
         shootInterval: 2000,
         projectileClass: 'iceball',
         freezeDuration: 2000,
     },
     Poison: {
         cost: 100,
-        damage: 8,
+        damage: 2,
         shootInterval: 2500,
         projectileClass: 'poisonball',
         poisonDuration: 2000,
     },
     Lightning: {
         cost: 150,
-        damage: 16,
+        damage: 8,
         shootInterval: 2000,
         projectileClass: 'lightningball',
     },
     Blast: {
-        cost: 200,
-        damage: 40,
+        cost: 100,
+        damage: 11,
         flashDuration: 1000,
         flashCount: 3,
         explosionRadius: 2,
@@ -98,7 +98,7 @@ const dragonTypes = {
     },
     Deadly: {
         cost: 250,
-        damage: 24,
+        damage: 11,
         shootInterval: 7500,
         projectileClass: 'deadlyball',
     }
@@ -106,30 +106,30 @@ const dragonTypes = {
 
 // 2. МАССИВ ЗОМБИ
 const zombieTypes = {
-  normal: {
-    health: 5,
-    speed: 20,
-    points: 100,
-    spawnChance: 0.5,
-  },
-  armored: {
-    health: 13,
-    speed: 25,
-    points: 150,
-    spawnChance: 0.25,
-  },
-  hz: {
-    health: 10,
-    speed: 22,
-    points: 175,
-    spawnChance: 0.25,
-  },
-  golden: {
-    health: 28,
-    speed: 19,
-    points: 100,
-    spawnChance: 0.15,
-  },
+    normal: {
+        health: 6,
+        speed: 22,
+        points: 100,
+        spawnChance: 0.65,
+    },
+    armored: {
+        health: 9,
+        speed: 22,
+        points: 150,
+        spawnChance: 0.2,
+    },
+    hz: {
+        health: 12,
+        speed: 22,
+        points: 175,
+        spawnChance: 0.1,
+    },
+    golden: {
+        health: 13,
+        speed: 19,
+        points: 100,
+        spawnChance: 0.05,
+    }
 };
 
 // Создаем сетку
@@ -658,6 +658,48 @@ function createIceballTrail(projectile) {
   }, 50);
 }
 
+function freezeZombie(zombie, duration) {
+	if (zombie.classList.contains('frozen')) return
+
+	zombie.classList.add('frozen')
+	zombie.dataset.slowMultiplier = '0'
+
+	const iceOverlay = document.createElement('div')
+	iceOverlay.className = 'ice-overlay'
+	zombie.appendChild(iceOverlay)
+
+	const timeoutId = setTimeout(() => {
+		if (zombie.isConnected) {
+			zombie.classList.remove('frozen')
+			zombie.dataset.slowMultiplier = '1'
+			iceOverlay.remove()
+			delete zombie.dataset.freezeTimeoutId
+		}
+	}, duration)
+
+	zombie.dataset.freezeTimeoutId = timeoutId
+}
+
+function poisonZombie(zombie, duration) {
+	if (zombie.classList.contains('poisoned')) return
+
+	zombie.classList.add('poisoned')
+
+	const poisonOverlay = document.createElement('div')
+	poisonOverlay.className = 'poison-overlay'
+	zombie.appendChild(poisonOverlay)
+
+	const timeoutId = setTimeout(() => {
+		if (zombie.isConnected) {
+			zombie.classList.remove('poisoned')
+			poisonOverlay.remove()
+			delete zombie.dataset.poisonTimeoutId
+		}
+	}, duration)
+
+	zombie.dataset.poisonTimeoutId = timeoutId
+}
+
 function lightningAttack(dragon, config) {
   if (isGameOver) return;
 
@@ -719,62 +761,63 @@ function createLightningBolt(x1, y1, x2, y2) {
 }
 
 function spawnZombie() {
-  if (isGameOver) return;
+  if (isGameOver) return
 
-  let random = Math.random();
-  let cumulativeChance = 0;
-  let zombieType;
+  let random = Math.random()
+  let cumulativeChance = 0
+  let zombieType
 
   for (const type in zombieTypes) {
-    cumulativeChance += zombieTypes[type].spawnChance;
+    cumulativeChance += zombieTypes[type].spawnChance
     if (random <= cumulativeChance) {
-      zombieType = type;
-      break;
+      zombieType = type
+      break
     }
   }
 
-  const zombieConfig = zombieTypes[zombieType];
+  const zombieConfig = zombieTypes[zombieType]
 
-  const zombie = document.createElement("div");
-  zombie.className = `zombie ${zombieType}`;
-  zombie.style.setProperty("--move-duration", `${zombieConfig.speed}s`);
+  const zombie = document.createElement('div')
+  zombie.className = `zombie ${zombieType}`
+  zombie.style.setProperty('--move-duration', `${zombieConfig.speed}s`)
 
-  const row = Math.floor(Math.random() * 5);
-  zombie.style.top = `${row * 20}%`;
-  zombie.dataset.health = zombieConfig.health.toString();
-  zombie.dataset.points = zombieConfig.points.toString();
-  zombie.dataset.row = row.toString();
+  const row = Math.floor(Math.random() * 5)
+  zombie.style.top = `${row * 20}%`
+  zombie.dataset.health = zombieConfig.health.toString()
+  zombie.dataset.points = zombieConfig.points.toString()
+  zombie.dataset.row = row.toString()
+  zombie.dataset.slowMultiplier = '1'
 
-  grid.appendChild(zombie);
+  grid.appendChild(zombie)
 
   const checkGameOver = () => {
-    if (isGameOver) return;
-    const cells = document.querySelectorAll(`.cell:nth-child(${row * 8 + 1})`);
-    if (cells.length === 0) return;
+    if (isGameOver) return
+    const cells = document.querySelectorAll(`.cell:nth-child(${row * 8 + 1})`)
+    if (cells.length === 0) return
 
-    const zombieRect = zombie.getBoundingClientRect();
-    const firstCellRect = cells[0].getBoundingClientRect();
+    const zombieRect = zombie.getBoundingClientRect()
+    const firstCellRect = cells[0].getBoundingClientRect()
 
     if (zombieRect.right <= firstCellRect.left + firstCellRect.width / 2) {
-      GameOver();
+      GameOver()
     }
-  };
+  }
 
   const checkCollision = setInterval(() => {
     if (!zombie.isConnected) {
-      clearInterval(checkCollision);
-      return;
+      clearInterval(checkCollision)
+      return
     }
 
-    checkGameOver();
+    checkGameOver()
 
-    const projectiles = document.querySelectorAll(".projectile");
-    const zombieRect = zombie.getBoundingClientRect();
+    const projectiles = document.querySelectorAll('.projectile')
+    const zombieRect = zombie.getBoundingClientRect()
 
-    projectiles.forEach((projectile) => {
-      if (!projectile.isConnected) return;
+    projectiles.forEach(projectile => {
+      if (!projectile.isConnected) return
 
-      const projectileRect = projectile.getBoundingClientRect();
+      const projectileRect = projectile.getBoundingClientRect()
 
       if (
         projectileRect.right > zombieRect.left &&
@@ -782,42 +825,60 @@ function spawnZombie() {
         projectileRect.bottom > zombieRect.top &&
         projectileRect.top < zombieRect.bottom
       ) {
-        const hitEffect = document.createElement("div");
-        hitEffect.className = "hit-effect";
-        hitEffect.style.left = `${zombieRect.left}px`;
-        hitEffect.style.top = `${zombieRect.top}px`;
-        document.body.appendChild(hitEffect);
-        setTimeout(() => hitEffect.remove(), 500);
+        const hitEffect = document.createElement('div')
+        hitEffect.className = 'hit-effect'
+        hitEffect.style.left = `${zombieRect.left}px`
+        hitEffect.style.top = `${zombieRect.top}px`
+        document.body.appendChild(hitEffect)
+        setTimeout(() => hitEffect.remove(), 500)
 
-        let damage = 1;
+        let damage = 1
         for (const type in dragonTypes) {
-          if (
-            projectile.classList.contains(dragonTypes[type].projectileClass)
-          ) {
-            damage = dragonTypes[type].damage;
-            break;
+          if (projectile.classList.contains(dragonTypes[type].projectileClass)) {
+            damage = dragonTypes[type].damage
+            if (type === 'Ice') {
+              freezeZombie(zombie, dragonTypes.Ice.freezeDuration)
+            } else if (type === 'Poison') {
+              poisonZombie(zombie, dragonTypes.Poison.poisonDuration)
+            }
+            break
           }
         }
 
-        let currentHealth = parseInt(zombie.dataset.health);
-        currentHealth -= damage;
-        zombie.dataset.health = currentHealth.toString();
+        if (projectile.classList.contains('fireball') && zombie.classList.contains('frozen')) {
+          zombie.dataset.slowMultiplier = '1'
+          zombie.classList.remove('frozen')
+          const iceOverlay = zombie.querySelector('.ice-overlay')
+          if (iceOverlay) iceOverlay.remove()
+          if (zombie.dataset.freezeTimeoutId) {
+            clearTimeout(zombie.dataset.freezeTimeoutId)
+            delete zombie.dataset.freezeTimeoutId
+          }
+        }
 
-        projectile.remove();
+        let currentHealth = parseInt(zombie.dataset.health)
+        currentHealth -= damage
+        zombie.dataset.health = currentHealth.toString()
+
+        projectile.remove()
 
         if (currentHealth <= 0) {
-          score += parseInt(zombie.dataset.points);
-          scoreCountDisplay.textContent = score;
-          localStorage.setItem("score", score);
-          zombie.remove();
-          clearInterval(checkCollision);
+          score += parseInt(zombie.dataset.points)
+          scoreCountDisplay.textContent = score
+          zombie.remove()
+          clearInterval(checkCollision)
+          if (score >= 1000) {
+            clearInterval(zombieSpawnInterval)
+            modalWin.classList.add('visible')
+            IntoLocalStorage(1)
+          }
         } else {
-          zombie.classList.add("damaged");
-          setTimeout(() => zombie.classList.remove("damaged"), 200);
+          zombie.classList.add('damaged')
+          setTimeout(() => zombie.classList.remove('damaged'), 200)
         }
       }
-    });
-  }, 100);
+    })
+  }, 100)
 }
 
 function collectSun(sun) {
