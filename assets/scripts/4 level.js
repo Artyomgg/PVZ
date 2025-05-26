@@ -200,7 +200,7 @@ function placeDragon(cell) {
 			)
 			dragon.dataset.shootIntervalId = shootIntervalId
 
-			if (selectedDragonType === 'fire') {
+			if (selectedDragonType === 'Fire') {
 				const sunIntervalId = setInterval(
 					() => spawnSunNearDragon(dragon, cell),
 					dragonConfig.sunSpawnInterval
@@ -294,7 +294,7 @@ function triggerExplosion(dragon, config, cell) {
 }
 
 function spawnSunNearDragon(dragon, cell) {
-	if (isGameOver || Math.random() > dragonTypes.fire.sunSpawnChance) return
+	if (isGameOver || Math.random() > dragonTypes.Fire.sunSpawnChance) return
 
 	const sun = document.createElement('div')
 	sun.className = 'sun'

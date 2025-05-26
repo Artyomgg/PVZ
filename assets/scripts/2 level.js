@@ -68,7 +68,6 @@ const dragonTypes = {
 		shootInterval: 1500,
 		projectileClass: 'fireball',
 		sunSpawnInterval: 5000,
-		sunSpawnChance: 0.1,
 	},
 	Ice: {
 		cost: 75,
@@ -274,7 +273,7 @@ function triggerExplosion(dragon, config, cell) {
 }
 
 function spawnSunNearDragon(dragon, cell) {
-    if (isGameOver || Math.random() > dragonTypes.fire.sunSpawnChance) return
+    if (isGameOver || Math.random() > dragonTypes.Fire.sunSpawnChance) return
 
     const sun = document.createElement('div')
     sun.className = 'sun'

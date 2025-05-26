@@ -113,7 +113,7 @@ const zombieTypes = {
         health: 10,
         speed: 19,
         points: 100,
-        spawnChance: 0.5,
+        spawnChance: 0.7,
     }
 }
 
@@ -286,7 +286,7 @@ function triggerExplosion(dragon, config, cell) {
 }
 
 function spawnSunNearDragon(dragon, cell) {
-    if (isGameOver || Math.random() > dragonTypes.fire.sunSpawnChance) return
+    if (isGameOver || Math.random() > dragonTypes.Fire.sunSpawnChance) return
 
     const sun = document.createElement('div')
     sun.className = 'sun'
@@ -449,6 +449,7 @@ function createDeadlyballTrail(projectile) {
     }, 50)
 }
 
+//заморозка
 function freezeZombie(zombie, duration) {
     if (zombie.classList.contains('frozen')) return
 
@@ -471,6 +472,7 @@ function freezeZombie(zombie, duration) {
     zombie.dataset.freezeTimeoutId = timeoutId
 }
 
+//отравление
 function poisonZombie(zombie, duration) {
     if (zombie.classList.contains('poisoned')) return
 
@@ -495,7 +497,7 @@ function poisonZombie(zombie, duration) {
 function spawnBoss() {
     const boss = {
         name: 'Boss Knight',
-        health: 100,
+        health: 500,
         speed: 30,
         points: 500,
         isAlive: true,
@@ -718,10 +720,10 @@ function spawnZombie() {
                 for (const type in dragonTypes) {
                     if (projectile.classList.contains(dragonTypes[type].projectileClass)) {
                         damage = dragonTypes[type].damage
-                        if (type === 'ice') {
-                            freezeZombie(zombie, dragonTypes.ice.freezeDuration)
-                        } else if (type === 'poison') {
-                            poisonZombie(zombie, dragonTypes.poison.poisonDuration)
+                        if (type === 'Ice') {
+                            freezeZombie(zombie, dragonTypes.Ice.freezeDuration)
+                        } else if (type === 'Poison') {
+                            poisonZombie(zombie, dragonTypes.Poison.poisonDuration)
                         }
                         break
                     }
@@ -986,12 +988,12 @@ function startCutscene() {
     `
     crawlContainer.appendChild(crawl)
 
-    // Скрываем катсцену и показываем модальное окно победы через 15 секунд
+    // Скрываем катсцену и показываем модальное окно победы через 25 секунд
     setTimeout(() => {
         cutscene.remove()
         modalWin.classList.add('visible')
         IntoLocalStorage(5)
-    }, 20000)
+    }, 25000)
 }
 
 function applyDamage(entity, damage) {
