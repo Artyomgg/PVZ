@@ -865,14 +865,10 @@ function spawnZombie() {
 
         if (currentHealth <= 0) {
           score += parseInt(zombie.dataset.points)
+          localStorage.setItem("score", score);
           scoreCountDisplay.textContent = score
           zombie.remove()
           clearInterval(checkCollision)
-          if (score >= 1000) {
-            clearInterval(zombieSpawnInterval)
-            modalWin.classList.add('visible')
-            IntoLocalStorage(1)
-          }
         } else {
           zombie.classList.add('damaged')
           setTimeout(() => zombie.classList.remove('damaged'), 200)
